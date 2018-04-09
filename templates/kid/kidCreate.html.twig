@@ -1,0 +1,39 @@
+{% extends 'base.html.twig'%}
+{% block title %}Troc&Mode Kids{% endblock %}
+
+{% block body %}
+
+<h1>Créez le profil de vos enfants</h1>
+
+<form action="/kid/create" method="post">
+
+    <label for="kidName">Nom</label>
+    <input type="text" id="kidName" name="kidName">
+    <br>
+    <label for="kidSurname">Prénom</label>
+    <input type="text" id="kidSurname" name="kidSurname">
+    <br>
+    <label for="kidBirthday">Date de naissance</label>
+    <input type="date" id="kidBirthday" name="kidBirthday">
+    <br>
+    <label for="kidSchoolId">Ecole</label>
+    <select name="kidSchoolId" id="kidSchoolId">
+    {% for school in schools %}
+    <option value="{{school.id}}">{{school.schoolName}} / {{school.schoolCity}}</option>
+    {% endfor %}
+    </select>
+    
+    <input type="submit" value="CREER SON PROFIL">
+    <br>
+
+
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+    
+</form>
+
+
+{% endblock %}

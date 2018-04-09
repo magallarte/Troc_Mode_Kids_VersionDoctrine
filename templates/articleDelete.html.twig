@@ -1,0 +1,24 @@
+(% extends 'base.html.twig'%)
+
+{% block body %}
+
+<h1>FICHE ARTICLE : suppression</h1>
+
+<form action="/article/delete/id">
+    <label for="idselection"></label>
+    <input type="text" name="articleId" id="idselection">
+    <input type="submit" value="Supprimer">
+
+/ VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ?
+
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+
+// message = <p>L'article {{ article.articleId }} a bien été supprimé. Pensez à supprimer les fichiers photos.</p>
+
+</form>
+
+{% endblock %}

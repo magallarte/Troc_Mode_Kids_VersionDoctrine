@@ -1,0 +1,180 @@
+(% extends 'base.html.twig'%)
+
+{% block body %}
+
+<h1>FICHE ARTICLE : modification</h1>
+
+<form action="/article/show">
+    <label for="idselection">Article à modifier :</label>
+    <input type="text" name="articleId" id="idselection">
+    <input type="submit" value="Voir">
+</form>
+
+<form action="/article/update/id" method="post">
+
+    <label for="articleId">CODE ARTICLE</label>
+    <input type="text" id="articleId" name="articleId" placeholder="{{article.articleId}}">
+
+    <label for="articlePicture1"> ARTICLE PHOTO 1</label>
+    <input type="text" id="articlePicture1" name="articlePicture1" placeholder="{{article.articlePicture1}}">
+
+    <label for="articlePicture2"> ARTICLE PHOTO 2</label>
+    <input type="text" id="articlePicture2" name="articlePicture2" placeholder="{{article.articlePicture2}}">
+
+    <label for="articlePicture3"> ARTICLE PHOTO 3</label>
+    <input type="text" id="articlePicture3" name="articlePicture3" placeholder="{{article.articlePicture3}}">
+
+    <label for="gender">SEXE</label>
+    <select name="gender" id="gender">
+    {% for gender in genders %}
+        {% if gender === article.gender %}
+            <option selected="selected" value="{{gender.id}}">{{gender.title}}</option>';
+        {% else %}
+            <option value="{{gender.id}}">{{gender.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="type">TYPE</label>
+    <select name="type" id="type">
+    {% for type in types%}
+        {% if type === article.type %}
+            <option selected="selected" value="{{type.id}}">{{type.title}}</option>';
+        {% else %}
+            <option value="{{type.id}}">{{type.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="size">TAILLE</label>
+    <select name="size" id="size">
+    {% for size in sizes%}
+        {% if size === article.size %}
+        <option selected="selected" value="{{size.id}}">{{size.title}}</option>
+        {% else %}
+        <option value="{{size.id}}">{{size.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="brand">MARQUE</label>
+    <select name="brand" id="brand">
+    {% for brand in brands%}
+        {% if brand === article.brand %}
+        <option selected="selected" value="{{brand.id}}">{{brand.title}}</option>
+        {% else %}
+        <option value="{{brand.id}}">{{brand.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="season">SAISON</label>
+    <select name="season[]" id="season">
+    {% for wearAndTear in wearAndTears%}
+        {% if wearAndTear === article.wearAndTear %}
+        <option selected="selected" value="{{season.id}}">{{season.title}}</option>
+        {% else %}
+        <option value="{{season.id}}">{{season.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="color">COLOR</label>
+    <select name="color[]" id="color">
+    {% for color in colors%}
+        {% if color === article.color %}
+        <option selected="selected" value="{{color.id}}">{{color.title}}</option>
+        {% else %}
+        <option value="{{color.id}}">{{color.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+// VOIR COMMENT GERER LE TABLEAU ASSOCIATIF FABRIC/PERCENTAGE
+    <label for="fabric">COMPOSITION</label>
+    {% for fabric in fabrics%}
+    <li>{{fabric.title}}<input type="text" name="fabric_category.percentage[]" placeholder="{{article.fabric_category.percentage}}"></li>
+    {% endfor%}
+    </select>
+
+    <label for="wearAndTear">COLOR</label>
+    <select name="wearAndTear" id="wearAndTear">
+    {% for wearAndTear in wearAndTears%}
+        {% if wearAndTear === article.wearAndTear %}
+        <option selected="selected" value="{{wearAndTear.id}}">{{wearAndTear.title}}</option>
+        {% else %}
+        <option value="{{wearAndTear.id}}">{{wearAndTear.title}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="articleButtonValue">VALEUR BOUTONS</label>
+    <input type="text" id="articleButtonValue" name="articleButtonValue" placeholder="{{article.articleButtonValue}}">
+
+    <label for="articleEurosValue">VALEUR EUROS</label>
+    <input type="text" id="articleEurosValue" name="articleEurosValue" placeholder="{{article.articleEurosValue}}">
+
+    <label for="articleComments">COMMENTAIRES</label>
+    <input type="text area" id="articleComments" name="articleComments" placeholder="{{article.articleComments}}">
+
+    <label for="donator">DONATEUR</label>
+    <select name="donator" id="donator">
+    {% for donator in donators%}
+        {% if donator === article.donator %}
+        <option selected="selected" value="{{donator.id}}">{{donator.name}} {donator.surname}}</option>
+        {% else %}
+        <option value="{{donator.id}}">{{donator.name}} {donator.surname}}</option>
+        {% endif %}
+    {% endfor%}
+    </select>
+
+    <label for="donationBag">SAC DE DON</label>
+    <input type="text" id="donationBag" name="donationBag" placeholder="{{article.donationBag}}">
+
+    <label for="processStatus">ETAPE DE TRAITEMENT</label>
+    <select name="processStatus" id="processStatus">
+    {% for processStatus in processStatuss%}
+        {% if processStatus === article.processStatus %}
+        <option selected="selected" value="{{processStatus.id}}">{{processStatus.title}}</option>
+        {% else %}
+        <option value="{{processStatus.id}}">{{processStatus.title}}</option>
+        {% endif %}
+
+    {% endfor%}
+    </select>
+
+    <input type="submit" value="MODIFIER">
+
+/ VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ?
+
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+
+// message = <p>L'article {{ article.articleId }} a bien été modifié. Pensez à renommer les fichiers photos si besoin.</p>
+
+</form>
+
+    //private $articlePicture1;automatique
+    //private $articlePicture2;automatique
+    //private $articlePicture3;automatique
+    //private $articleButtonValue;ok
+    //private $articleEurosValue;ok
+    //private $articleComments;ok
+    //private $articleId;automatique
+    //private $brand;ok
+    //private $deliveryBag;automatique
+    //private $donationBag;ok
+    //private $gender;ok
+    //private $member;ok
+    //private $processStatus;ok
+    //private $size;ok
+    //private $type;ok
+    //private $wearAndTear;ok
+    //private $color;array ok
+    //private $fabric;array à verifier
+    //private $season;array ok
+
+{% endblock %}

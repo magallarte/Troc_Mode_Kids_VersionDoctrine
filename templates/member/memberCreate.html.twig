@@ -1,0 +1,62 @@
+{% extends 'base.html.twig'%}
+{% block title %}Troc&Mode Kids{% endblock %}
+
+{% block body %}
+
+<h1>Créez votre profil</h1>
+
+<form action="/member/create" method="post">
+
+    <label for="memberName">Nom</label>
+    <input type="text" id="memberName" name="memberName">
+    <br>
+    <label for="memberSurname">Prénom</label>
+    <input type="text" id="memberSurname" name="memberSurname">
+    <br>
+    <label for="memberAddress1">Adresse</label>
+    <input type="text" id="memberAddress1" name="memberAddress1">
+    <br>
+    <label for="memberAddress2">Adresse (complément)</label>
+    <input type="text" id="memberAddress2" name="memberAddress2">
+    <br>
+    <label for="memberZipCode">Code Postal</label>
+    <input type="text" id="memberZipCode" name="memberZipCode">
+    <br>
+    <label for="memberCity">Ville</label>
+    <input type="text" id="memberCity" name="memberCity">
+    <br>
+    <label for="memberTel">Téléphone</label>
+    <input type="text" id="memberTel" name="memberTel">
+    <br>
+    <label for="memberEmail">Email</label>
+    <input type="email" id="memberEmail" name="memberEmail">
+    <br>
+    <label for="memberPassword">Mot de passe</label>
+    <input type="text" id="memberPassword" name="memberPassword">
+    <br>
+    <label for="memberSubscription">Souhaitez vous recevoir la newsletter ?</label>
+    <input type="radio" id="memberSubscription" name="memberSubscription" value="oui">
+    <input type="radio" id="memberSubscription" name="memberSubscription" value="non">
+    <br>
+    <label for="memberExpertise">Compétence que vous pouriez apporter à l'association</label>
+    <input type="text" id="mmemberExpertise" name="memberExpertise">
+    <br>
+    <label for="memberLevel">Niveau en couture</label>
+    <input type="range" id="memberLevel" name="memberLevel">
+    <br>
+    {# rajouter une section KIDS #}
+
+    <input type="submit" value="CREER MON PROFIL">
+    <br>
+{# VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ? #}
+
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+    
+</form>
+
+
+{% endblock %}

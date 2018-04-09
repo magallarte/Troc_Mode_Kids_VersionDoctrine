@@ -1,0 +1,128 @@
+(% extends 'base.html.twig'%)
+
+{% block body %}
+
+
+<h1>FICHE ARTICLE : création</h1>
+
+<form action="/article/create" method="post">
+
+    <label for="gender">SEXE</label>
+    <select name="gender" id="gender">
+    {% for gender in genders%}
+    <option value="{{gender.id}}">{{gender.title}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="type">TYPE</label>
+    <select name="type" id="type">
+    {% for type in types%}
+    <option value="{{type.id}}">{{type.title}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="size">TAILLE</label>
+    <select name="size" id="size">
+    {% for size in sizes%}
+    <option value="{{size.id}}">{{size.title}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="brand">MARQUE</label>
+    <select name="brand" id="brand">
+    {% for brand in brands%}
+    <option value="{{brand.id}}">{{brand.title}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="season">SAISON</label>
+    <select name="season[]" id="season">
+    {% for wearAndTear in wearAndTears%}
+    <option value="{{season.id}}">{{season.title}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="color">COULEUR</label>
+    <select name="color[]" id="color">
+    {% for color in colors%}
+    <option value="{{color.id}}">{{color.title}}</option>
+    {% endfor%}
+    </select>
+
+// VOIR COMMENT GERER LE TABLEAU ASSOCIATIF FABRIC/PERCENTAGE
+    <label for="fabric">COMPOSITION</label>
+    {% for fabric in fabrics%}
+    <li>{{fabric.title}}<input type="hidden" name="fabric_category.title[]" value="{{fabric.id}}"><input type="text" name="fabric_category.percentage[]"></li>
+    {% endfor%}
+    </select>
+
+    <label for="wearAndTear">ETAT</label>
+    <select name="wearAndTear" id="wearAndTear">
+    {% for wearAndTear in wearAndTears%}
+    <option value="{{wearAndTear.id}}">{{wearAndTear.title}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="articleButtonValue">VALEUR BOUTONS</label>
+    <input type="text" id="articleButtonValue" name="articleButtonValue">
+
+    <label for="articleEurosValue">VALEUR EUROS</label>
+    <input type="text" id="articleEurosValue" name="articleEurosValue">
+
+    <label for="articleComments">COMMENTAIRES</label>
+    <input type="text area" id="articleComments" name="articleComments">
+
+    <label for="donator">DONATEUR</label>
+    <select name="donator" id="donator">
+    {% for donator in donators%}
+    <option value="{{donator.id}}">{{donator.name}} {donator.surname}}</option>
+    {% endfor%}
+    </select>
+
+    <label for="donationBag">SAC DE DON</label>
+    <input type="text" id="donationBag" name="donationBag">
+
+    <label for="processStatus">ETAPE DE TRAITEMENT</label>
+    <select name="processStatus" id="processStatus">
+    {% for processStatus in processStatuss%}
+    <option value="{{processStatus.id}}">{{processStatus.title}}</option>
+    {% endfor%}
+    </select>
+
+    <input type="submit" value="CREER">
+
+// VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ?
+
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+
+// message = <p>L'article {{ article.articleId }} a bien été crée. Pensez à renommer les fichiers photos.</p>
+
+
+</form>
+
+
+    // private $articlePicture1;automatique
+    // private $articlePicture2;automatique
+    // private $articlePicture3;automatique
+    // private $articleButtonValue;ok
+    // private $articleEurosValue;ok
+    // private $articleComments;ok
+    // private $articleId;automatique
+    // private $brand;ok
+    // private $deliveryBag;automatique
+    // private $donationBag;ok
+    // private $gender;ok
+    // private $member;ok
+    // private $processStatus;ok
+    // private $size;ok
+    // private $type;ok
+    // private $wearAndTear;ok
+    // private $color;array ok
+    // private $fabric;array à verifier
+    // private $season;array ok
+
+{% endblock %}

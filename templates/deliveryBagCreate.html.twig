@@ -1,0 +1,134 @@
+// A FINIR
+
+(% extends 'base.html.twig'%)
+
+{% block body %}
+
+{% if app.session is defined %}
+    <div>
+        <form action="/article/selectKid/{{kid.id}}/{{ page }}" method="post">
+            <select name="selectionKid" id="selectionKid"> 
+            {{% for kid in kids %}}
+                <option  value="selectionKid" >La sélection de {{kid.name}}</option>
+            </select>
+            <input type="submit">// a remplacer par un scrpit JS on change
+        </form>
+    </div>   
+{% endif %}
+
+    <aside>
+    <h1 >Catégories</h1>
+        <form action="/article/selectCategories/{{ page }}" method="post">
+
+            <label for="gender">SEXE</label>
+            <select name="gender" id="gender">
+            {% for gender in genders%}
+            <option value="{{gender.id}}">{{gender.title}}</option>
+            {% endfor%}
+            </select>
+
+            <label for="type">TYPE</label>
+            <select name="type" id="type">
+            {% for type in types%}
+            <option value="{{type.id}}">{{type.title}}</option>
+            {% endfor%}
+            </select>
+
+            <label for="size">TAILLE</label>
+            <select name="size" id="size">
+            {% for size in sizes%}
+            <option value="{{size.id}}">{{size.title}}</option>
+            {% endfor%}
+            </select>
+
+            <label for="brand">MARQUE</label>
+            <select name="brand" id="brand">
+            {% for brand in brands%}
+            <option value="{{brand.id}}">{{brand.title}}</option>
+            {% endfor%}
+            </select>
+
+            <label for="season">SAISON</label>
+            <select name="season[]" id="season">
+            {% for wearAndTear in wearAndTears%}
+            <option value="{{season.id}}">{{season.title}}</option>
+            {% endfor%}
+            </select>
+
+            <label for="color">COULEUR</label>
+            <select name="color[]" id="color">
+            {% for color in colors%}
+            <option value="{{color.id}}">{{color.title}}</option>
+            {% endfor%}
+            </select>
+
+            <label for="wearAndTear">ETAT</label>
+            <select name="wearAndTear" id="wearAndTear">
+            {% for wearAndTear in wearAndTears%}
+            <option value="{{wearAndTear.id}}">{{wearAndTear.title}}</option>
+            {% endfor%}
+            </select>
+        
+            <input type="submit">// a remplacer par un scrpit JS on change
+
+        </form>
+    </aside>
+
+
+    <aside>
+        <h1 >Votre sélection (panier)</h1>
+        <p> Page {{ page }} sur {{ nombreDePages }}</p>
+        <div>
+            <form action="/article/showSelection/{{ page }}" method="post">
+                <label for="tri"> TRIEZ PAR : </label>
+                <select name="tri" id="tri"> 
+                <option  value="triTaille" >Taille</option>
+                <option  value="triSaison" >Saison</option>
+                </select>
+                <input type="submit">
+            </form>
+        </div>
+        <br>
+
+        <div>
+        // TESTER les deux écritures
+        // Option 1
+        {% for article in articles %}
+            <a href="{{ path('article_show', {'slug': article.slug}) }}">
+             <div>
+                    <img alt="image" src="{{ asset('images/{{article.picture1}}') }}">
+                    <h1>{{article.type}}  {{article.size}}  {{article.brand}}</h1>
+                    <p> {{article.eurosValue}} // {{article.buttonsValue}} <p>
+            </div>
+            </a>
+        {% endfor %}
+         // Option 2
+        {% for article in articles %}
+            <a href="/article/showDetails/{{ article.id }}" >
+                <div>
+                    <img alt="image" src="images/{{ article.picture1}}">
+                    <h1>{{article.type}}  {{article.size}}  {{article.brand}}</h1>
+                    <p> {{article.eurosValue}} // {{article.buttonsValue}} <p>
+                </div>
+            </a>
+        {% endfor %}
+        </div>
+
+        <br>
+        <div style=display:"block"; align="center">
+            {{% if page > 1 %}}
+                <a href="article/showSelection/{{page}}-1/{{tri}}">Page précédente</a>
+            {{% endif %}}
+            {% for i in 0..{{nombreDePages}} %}
+                * <a href="article/showSelection/{{ i }}/{{tri}}/">{{ i }}</a>
+            {% endfor %}
+            {{% if page < {{nombreDePages}} %}}
+                <a href="article/showSelection/{{page}}+1/{{tri}}">Page suivante</a>
+            {{% endif %}}
+        </div>
+    </aside>
+
+
+    {% endif %}
+
+    {% endblock %}

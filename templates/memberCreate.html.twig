@@ -1,0 +1,81 @@
+(% extends 'base.html.twig'%)
+
+{% block body %}
+
+
+<h1>Créez votre profil</h1>
+
+<form action="/member/create" method="post">
+
+{# 
+member_id automatique
+member_name ok
+member_surname ok
+member_address_1_ ok
+member_address_2_ ok
+member_zip_code ok
+member_city ok
+member_tel ok
+member_email ok
+member_password à crypter
+member_button_wallet automatique
+member_subscription ok
+member_expertise ok
+member_level ok
+ #}
+
+    <label for="memberName">Nom</label>
+    <input type="text" id="memberName" name="memberName">
+
+    <label for="memberSurname">Prénom</label>
+    <input type="text" id="memberSurname" name="memberSurname">
+
+    <label for="memberAddress1">Adresse</label>
+    <input type="text" id="memberAddress1" name="memberAddress1">
+
+    <label for="memberAddress2">Adresse (complément)</label>
+    <input type="text" id="memberAddress2" name="memberAddress2">
+
+    <label for="memberZipCode">Code Postal</label>
+    <input type="text" id="memberZipCode" name="memberZipCode">
+
+    <label for="memberCity">Ville</label>
+    <input type="text" id="memberCity" name="memberCity">
+
+    <label for="memberTel">Téléphone</label>
+    <input type="text" id="memberTel" name="memberTel">
+
+    <label for="memberEmail">Email</label>
+    <input type="email" id="memberEmail" name="memberEmail">
+
+    <label for="memberPassWord">Mot de passe</label>
+    <input type="text" id="memberPassWord" name="memberPassWord">
+
+    <label for="memberSubscrption">Souhaitez vous recevoir la newsletter ?</label>
+    <input type="radio" id="memberSubscrption" name="memberSubscrption" value="oui">
+    <input type="radio" id="memberSubscrption" name="memberSubscrption" value="non">
+
+    <label for="memberExpertise">Compétence que vous pouriez apporter à l'association</label>
+    <input type="text" id="mmemberExpertise" name="memberExpertise">
+
+    <label for="memberLevel">Niveau en couture</label>
+    <input type="range" id="memberLevel" name="memberLevel">
+
+    // rajouter une section KIDS
+
+    <input type="submit" value="CREER MON PROFIL">
+
+/ VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ?
+
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+
+// message = <p>Bienvenue {{ member.surname }}! Votre profil a bien été crée.</p>
+    
+</form>
+
+
+{% endblock %}
