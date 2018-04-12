@@ -1,0 +1,12 @@
+{% extends 'base.html.twig'%}
+{% block title %}Troc&Mode Kids{% endblock %}
+
+{% block body %}
+
+<h1>Modifier le profil de {{memberSurname}} {{memberName}}</h1>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+{% endblock %}

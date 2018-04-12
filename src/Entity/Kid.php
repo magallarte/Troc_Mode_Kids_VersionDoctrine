@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\KidRepository")
@@ -19,17 +20,21 @@ class Kid
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
+    * @ORM\Column(type="string", length=255)
+    * @Assert\NotBlank()
+    */
     private $kid_name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
+    * @ORM\Column(type="string", length=255)
+    * @Assert\NotBlank()
+    */
     private $kid_surname;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Type("\DateTime")
      */
     private $kid_birthday;
 
@@ -40,6 +45,7 @@ class Kid
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Member", mappedBy="member_kid_list")
+     * @Assert\NotBlank()
      */
     private $kid_parent_list;
 
@@ -119,6 +125,11 @@ class Kid
         return $this;
     }
 
+    public function setKidParentList(Member $kidParentList): self
+    {
+        return $this->addKidParentList($kidParentList);
+    }
+
     public function removeKidParentList(Member $kidParentList): self
     {
         if ($this->kid_parent_list->contains($kidParentList)) {
@@ -128,4 +139,5 @@ class Kid
 
         return $this;
     }
+
 }

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig'%}
+
+{% block body %}
+
+<h1>Votre profil</h1>
+
+<p>{{member.memberName}}</p>
+<p>{{member.memberSurname}}</p>
+<p>{{member.memberAddress1}}</p>
+<p>{{member.memberAddress2}}</p>
+<p>{{member.memberZipCode}} {{member.memberCity}} </p>
+<p>Tel : {{member.memberTel}}</p>
+<p>Email : {{member.memberEmail}}</p>
+<p>Abonnement à la newsletter :{{member.memberSubscription}}</p>
+<p>Niveau de couture :</p>
+<p type="range">{{member.memberLevel}}</p>
+<p>Cagnotte : {{member.memberButtonWallet}}</p>
+
+<a href="/member/unsetSession">Me déconnecter</a>
+<a href="/member/update">Modifier mon profil</a>
+<a href="/donationBag/show">Voir mes derniers dons</a>
+<a href="/deliveryBag/show">Voir mes dernières trouvailles</a>
+
+{% endblock %}

@@ -5,7 +5,7 @@
 
 <h1>Créez votre profil</h1>
 
-<form action="/member/create" method="post">
+{# <form action="/member/create" method="post">
 
     <label for="memberName">Nom</label>
     <input type="text" id="memberName" name="memberName">
@@ -44,11 +44,11 @@
     <label for="memberLevel">Niveau en couture</label>
     <input type="range" id="memberLevel" name="memberLevel">
     <br>
-    {# rajouter une section KIDS #}
+    //rajouter une section KIDS 
 
     <input type="submit" value="CREER MON PROFIL">
     <br>
-{# VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ? #}
+//VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ?
 
 {% for message in app.flashes('notice') %}
     <div class="flash-notice">
@@ -56,7 +56,10 @@
     </div>
 {% endfor %}
     
-</form>
+</form> #}
 
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
 
 {% endblock %}

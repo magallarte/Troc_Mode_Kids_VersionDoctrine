@@ -1,4 +1,4 @@
-(% extends 'base.html.twig'%)
+{% extends 'base.html.twig'%}
 
 {% block body %}
 
@@ -6,7 +6,7 @@
 <h1>Menu ADMIN : </h1>
 
 <ul>
-    <a href="/article/create"><li>Créer un article :</li></a>
+    {# <a href="/article/create"><li>Créer un article :</li></a>
     <li>Modifier un article :
         <form action="/article/update/articleId" method="post">
             <label for="articleId">Code Article</label>
@@ -28,31 +28,36 @@
             </select>
             <input type="submit" value="SUPPRIMER">
         </form>
+    </li> #}
+
+    <li>Créer un membre :
+        <form action="/member/create" method="post">
+            <input type="submit" value="CREER">
+        </form>
     </li>
-    <a href="/member/create"><li>Créer un membre :</li></a>
     <li>Modifier un membre :
-        <form action="/member/update/memberId" method="post">
-            <label for="memberId">Code Article</label>
+        <form action="/member/update" method="post">
+            <label for="memberId">Membre : </label>
             <select name="memberId" id="memberId">
             {% for member in members %}
-            <option value="{{member.id}}">{{member.surname}}  {{member.name}}</option>
+            <option value="{{member.id}}"> {{member.id}}  {{member.memberSurname}}  {{member.memberName}}</option>
             {% endfor %}
             </select>
             <input type="submit" value="MODIFIER">
         </form>
     </li>
     <li>Supprimer un membre :
-        <form action="/member/delete/memberId" method="post">
-            <label for="memberId">Code Article</label>
+        <form action="/member/delete/id" method="post">
+            <label for="memberId">Membre : </label>
             <select name="memberId" id="memberId">
             {% for member in members %}
-            <option value="{{member.id}}">{{member.surname}}  {{member.name}}</option>
+            <option value="{{member.id}}">{{member.memberSurname}}  {{member.memberName}}</option>
             {% endfor %}
             </select>
             <input type="submit" value="SUPPRIMER">
         </form>
     </li>
-    <a href="/news/create"><li>Créer une news :</li></a>
+    {# <a href="/news/create"><li>Créer une news :</li></a>
     <li>Modifier une news :</li>
         <form action="/news/update/newsId" method="post">
             <label for="newsId">News</label>
@@ -120,20 +125,12 @@
         </form>
     </li>
 </ul>
-    <input type="submit" value="CREER">
-
-// VERIFIER SI ECRITURE TWIG EST CORRECTE/ Comment gérer le unset ?
+    <input type="submit" value="CREER"> #}
 
 {% for message in app.flashes('notice') %}
     <div class="flash-notice">
         {{ message }}
     </div>
 {% endfor %}
-
-// message = <p>à définir selon l'action</p>
-
-    
-</form>
-
 
 {% endblock %}

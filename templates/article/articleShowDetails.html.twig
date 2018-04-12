@@ -1,0 +1,49 @@
+(% extends 'base.html.twig'%)
+
+{% block body %}
+
+
+<h1>FICHE ARTICLE : infos</h1>
+
+<div>{{article.articlePicture1}}</div>
+<div>{{article.articlePicture2}}</div>
+<div>{{article.articlePicture3}}</div>
+<p>{{article.type}}</p>
+<p>{{article.gender}}</p>
+<p>{{article.size}}</p>
+<p>{{article.brand}}</p>
+<p>{{article.color}}</p>
+<p>{{article.wearAndTear}}</p>
+
+
+    // private $articlePicture1;automatique
+    // private $articlePicture2;automatique
+    // private $articlePicture3;automatique
+    // private $articleButtonValue;ok
+    // private $articleEurosValue;ok
+    // private $articleComments;ok
+    // private $articleId;automatique
+    // private $deliveryBag;automatique
+    // private $donationBag;ok
+    // private $member;ok
+    // private $processStatus;ok
+    // private $fabric;array à verifier
+    // private $season;array ok
+
+<form action="/article/create" method="post">
+
+
+
+    
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
+
+// message = <p>L'article {{ article.articleId }} a bien été crée. Pensez à renommer les fichiers photos.</p>
+
+
+</form>
+
+{% endblock %}

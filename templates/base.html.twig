@@ -7,13 +7,11 @@
         <meta name="author" content="Marie-Aude LENOIR">
         <title>{% block title %}{% endblock %}</title>
 
-        {# {% block stylesheets %} #}
         <!-- Bootstrap core CSS -->
-         <link href="public/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+          <link href="http://127.0.0.1:8000/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
-         <link href="public/css/trocmodekids.css" rel="stylesheet">
-        {# {% endblock %} #}
+         <link href="http://127.0.0.1:8000/css/trocmodekids.css" rel="stylesheet">
     </head>
 
     <body>
@@ -21,14 +19,19 @@
         {# {% block navigation %} #}
             <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-bleu fixed-top">
                 <div class="container">
-                    <a class="navbar-brand" href="www/trocmodekids.fr">Troc&Mode Kids</a>
+                    <a class="navbar-brand" href="home/show">Troc&Mode Kids</a>
                         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                         </button>
                     <div class="collapse navbar-collapse" id="navbarResponsive">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/member/connection">Je m'identifie</a>
+                            {% if app.session %}
+                                <a class="nav-link" href="/member/show"> {{ sessionSurname }}  {{ sessionName }}</a>
+                                {# voir comment utiliser app.session.surname et app.session.name à la place #}
+                            {% else %}
+                                <a class="nav-link" href="/member/setSession">Je m'identifie</a>
+                            {% endif %}
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/deliveryBag/show">Mon panier</a>
@@ -40,8 +43,8 @@
                                     <a class="dropdown-item" href="concept.html.twig">Notre concept</a>
                                     <a class="dropdown-item" href="concept.html.twig">Je m'inscris</a>
                                     <a class="dropdown-item" href="/donationBag/show">Je donne</a>
-                                    <a class="dropdown-item" href="/deliveryBag/show">J'achète / Je troque</a>
-                                    <a class="dropdown-item" href="/workshop/show">Je valorise</a>
+                                    <a class="dropdown-item" href="/deliveryBag/show">Je trouve</a>
+                                    <a class="dropdown-item" href="/workshop/show">Je participe</a>
                                     <a class="dropdown-item" href="/news/show">News</a>
                                     <a class="dropdown-item" href="member/contact">Contact</a>
                                     <a class="dropdown-item" href="member/admin">Admin</a>
@@ -52,14 +55,21 @@
                 </div>
             </nav>
 
-            <div class="container logo">
+            {# <div class="container logo">
             <img src="{{ asset('images/Logo.png') }}" alt="Symfony!" />
-            </div>
+            </div> #}
 
         {# {% endblock %} #}
         </div>
 
         <div id="content">
+    
+        {% for message in app.flashes('notice') %}
+            <div class="flash-notice">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {% block body %} {% endblock %}
         </div>
 

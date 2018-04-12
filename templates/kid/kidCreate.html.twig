@@ -5,7 +5,7 @@
 
 <h1>Créez le profil de vos enfants</h1>
 
-<form action="/kid/create" method="post">
+{# <form action="/kid/create" method="post">
 
     <label for="kidName">Nom</label>
     <input type="text" id="kidName" name="kidName">
@@ -33,7 +33,11 @@
     </div>
 {% endfor %}
     
-</form>
+</form> #}
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
 
 
 {% endblock %}

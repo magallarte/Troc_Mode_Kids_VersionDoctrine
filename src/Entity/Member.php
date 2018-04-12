@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
@@ -55,11 +56,13 @@ class Member
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $member_email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $member_password;
 
@@ -85,12 +88,30 @@ class Member
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Kid", inversedBy="kid_parent_list")
+     * Validator
      */
     private $member_kid_list;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $member_kid_count;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Workshop", mappedBy="workshop_trainer")
+     */
+    private $member_worshopAsTrainer;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Workshop", mappedBy="workshop_trainees_list")
+     */
+    private $member_worshopAsTrainee;
 
     public function __construct()
     {
         $this->member_kid_list = new ArrayCollection();
+        $this->member_worshopAsTrainer = new ArrayCollection();
+        $this->member_worshopAsTrainee = new ArrayCollection();
     }
 
     public function getId()
@@ -279,4 +300,76 @@ class Member
 
         return $this;
     }
+
+    public function getMemberKidCount(): ?int
+    {
+        return $this->member_kid_count;
+    }
+
+    public function setMemberKidCount(int $member_kid_count): self
+    {
+        $this->member_kid_count = $member_kid_count;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workshop[]
+     */
+    public function getMemberWorshopAsTrainer(): Collection
+    {
+        return $this->member_worshopAsTrainer;
+    }
+
+    public function addMemberWorshopAsTrainer(Workshop $memberWorshopAsTrainer): self
+    {
+        if (!$this->member_worshopAsTrainer->contains($memberWorshopAsTrainer)) {
+            $this->member_worshopAsTrainer[] = $memberWorshopAsTrainer;
+            $memberWorshopAsTrainer->setWorkshopTrainer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberWorshopAsTrainer(Workshop $memberWorshopAsTrainer): self
+    {
+        if ($this->member_worshopAsTrainer->contains($memberWorshopAsTrainer)) {
+            $this->member_worshopAsTrainer->removeElement($memberWorshopAsTrainer);
+            // set the owning side to null (unless already changed)
+            if ($memberWorshopAsTrainer->getWorkshopTrainer() === $this) {
+                $memberWorshopAsTrainer->setWorkshopTrainer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Workshop[]
+     */
+    public function getMemberWorshopAsTrainee(): Collection
+    {
+        return $this->member_worshopAsTrainee;
+    }
+
+    public function addMemberWorshopAsTrainee(Workshop $memberWorshopAsTrainee): self
+    {
+        if (!$this->member_worshopAsTrainee->contains($memberWorshopAsTrainee)) {
+            $this->member_worshopAsTrainee[] = $memberWorshopAsTrainee;
+            $memberWorshopAsTrainee->addWorkshopTraineesList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberWorshopAsTrainee(Workshop $memberWorshopAsTrainee): self
+    {
+        if ($this->member_worshopAsTrainee->contains($memberWorshopAsTrainee)) {
+            $this->member_worshopAsTrainee->removeElement($memberWorshopAsTrainee);
+            $memberWorshopAsTrainee->removeWorkshopTraineesList($this);
+        }
+
+        return $this;
+    }
+
 }

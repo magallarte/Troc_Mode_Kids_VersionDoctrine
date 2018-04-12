@@ -1,0 +1,135 @@
+{% extends 'base.html.twig'%}
+{% block title %}Troc&Mode Kids{% endblock %}
+
+{% block body %}
+
+    <header>
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+          <!-- Slide One -->
+            <div class="carousel-item active" style="background-image: url('http://127.0.0.1:8000/images/Gaspillage vestimentaire.png')">
+              <div class="carousel-caption d-none d-md-block">
+                <a href="https://www.lexpress.fr/styles/mode/comment-l-upcycling-mode-redonne-vie-aux-vieux-vetements_1878176.html" >
+                <h4>L'EXPRESS - 16/02/2017</h4>
+                <p>Comment l'upcycling mode redonne vie aux vieux vêtments ?</p>
+                </a>
+              </div>
+            </div>
+          <!-- Slide Two -->
+          <div class="carousel-item" style="background-image: url('http://127.0.0.1:8000/images/Logo.png')">
+            <div class="carousel-caption d-none d-md-block">
+              <a href="#" >
+              <h4>Concept Troc&Mode</h4>
+              <p>Une vidéo pour expliquer le fonctionnement !</p>
+              </a>
+            </div>
+          </div>
+          <!-- Slide Three -->
+          <div class="carousel-item" style="background-image: url('http://127.0.0.1:8000/images/Robe.jpeg')">
+            <div class="carousel-caption d-none d-md-block">
+            <a href="#" >
+              <h4>Création de la semaine</h4>
+              <p>Une petite robe légère ...</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </header>
+
+<!-- Page Content -->
+    <div class="container">
+
+      <h1 class="my-4">Donnez utile - Achetez raisonné - Devenez upcycler !</h1>
+
+      <!-- Section Explications des 3 actions -->
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <div class="card h-100">
+            <h2 class="card-header">Je donne<img src="http://127.0.0.1:8000/images/Pictogramme-DON.png"></h2>
+            <div class="card-body">
+              <p class="card-text">Vous ne savez plus quoi faire des vêtements trop petits de vos enfants ? Vous n'avez pas le temps de faire le tri, de les déposer aux containers, de vous occcuper de les revendre ...</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">On s'occupe de tout !</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <div class="card h-100">
+            <h2 class="card-header">J'achète<img src="http://127.0.0.1:8000/images/Pictogramme-ACHAT.png"></h2>
+            <div class="card-body">
+              <p class="card-text">Grâce à vos points (gagnés en fonction de vos dons)et 1€ par vêtement ou bien, pour quelques €, achetez des vêtements de seconde main, en parfait état ! </p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Choisissez ce qu'il vous plait !</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <div class="card h-100">
+            <h2 class="card-header">Je valorise<img src="http://127.0.0.1:8000/images/Pictogramme-UPCYCLING.png"></h2>
+            <div class="card-body">
+              <p class="card-text">Vous êtes couturière débutante ou professionnelle et vous avez envie de redonner vie à des vêtments abîmés, ou bien de créer à partir de tissues recyclés ?</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Venez participer !</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+
+      <hr>
+
+      <!-- Section Arguments-->
+        <div class="col-lg-12">
+          <h3><strong>Pourquoi donner et acheter ses vêtements via TROC&Mode Kids ?</strong></h3>
+            <ul class="list-likes">
+                <p>C'est facile, on s'occupe de TOUT  ! (Collecte,Tri,Vente,Recyclage).</p>
+                <p>C'est simple, on récupère TOUS les vêtements enfant! (toutes les marques, toutes les tailles, tous les états).</p>
+                <p>C'utile, cela permet :
+                  <div>
+                    <ul class="list-check">
+                    <li>d'éviter le gaspillage vestimentaire et de faire un geste pour la planète !</li>
+                    <li>de faire profiter à beaucoup de parents d'un grand choix de vêtements pour leur(s) enfant(s).</li>
+                    <li>de mettre en valeur le savoir faire des couturières.</li>
+                    <li>de soutenir une activité qui crée du lien entre toutes les générations !</li>
+                    <li>de créer des emplois locaux.</li>
+                    </ul>
+                  </div>
+                </p>
+            </ul>
+        </div>
+      <!-- /.row -->
+
+      <hr>
+
+      <!-- Section Rejoignez nous ! -->
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <p>Troc&Mode est une association qui propose ses services de collecte, tri et recyclage, sur Castelnau-le-lez, le Crès et Jacou. Si vous habitez sur une de ces communes ... rejoignez notre association en vous inscrivant sur ce site.</p>
+        </div>
+        <div class="col-md-4">
+          <a class="btn btn-lg btn btn-primary btn-block" href="#">Rejoignez nous !</a>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.container -->
+
+
+{% endblock %}
