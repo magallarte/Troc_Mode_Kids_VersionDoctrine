@@ -107,11 +107,23 @@ class Member
      */
     private $member_worshopAsTrainee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DonationBag", mappedBy="donationBag_donator")
+     */
+    private $member_donationBag_list;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DeliveryBag", mappedBy="deliveryBag_buyer")
+     */
+    private $member_deliveryBag_list;
+
     public function __construct()
     {
         $this->member_kid_list = new ArrayCollection();
         $this->member_worshopAsTrainer = new ArrayCollection();
         $this->member_worshopAsTrainee = new ArrayCollection();
+        $this->member_donationBag_list = new ArrayCollection();
+        $this->member_deliveryBag_list = new ArrayCollection();
     }
 
     public function getId()
@@ -367,6 +379,68 @@ class Member
         if ($this->member_worshopAsTrainee->contains($memberWorshopAsTrainee)) {
             $this->member_worshopAsTrainee->removeElement($memberWorshopAsTrainee);
             $memberWorshopAsTrainee->removeWorkshopTraineesList($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DonationBag[]
+     */
+    public function getMemberDonationBagList(): Collection
+    {
+        return $this->member_donationBag_list;
+    }
+
+    public function addMemberDonationBagList(DonationBag $memberDonationBagList): self
+    {
+        if (!$this->member_donationBag_list->contains($memberDonationBagList)) {
+            $this->member_donationBag_list[] = $memberDonationBagList;
+            $memberDonationBagList->setDonationBagDonator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberDonationBagList(DonationBag $memberDonationBagList): self
+    {
+        if ($this->member_donationBag_list->contains($memberDonationBagList)) {
+            $this->member_donationBag_list->removeElement($memberDonationBagList);
+            // set the owning side to null (unless already changed)
+            if ($memberDonationBagList->getDonationBagDonator() === $this) {
+                $memberDonationBagList->setDonationBagDonator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DeliveryBag[]
+     */
+    public function getMemberDeliveryBagList(): Collection
+    {
+        return $this->member_deliveryBag_list;
+    }
+
+    public function addMemberDeliveryBagList(DeliveryBag $memberDeliveryBagList): self
+    {
+        if (!$this->member_deliveryBag_list->contains($memberDeliveryBagList)) {
+            $this->member_deliveryBag_list[] = $memberDeliveryBagList;
+            $memberDeliveryBagList->setDeliveryBagBuyer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberDeliveryBagList(DeliveryBag $memberDeliveryBagList): self
+    {
+        if ($this->member_deliveryBag_list->contains($memberDeliveryBagList)) {
+            $this->member_deliveryBag_list->removeElement($memberDeliveryBagList);
+            // set the owning side to null (unless already changed)
+            if ($memberDeliveryBagList->getDeliveryBagBuyer() === $this) {
+                $memberDeliveryBagList->setDeliveryBagBuyer(null);
+            }
         }
 
         return $this;

@@ -6,9 +6,9 @@
 <h1>Menu ADMIN : </h1>
 
 <ul>
-    {# <a href="/article/create"><li>Créer un article :</li></a>
+    <a href="/article/create"><li>Créer un article :</li></a>
     <li>Modifier un article :
-        <form action="/article/update/articleId" method="post">
+        <form action="/article/create" method="post">
             <label for="articleId">Code Article</label>
             <select name="articleId" id="articleId">
             {% for article in articles %}
@@ -18,6 +18,7 @@
             <input type="submit" value="MODIFIER">
         </form>
     </li>
+    {#
     <li>Supprimer un article :
         <form action="/article/delete/articleId" method="post">
             <label for="articleId">Code Article</label>

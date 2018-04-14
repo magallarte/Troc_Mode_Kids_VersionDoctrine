@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fabric{% endblock %}
+
+{% block body %}
+    <h1>Fabric</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ fabric.id }}</td>
+            </tr>
+            <tr>
+                <th>Fabric_name</th>
+                <td>{{ fabric.fabric_name }}</td>
+            </tr>
+            <tr>
+                <th>Fabric_code</th>
+                <td>{{ fabric.fabric_code }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('fabric_index') }}">back to list</a>
+
+    <a href="{{ path('fabric_edit', {'id': fabric.id}) }}">edit</a>
+
+    {{ include('fabric/_delete_form.html.twig') }}
+{% endblock %}

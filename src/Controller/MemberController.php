@@ -61,6 +61,13 @@ class MemberController extends Controller
             // ->add('memberRole', HiddenType::class, array('data'  => 'membre'))
             ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
             ->add('memberSubscription', RadioType::class, array('label'  => 'Abonnement à la newsletter'))
+            // voir si posible d'affecter 2 choix : oui ou non
+    //         $builder->add('attending', ChoiceType::class, array(
+    // 'choices' => array(
+    //     'Yes' => true,
+    //     'No' => false,
+    //     'Maybe' => null,
+    // ),
             ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
             ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
             ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))

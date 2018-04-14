@@ -80,6 +80,15 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "sensio/framework-extra-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
+        }
+    },
     "symfony/asset": {
         "version": "v4.0.8"
     },
@@ -172,6 +181,12 @@
             "version": "4.0",
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
+    },
+    "symfony/security-core": {
+        "version": "v4.0.8"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.0.8"
     },
     "symfony/translation": {
         "version": "3.3",
