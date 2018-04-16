@@ -17,7 +17,7 @@ class ProcessStatus
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $processStatus_name;
 

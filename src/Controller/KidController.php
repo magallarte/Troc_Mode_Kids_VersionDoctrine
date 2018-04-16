@@ -41,15 +41,15 @@ class KidController extends Controller
                                 return $parent->getMemberName().' '.$parent->getMemberSurname();
                             },
                             'preferred_choices' => function ($parent){
-                                return $parent->getMemberName().' '.$parent->getMemberSurname();
+                                return $parent->getMemberSurname().' '.$parent->getMemberName() == $session->get('surname').' '.$session->get('name');
                             }))
                     ->add('kidBirthday', BirthdayType::class, array(
                         'label'  => 'Date de naissance :',
-                            'widget' => 'choice',
-                            'format' => 'dd-MM-yyyy',
-                            'placeholder' => array(
-                                    'day' => 'Jour', 'month' => 'Mois', 'year' => 'Année',)
-                            ))
+                        'widget' => 'choice',
+                        'format' => 'dd-MM-yyyy',
+                        'placeholder' => array(
+                                'day' => 'Jour', 'month' => 'Mois', 'year' => 'Année',)
+                        ))
                     ->add('kidSchoolId', EntityType::class, array(
                             'label'  => 'Ecole :',
                             'class' => 'App\Entity\School',

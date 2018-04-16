@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Workshop index{% endblock %}
+
+{% block body %}
+    <h1>Workshop index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Workshop_date</th>
+                <th>Workshop_theme</th>
+                <th>Workshop_fee</th>
+                <th>Workshop_place</th>
+                <th>Workshop_picture</th>
+                <th>Workshop_trainer</th>
+                <th>Workshop_trainees</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for workshop in workshops %}
+            <tr>
+                <td>{{ workshop.id }}</td>
+                <td>{{ workshop.workshopDate ? workshop.workshopDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ workshop.workshopTheme }}</td>
+                <td>{{ workshop.workshopFee }}</td>
+                <td>{{ workshop.workshopPlace }}</td>
+                <td>{{ workshop.workshopPicture }}</td>
+                <td>{{ workshop.workshopTrainer.MemberSurname }} {{ workshop.workshopTrainer.MemberName }}</td>
+                {% for trainee in workshop.workshopTraineesList %}
+                <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
+                {% endfor %}
+                <td>
+                    <a href="{{ path('workshop_show', {'id': workshop.id}) }}">show</a>
+                    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('workshop_new') }}">Create new</a>
+{% endblock %}

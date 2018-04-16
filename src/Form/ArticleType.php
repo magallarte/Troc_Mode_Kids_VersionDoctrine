@@ -25,7 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FabricType;
+use App\Form\FabricType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ArticleType extends AbstractType
@@ -64,41 +64,24 @@ class ArticleType extends AbstractType
                     'label'  => 'Etat d\'usure :',
                     'class' => 'App\Entity\WearStatus',
                     'choice_label' => 'WearStatusName'))
-            ->add('article_fabric', EntityType::class, array(
-                    'label'  => 'Composition :',
-                    'class' => 'App\Entity\Fabric',
-                    'expanded'=> true,
-                    'multiple'=> true,
-                    'choice_label' => 'FabricName'))
-            // ->add('article_fabric', CollectionType::class, array(
+            // ->add('article_fabric', EntityType::class, array(
             //         'label'  => 'Composition :',
-            //         'entry_type' => ChoiceType::class,
-            //         // these options are passed to each "email" type
-            //         'entry_options' => $builder->create('article_fabric', FormType::class, array('by_reference' => true))
-            //         ->add('composition', EntityType::class, array(
-            //             'label'  => 'Composition :',
-            //             'class' => 'App\Entity\Fabric',
-            //             'choice_label' => 'FabricName'))
-            //         ->add('percentage', ChoiceType::class, array(
-            //         'entry_type' => PercentType::class,
-            //         'entry_options' => array(
-            //             'attr' => array('class' => 'email-box')))))
-            // ->add('article_fabric2', CollectionType::class, array(
-            //         'label'  => 'Composition en pourcentage :',
-            //         'entry_type' => ChoiceType::class,
-            //         'entry_options' => array(
-            //             'choices' => array (
-            //                 '5' => '5',
-            //                 '10' => '10',
-            //                 '20' => '20',
-            //                 '30' => '30',
-            //             ),
-            //         'allow_add' => true,
-            //         )))
+            //         'class' => 'App\Entity\Fabric',
+            //         'expanded'=> true,
+            //         'multiple'=> true,
+            //         'choice_label' => 'FabricName'))
+            // Option1:
+            ->add('article_fabric', CollectionType::class, array(
+                    'label'  => 'Composition :',
+                    'entry_type' => FabricType::class,
+                    'allow_add'=> true
+            ))
+            //Option2:
             // ->add('article_fabric%', PercentType::class, array(
             //         'label'  => 'Marque :',
             //         'class' => 'App\Entity\Fabric',
             //         'choice_label' => 'FabricName'))
+            //Option3:
             // ->add(
             //         $builder->create('article_fabric', FormType::class, array('by_reference' => true))
             //         ->add('composition', EntityType::class, array(
@@ -109,6 +92,7 @@ class ArticleType extends AbstractType
             //         'entry_type' => PercentType::class,
             //         'entry_options' => array(
             //             'attr' => array('class' => 'email-box')))))
+            //Option 4:
             //  ->add(
             //         $builder->create('article_fabric', FormType::class, array('by_reference' => true))
             //         ->add('composition', EntityType::class, array(
@@ -122,7 +106,7 @@ class ArticleType extends AbstractType
             //                 '10' => '10'))))
             ->add('article_buttonValue', MoneyType::class, array('label'  => 'Valeur "Boutons"  '))
             ->add('article_eurosValue', MoneyType::class, array('label'  => 'Valeur "Euros"  '))
-            // ->add('article_comments', TextareaType::class, array('label'  => 'Descriptif '))
+            ->add('article_comments', TextareaType::class, array('label'  => 'Descriptif '))
             ->add('article_processStatus', EntityType::class, array(
                     'label'  => 'Etape de traitement :',
                     'class' => 'App\Entity\ProcessStatus',

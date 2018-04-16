@@ -117,6 +117,11 @@ class Member
      */
     private $member_deliveryBag_list;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role")
+     */
+    private $member_role;
+
     public function __construct()
     {
         $this->member_kid_list = new ArrayCollection();
@@ -124,6 +129,7 @@ class Member
         $this->member_worshopAsTrainee = new ArrayCollection();
         $this->member_donationBag_list = new ArrayCollection();
         $this->member_deliveryBag_list = new ArrayCollection();
+        $this->member_role = new ArrayCollection();
     }
 
     public function getId()
@@ -441,6 +447,37 @@ class Member
             if ($memberDeliveryBagList->getDeliveryBagBuyer() === $this) {
                 $memberDeliveryBagList->setDeliveryBagBuyer(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getMemberRole(): Collection
+    {
+        return $this->member_role;
+    }
+
+    public function addMemberRole(Role $memberRole): self
+    {
+        if (!$this->member_role->contains($memberRole)) {
+            $this->member_role[] = $memberRole;
+        }
+
+        return $this;
+    }
+
+    public function setMemberRole(Role $memberRole): self
+    {
+        return $this->addMemberRole($memberRole);
+    }
+
+    public function removeMemberRole(Role $memberRole): self
+    {
+        if ($this->member_role->contains($memberRole)) {
+            $this->member_role->removeElement($memberRole);
         }
 
         return $this;

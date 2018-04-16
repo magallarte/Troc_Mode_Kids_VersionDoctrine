@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeliveryBag index{% endblock %}
+
+{% block body %}
+    <h1>DeliveryBag index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DeliveryBag_serviceFee</th>
+                <th>DeliveryBag_buttonAmount</th>
+                <th>DeliveryBag_buyDate</th>
+                <th>DeliveryBag_deliveryFee</th>
+                <th>DeliveryBag_deliveryDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for delivery_bag in delivery_bags %}
+            <tr>
+                <td>{{ delivery_bag.id }}</td>
+                <td>{{ delivery_bag.deliveryBag_serviceFee }}</td>
+                <td>{{ delivery_bag.deliveryBag_buttonAmount }}</td>
+                <td>{{ delivery_bag.deliveryBag_buyDate ? delivery_bag.deliveryBag_buyDate|date('Y-m-d') : '' }}</td>
+                <td>{{ delivery_bag.deliveryBag_deliveryFee }}</td>
+                <td>{{ delivery_bag.deliveryBag_deliveryDate ? delivery_bag.deliveryBag_deliveryDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('delivery_bag_show', {'id': delivery_bag.id}) }}">show</a>
+                    <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('delivery_bag_new') }}">Create new</a>
+{% endblock %}

@@ -14,12 +14,12 @@ class Article
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $article_picture1;
 
@@ -109,40 +109,16 @@ class Article
      */
     private $article_season;
 
+    /**
+     * @ORM\Column(type="string", length=13, nullable=true)
+     */
+    private $article_code;
+
     public function __construct()
     {
         $this->article_color = new ArrayCollection();
         $this->article_fabric = new ArrayCollection();
         $this->article_season = new ArrayCollection();
-    }
-
-
-    public function setId($id)
-    {
-        $id = substr( $id, -4 );
-        if( ctype_digit($id) ) {
-            $id = (int)$id;
-            $id++;
-            $id=str_pad($id,4,"0",STR_PAD_LEFT);// fonction PHP qui complète pour obtenir 6 caractères
-        }
-        $genderCode = $this->getArticleGender();
-        var_dump($genderCode);
-        $sizeCode = $this->getArticleSize();
-        if(is_array($this->getArticleSeason()) && count($this->getArticleSeason()>1))
-                {
-                    $seasonCode='';
-                    foreach($this->getArticleSeason() as $articleSeason)
-                    {
-                        $seasonCode = $seasonCode.$articleSeason;
-                    }
-                }
-                else
-                {
-                    $seasonCode= ( str_pad($this->getArticleSeason() ,2, "0", STR_PAD_LEFT) );
-                }
-        $typeCode = $this->getArticleType();
-        $this->id = $genderCode.$sizeCode.$seasonCode.$typeCode.$id;
-        return $this;
     }
 
     public function getId()
@@ -155,9 +131,9 @@ class Article
         return $this->article_picture1;
     }
 
-    public function setArticlePicture1(string $article_picture1): self
+    public function setArticlePicture1(?string $article_picture1): self
     {
-        $this->article_picture1 = $article_picture1;
+        $this->article_picture2 = $article_picture1;
 
         return $this;
     }
@@ -392,6 +368,41 @@ class Article
         if ($this->article_season->contains($articleSeason)) {
             $this->article_season->removeElement($articleSeason);
         }
+
+        return $this;
+    }
+
+    public function getArticleCode(): ?string
+    {
+        return $this->article_code;
+    }
+
+    public function setArticleCode(?string $last_article_code): self
+    {
+        $numCode = substr( $last_article_code, -4 );
+        if( ctype_digit($numCode) ) {
+            $numCode = (int)$numCode;
+            $numCode++;
+            $numCode=str_pad($numCode,4,"0",STR_PAD_LEFT);// fonction PHP qui complète pour obtenir 4 caractères
+        }
+        
+        $genderCode = $this->getArticleGender()->getGenderCode();
+        
+        $sizeCode = $this->getArticleSize()->getSizeCode();
+        
+        $seasonCode='';
+            foreach($this->getArticleSeason() as $articleSeason)
+            {
+                $seasonCode = $seasonCode.$articleSeason->getSeasonCode();
+            }
+        if(strlen($seasonCode)<1)
+            {
+                $seasonCode= ( str_pad($seasonCode ,2, "0", STR_PAD_LEFT) );
+            }
+        
+        $typeCode = $this->getArticleType()->getTypeCode();
+        
+        $this->id = $genderCode.$sizeCode.$seasonCode.$typeCode.$numCode;
 
         return $this;
     }

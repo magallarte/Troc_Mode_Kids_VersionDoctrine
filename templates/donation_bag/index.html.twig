@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DonationBag index{% endblock %}
+
+{% block body %}
+    <h1>DonationBag index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DonationBag_date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for donation_bag in donation_bags %}
+            <tr>
+                <td>{{ donation_bag.id }}</td>
+                <td>{{ donation_bag.donationBag_date ? donation_bag.donationBag_date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('donation_bag_show', {'id': donation_bag.id}) }}">show</a>
+                    <a href="{{ path('donation_bag_edit', {'id': donation_bag.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('donation_bag_new') }}">Create new</a>
+{% endblock %}

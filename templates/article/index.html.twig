@@ -21,13 +21,14 @@
         <tbody>
         {% for article in articles %}
             <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.article_picture1 }}</td>
-                <td>{{ article.article_picture2 }}</td>
-                <td>{{ article.article_picture3 }}</td>
-                <td>{{ article.article_buttonValue }}</td>
-                <td>{{ article.article_eurosValue }}</td>
-                <td>{{ article.article_comments }}</td>
+                <td>{{ article.articleGender }}</td>
+                <td>{{ article.articleType }}</td>
+                <td>{{ article.articleSeason }}</td>
+                <td>{{ article.articleSize }}</td>
+                <td>{{ article.articleBrand }}</td>
+                <td>{{ article.articlePicture1 }}</td>
+                <td>{{ article.articleButtonValue }}</td>
+                <td>{{ article.articleEurosValue }}</td>
                 <td>
                     <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
                     <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>

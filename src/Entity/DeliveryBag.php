@@ -50,6 +50,21 @@ class DeliveryBag
      */
     private $deliveryBag_article_list;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Delivery")
+     */
+    private $deliveryBag_delivery;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $deliveryBag_deliveryFee;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $deliveryBag_deliveryDate;
+
     public function __construct()
     {
         $this->deliveryBag_article_list = new ArrayCollection();
@@ -147,6 +162,42 @@ class DeliveryBag
                 $deliveryBagArticleList->setArticleDeliveyBag(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDeliveryBagDelivery(): ?Delivery
+    {
+        return $this->deliveryBag_delivery;
+    }
+
+    public function setDeliveryBagDelivery(?Delivery $deliveryBag_delivery): self
+    {
+        $this->deliveryBag_delivery = $deliveryBag_delivery;
+
+        return $this;
+    }
+
+    public function getDeliveryBagDeliveryFee(): ?float
+    {
+        return $this->deliveryBag_deliveryFee;
+    }
+
+    public function setDeliveryBagDeliveryFee(?float $deliveryBag_deliveryFee): self
+    {
+        $this->deliveryBag_deliveryFee = $deliveryBag_deliveryFee;
+
+        return $this;
+    }
+
+    public function getDeliveryBagDeliveryDate(): ?\DateTimeInterface
+    {
+        return $this->deliveryBag_deliveryDate;
+    }
+
+    public function setDeliveryBagDeliveryDate(?\DateTimeInterface $deliveryBag_deliveryDate): self
+    {
+        $this->deliveryBag_deliveryDate = $deliveryBag_deliveryDate;
 
         return $this;
     }

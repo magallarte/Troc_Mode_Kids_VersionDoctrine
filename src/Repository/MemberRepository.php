@@ -47,4 +47,42 @@ class MemberRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    //     public function findAllSameRole($role): array
+    // {
+    //     $conn = $this->getEntityManager()->getConnection();
+
+    //     $sql = '
+    //         SELECT * FROM `member_role`
+    //         INNER JOIN `member` ON `member`.`id`= `member_role`.`member_id`
+    //         INNER JOIN `role` ON `role`.`id`= `member_role`.`role_id`
+    //         WHERE `role`.`role_name` = :role
+    //         ORDER BY `member`.`member_name` ASC
+    //         ';
+    //     $stmt = $conn->prepare($sql);
+    //     $stmt->execute(['role' => $role]);
+
+    //     // returns an array of arrays (i.e. a raw data set)
+    //     return $stmt->fetchAll();
+    // }
+    /**
+     * @param $role
+     * @return Member[]
+     */
+    public function findAllSameRole($role): array
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('m')
+            ->innerJoin('m.member_role', 'r', 'WITH', 'r.role_name = :role')
+            ->addselect('r')
+            ->orderBy('m.member_name', 'ASC')
+            ->setParameter('role', $role)
+            ->getQuery();
+
+        return $qb->execute();
+
+        // to get just one result:
+        // $product = $qb->setMaxResults(1)->getOneOrNullResult();
+    }
 }

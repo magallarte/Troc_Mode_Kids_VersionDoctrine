@@ -15,9 +15,11 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface; 
 use Symfony\Component\Form\FormEvent;
@@ -58,16 +60,15 @@ class MemberController extends Controller
             ->add('memberEmail', EmailType::class, array('label'  => 'email :'))
             ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
             ->add('memberButtonWallet', HiddenType::class, array('data'  => '0'))
-            // ->add('memberRole', HiddenType::class, array('data'  => 'membre'))
+            // ->add('memberRole', HiddenType::class, array('data'  => 'visiteur'))
             ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
-            ->add('memberSubscription', RadioType::class, array('label'  => 'Abonnement à la newsletter'))
-            // voir si posible d'affecter 2 choix : oui ou non
-    //         $builder->add('attending', ChoiceType::class, array(
-    // 'choices' => array(
-    //     'Yes' => true,
-    //     'No' => false,
-    //     'Maybe' => null,
-    // ),
+            ->add('memberSubscription', ChoiceType::class, array(
+                'label'  => 'Abonnement à la newsletter',
+                'expanded'=> true,
+                'choices' => array(
+                    'Oui' => true,
+                    'Non' => false
+                )))
             ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
             ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
             ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
@@ -103,17 +104,12 @@ class MemberController extends Controller
                     return $this->redirectToRoute('kid_create');
                 }
                 else {
-                    return $this->render('home.html.twig', array(
-                    'sessionName' => $session->get('name'),
-                    'sessionSurname' => $session->get('surname')
-                    ));
+                    return $this->render('home.html.twig');
                 }
             }
 
         return $this->render('member/memberCreate.html.twig', array(
-            'form' => $form->createView(),
-            'sessionName' => $session->get('name'),
-            'sessionSurname' => $session->get('surname')
+            'form' => $form->createView()
             ));
     }
     /**
@@ -172,10 +168,7 @@ class MemberController extends Controller
                     'notice',
                     'Vous êtes bien connecté !'
                     );
-                    return $this->render('home.html.twig', array(
-                        'sessionName' => $session->get('name'),
-                        'sessionSurname' => $session->get('surname'),
-                    ));
+                    return $this->render('home.html.twig');
                     }
                     else // sinon on demande propose de recommencer la saisie ou de se créer un profil
                     {
@@ -199,9 +192,7 @@ class MemberController extends Controller
             }
 
         return $this->render('member/memberConnect.html.twig', array(
-            'form' => $form->createView(),
-            'sessionName' => $session->get('name'),
-            'sessionSurname' => $session->get('surname')
+            'form' => $form->createView()
             ));
     }
 
@@ -216,10 +207,7 @@ class MemberController extends Controller
             'notice',
             'Vous êtes bien déconnecté !'
         );
-        return $this->render('home.html.twig', array(
-            'sessionName' => ' ',
-            'sessionSurname' => ' '
-            ));
+        return $this->render('home.html.twig');
     }
 
 
@@ -233,9 +221,7 @@ class MemberController extends Controller
         $member = $entityManager->getRepository(Member::class)->find($session->get('id')); 
 
         return $this->render('member/memberShow.html.twig', array(
-            'member' => $member,
-            'sessionName' => $session->get('name'),
-            'sessionSurname' => $session->get('surname')
+            'member' => $member
         ));
     }
 
@@ -245,7 +231,15 @@ class MemberController extends Controller
 public function update(Request $request, SessionInterface $session)
 {
     $entityManager = $this->getDoctrine()->getManager();
-    $member = $entityManager->getRepository(Member::class)->find($request->get('memberId'));
+    if($session)
+    {
+        $member = $entityManager->getRepository(Member::class)->find($session->get('id'));
+    }
+    else {
+        $member = $entityManager->getRepository(Member::class)->find($request->get('memberId'));
+    }
+    
+    // $id=$request->get('memberId');
     // $member = $entityManager->getRepository(Member::class)->find($id);
 
     if (!$member) {
@@ -264,7 +258,11 @@ public function update(Request $request, SessionInterface $session)
             ->add('memberTel', TelType::class, array('label'  => 'Téléphone :'))
             ->add('memberEmail', EmailType::class, array('label'  => 'email :'))
             ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
-            // ->add('memberRole', HiddenType::class, array('data'  => 'membre'))
+            ->add('memberRole', EntityType::class, array('data'  => 'membre'))
+            ->add('memberRole', EntityType::class, array(
+                            'label'  => 'Role :',
+                            'class' => 'App\Entity\Role',
+                            'choice_label' => 'RoleName'))
             ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
             ->add('memberSubscription', RadioType::class, array('label'  => 'Abonnement à la newsletter'))
             ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
@@ -296,8 +294,7 @@ public function update(Request $request, SessionInterface $session)
 
         return $this->render('member/memberUpdate.html.twig', array(
             'form' => $form->createView(),
-            'memberName'=> $member->getMemberName(),
-            'memberSurname'=> $member->getMemberSurname(),
+            'member'=> $member
         ));
 
     }

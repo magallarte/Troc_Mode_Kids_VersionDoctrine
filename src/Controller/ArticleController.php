@@ -37,6 +37,7 @@ class ArticleController extends Controller
             $article = $form->getData();
             $em = $this->getDoctrine()->getManager();
            
+            // On récupère le code du dernier article pour créer le code de l'article en cours de création
             $criteria=array(
                 'article_gender'=> $article->getArticleGender(),
                 'article_size'=> $article->getArticleSize(),
@@ -46,34 +47,28 @@ class ArticleController extends Controller
             $orderBy = array('id'=>'ASC' );
 
             $lastArticle = $em->getRepository(Article::class)->findOneBy($criteria,$orderBy);
-            //     ['article_gender' => $article->getArticleGender()],
-            //     ['article_size' => $article->getArticleSize()],
-            //     ['article_season' => $article->getArticleSeason()],
-            //     ['article_type' => $article->getArticleType()],
-            //     ['id' => 'ASC']
-            // );
-            // $lastArticle=$similarArticles['0'];
-            var_dump($lastArticle);
-
-            // $criteria=array(
-            //     'gender'=> $article->getArticleGender(),
-            //     'size'=> $article->getArticleSize(),
-            //     'season'=> $article->getArticleSeason(),
-            //     'type'=> $article->getArticleType(),
-            // );
-            // $lastArticle = $this->getDoctrine()
-            //     ->getRepository(Article::class)
-            //     ->findLastInsertedArticleId($criteria);
-            // $lastArticleId = $lastArticle->getId();
+            $lastArticleCode = $lastArticle->getArticleCode();
             
             if(is_null ($lastArticle))
             {
-                $article->setId('XXXXXXXXX0000');
+                $article->setArticleCode('XXXXXXXXX0000');
             }
             
-            $article->setId($lastArticle);
+            $article->setArticleCode($lastArticle);
+
+            // On affecte au ArticleFabric un tableau avec avec les POST de fabric_name et fabric_percentage
+            // $article->setArticleFabric([
+            //   'name' =>$request('fabric_name'),
+            //   'percentage'=>$request('fabric_percentage')
+            //]);
+            
             $em->persist($article);
             $em->flush();
+
+            $this->addFlash(
+                    'notice',
+                    'L\'article a bien été crée !'
+            );
 
             return $this->redirectToRoute('article_index');
         }

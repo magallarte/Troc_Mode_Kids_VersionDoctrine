@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeliveryBag{% endblock %}
+
+{% block body %}
+    <h1>DeliveryBag</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ delivery_bag.id }}</td>
+            </tr>
+            <tr>
+                <th>DeliveryBag_serviceFee</th>
+                <td>{{ delivery_bag.deliveryBag_serviceFee }}</td>
+            </tr>
+            <tr>
+                <th>DeliveryBag_buttonAmount</th>
+                <td>{{ delivery_bag.deliveryBag_buttonAmount }}</td>
+            </tr>
+            <tr>
+                <th>DeliveryBag_buyDate</th>
+                <td>{{ delivery_bag.deliveryBag_buyDate ? delivery_bag.deliveryBag_buyDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DeliveryBag_deliveryFee</th>
+                <td>{{ delivery_bag.deliveryBag_deliveryFee }}</td>
+            </tr>
+            <tr>
+                <th>DeliveryBag_deliveryDate</th>
+                <td>{{ delivery_bag.deliveryBag_deliveryDate ? delivery_bag.deliveryBag_deliveryDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('delivery_bag_index') }}">back to list</a>
+
+    <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">edit</a>
+
+    {{ include('delivery_bag/_delete_form.html.twig') }}
+{% endblock %}

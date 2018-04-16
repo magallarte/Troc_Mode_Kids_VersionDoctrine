@@ -40,6 +40,11 @@ class DonationBag
      */
     private $donationBag_article_list;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SchoolStop")
+     */
+    private $donationBag_schoolStop;
+
     public function __construct()
     {
         $this->donationBag_article_list = new ArrayCollection();
@@ -113,6 +118,18 @@ class DonationBag
                 $donationBagArticleList->setArticleDonationBag(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDonationBagSchoolStop(): ?SchoolStop
+    {
+        return $this->donationBag_schoolStop;
+    }
+
+    public function setDonationBagSchoolStop(?SchoolStop $donationBag_schoolStop): self
+    {
+        $this->donationBag_schoolStop = $donationBag_schoolStop;
 
         return $this;
     }
