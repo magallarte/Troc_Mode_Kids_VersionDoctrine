@@ -1,46 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article index{% endblock %}
+{% block title %}Liste des articles{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
+    <h1>Liste des articles</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Article_picture1</th>
-                <th>Article_picture2</th>
-                <th>Article_picture3</th>
-                <th>Article_buttonValue</th>
-                <th>Article_eurosValue</th>
-                <th>Article_comments</th>
-                <th>actions</th>
+                <th>Sexe</th>
+                <th>Catégorie</th>
+                <th>Saison</th>
+                <th>Taille</th>
+                <th>Marque</th>
+                <th>Photo 1</th>
+                <th>Valeur (boutons)</th>
+                <th>Valeur (euros)</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for article in articles %}
             <tr>
-                <td>{{ article.articleGender }}</td>
-                <td>{{ article.articleType }}</td>
-                <td>{{ article.articleSeason }}</td>
-                <td>{{ article.articleSize }}</td>
-                <td>{{ article.articleBrand }}</td>
+                <td>{{ article.articleGender.GenderName }}</td>
+                <td>{{ article.articleType.TypeName }}</td>
+                <td>
+                {% for season in article.articleSeason %}
+                {{ season.SeasonName }}
+                {% endfor %}
+                </td>
+                <td>{{ article.articleSize.SizeName }}</td>
+                <td>{{ article.articleBrand.BrandName }}</td>
                 <td>{{ article.articlePicture1 }}</td>
                 <td>{{ article.articleButtonValue }}</td>
                 <td>{{ article.articleEurosValue }}</td>
                 <td>
-                    <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>
+                    <a href="{{ path('article_show', {'id': article.id}) }}">voir le fiche</a>
+                    <a href="{{ path('article_edit', {'id': article.id}) }}">éditer la fiche</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">Aucun article trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('article_new') }}">Create new</a>
+    <a href="{{ path('article_new') }}">Créer un nouvel article</a>
 {% endblock %}

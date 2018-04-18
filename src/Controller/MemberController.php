@@ -170,7 +170,7 @@ class MemberController extends Controller
                     );
                     return $this->render('home.html.twig');
                     }
-                    else // sinon on demande propose de recommencer la saisie ou de se créer un profil
+                    else // sinon on demande de recommencer la saisie ou de se créer un profil
                     {
                         if((in_array($user->getMemberEmail(), $memberEmailList)==false || (in_array('true', $check )==false)))
                         {

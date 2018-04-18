@@ -6,132 +6,26 @@
 <h1>Menu ADMIN : </h1>
 
 <ul>
-    {# <a href="/article/create"><li>Créer un article :</li></a>
-    <li>Modifier un article :
-        <form action="/article/create" method="post">
-            <label for="articleId">Code Article</label>
-            <select name="articleId" id="articleId">
-            {% for article in articles %}
-            <option value="{{article.id}}">{{article.id}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="MODIFIER">
-        </form>
-    </li> #}
-    {#
-    <li>Supprimer un article :
-        <form action="/article/delete/articleId" method="post">
-            <label for="articleId">Code Article</label>
-            <select name="articleId" id="articleId">
-            {% for article in articles %}
-            <option value="{{article.id}}">{{article.id}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="SUPPRIMER">
-        </form>
-    </li> #}
-
-    <li>Créer un membre :
-        <form action="/member/create" method="post">
-            <input type="submit" value="CREER">
-        </form>
-    </li>
-    <li>Modifier un membre :
-        <form action="/member/update" method="post">
-            <label for="memberId">Membre : </label>
-            <select name="memberId" id="memberId">
-            {% for member in members %}
-            <option value="{{member.id}}"> {{member.id}}  {{member.memberSurname}}  {{member.memberName}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="MODIFIER">
-        </form>
-    </li>
-    <li>Supprimer un membre :
-        <form action="/member/delete/id" method="post">
-            <label for="memberId">Membre : </label>
-            <select name="memberId" id="memberId">
-            {% for member in members %}
-            <option value="{{member.id}}">{{member.memberSurname}}  {{member.memberName}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="SUPPRIMER">
-        </form>
-    </li>
-    {# <a href="/news/create"><li>Créer une news :</li></a>
-    <li>Modifier une news :</li>
-        <form action="/news/update/newsId" method="post">
-            <label for="newsId">News</label>
-            <select name="newsId" id="newsId">
-            {% for news in newss %}
-            <option value="{{news.id}}">{{news.title}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="MODIFIER">
-        </form>
-    <li>Supprimer une news :</li>
-        <form action="/news/update/newsId" method="post">
-            <label for="newsId">News</label>
-            <select name="newsId" id="newsId">
-            {% for news in newss %}
-            <option value="{{news.id}}">{{news.title}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="SUPPRIMER">
-        </form>
-    <a href="/schoolTourStop/create"><li>Créer un RDV école :</li></a>
-    <li>Modifier un RDV école :
-        <form action="/schoolTourStop/update/schoolTourStopId" method="post">
-            <label for="schoolTourStopId">RDV Ecole</label>
-            <select name="schoolTourStopId" id="schoolTourStopId">
-            {% for schoolTourStop in schoolTourStops %}
-            <option value="{{schoolTourStop.id}}">{{schoolTourStop.school}}/{{schoolTourStop.title}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="MODIFIER">
-        </form>
-    </li>
-    <li>Supprimer un RDV école :
-    <form action="/schoolTourStop/delete/schoolTourStopId" method="post">
-            <label for="schoolTourStopId">RDV Ecole</label>
-            <select name="schoolTourStopId" id="schoolTourStopId">
-            {% for schoolTourStop in schoolTourStops %}
-            <option value="{{schoolTourStop.id}}">{{schoolTourStop.school}}/{{schoolTourStop.title}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="SUPPRIMER">
-        </form>
-    </li>
-    <a href="/workshop/create"><li>Créer un atelier :</li></a>
-    <li>Modifier un atelier :
-        <form action="/workshop/update/workshopId" method="post">
-            <label for="workshopId">Atelier</label>
-            <select name="workshopId" id="workshopId">
-            {% for workshop in workshops %}
-            <option value="{{workshop.id}}">{{workshop.theme}}/{{workshop.date}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="MODIFIER">
-        </form>
-    </li>
-    <li>Supprimer un atelier :
-        <form action="/workshop/update/workshopId" method="post">
-            <label for="workshopId">Atelier</label>
-            <select name="workshopId" id="workshopId">
-            {% for workshop in workshops %}
-            <option value="{{workshop.id}}">{{workshop.theme}}/{{workshop.date}}</option>
-            {% endfor %}
-            </select>
-            <input type="submit" value="SUPPRIMER">
-        </form>
-    </li>
-</ul>
-    <input type="submit" value="CREER"> #}
-
-{% for message in app.flashes('notice') %}
-    <div class="flash-notice">
-        {{ message }}
-    </div>
-{% endfor %}
+ <li>Article :
+    <a href="{{ path('article_index') }}">voir la liste</a> 
+</li>
+ <li>Membre :
+    <a href="{{ path('membre_index') }}">voir la liste</a> 
+</li>
+<li>Sac de dons :
+    <a href="{{ path('donationBag_index') }}">voir la liste</a> 
+</li>
+<li>Sac de livraisosn :
+    <a href="{{ path('deliveryBag_index') }}">voir la liste</a> 
+</li>
+<li>Tournée Ecoles :
+    <a href="{{ path('schoolStop_index') }}">voir la liste</a> 
+</li>
+<li>Atelier :
+    <a href="{{ path('workshop_index') }}">voir la liste</a> 
+</li>
+<li>News :
+    <a href="{{ path('news_index') }}">voir la liste</a> 
+</li>
 
 {% endblock %}

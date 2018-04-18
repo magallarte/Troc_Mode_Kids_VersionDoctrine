@@ -21,11 +21,11 @@
         {% for delivery_bag in delivery_bags %}
             <tr>
                 <td>{{ delivery_bag.id }}</td>
-                <td>{{ delivery_bag.deliveryBag_serviceFee }}</td>
-                <td>{{ delivery_bag.deliveryBag_buttonAmount }}</td>
-                <td>{{ delivery_bag.deliveryBag_buyDate ? delivery_bag.deliveryBag_buyDate|date('Y-m-d') : '' }}</td>
-                <td>{{ delivery_bag.deliveryBag_deliveryFee }}</td>
-                <td>{{ delivery_bag.deliveryBag_deliveryDate ? delivery_bag.deliveryBag_deliveryDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ delivery_bag.deliveryBagServiceFee }}</td>
+                <td>{{ delivery_bag.deliveryBagButtonAmount }}</td>
+                <td>{{ delivery_bag.deliveryBagBuyDate ? delivery_bag.deliveryBagBuyDate|date('Y-m-d') : '' }}</td>
+                <td>{{ delivery_bag.deliveryBagDeliveryFee }}</td>
+                <td>{{ delivery_bag.deliveryBagDeliveryDate ? delivery_bag.deliveryBagDeliveryDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('delivery_bag_show', {'id': delivery_bag.id}) }}">show</a>
                     <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">edit</a>

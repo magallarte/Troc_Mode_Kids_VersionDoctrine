@@ -17,7 +17,7 @@
         {% for donation_bag in donation_bags %}
             <tr>
                 <td>{{ donation_bag.id }}</td>
-                <td>{{ donation_bag.donationBag_date ? donation_bag.donationBag_date|date('Y-m-d') : '' }}</td>
+                <td>{{ donation_bag.donationBagDate ? donation_bag.donationBagDate|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('donation_bag_show', {'id': donation_bag.id}) }}">show</a>
                     <a href="{{ path('donation_bag_edit', {'id': donation_bag.id}) }}">edit</a>

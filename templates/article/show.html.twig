@@ -3,36 +3,56 @@
 {% block title %}Article{% endblock %}
 
 {% block body %}
-    <h1>Article</h1>
+    <h1>Fiche Article</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ article.id }}</td>
+                <th>Catégorie :</th>
+                <td>{{ article.articleType }}</td>
             </tr>
             <tr>
-                <th>Article_picture1</th>
+                <th>Sexe:</th>
+                <td>{{ article.articleGender }}</td>
+            </tr>
+            <tr>
+                <th>Saison</th>
+                <td>{{ article.articleSeason }}</td>
+            </tr>
+            <tr>
+                <th>Taille</th>
+                <td>{{ article.articleSize }}</td>
+            </tr>
+            <tr>
+                <th>Marque</th>
+                <td>{{ article.articleBrand }}</td>
+            </tr>
+            <tr>
+                <th>Photo 1</th>
                 <td>{{ article.articlePicture1 }}</td>
             </tr>
             <tr>
-                <th>Article_picture2</th>
+                <th>Photo 2</th>
                 <td>{{ article.articlePicture2 }}</td>
             </tr>
             <tr>
-                <th>Article_picture3</th>
+                <th>Photo 3</th>
                 <td>{{ article.articlePicture3 }}</td>
             </tr>
             <tr>
-                <th>Article_buttonValue</th>
+                <th>Etat d'usure</th>
+                <td>{{ article.wearStatus }}</td>
+            </tr>
+            <tr>
+                <th>Valeur (boutons)</th>
                 <td>{{ article.articleButtonValue }}</td>
             </tr>
             <tr>
-                <th>Article_eurosValue</th>
+                <th>Valeur (euros)</th>
                 <td>{{ article.articleEurosValue }}</td>
             </tr>
             <tr>
-                <th>Article_comments</th>
+                <th>Descriptif</th>
                 <td>{{ article.articleComments }}</td>
             </tr>
         </tbody>

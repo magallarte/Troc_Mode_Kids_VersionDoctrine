@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des articles{% endblock %}
+
+{% block body %}
+
+    <aside>
+    <h1>Filtres</h1>
+    <form action="/article/selection" method="post">
+
+    
+    <label for="selectionGender">Sexe(s)</label>
+    <select name="selectionGender[]" id="selectionGender" multiple="true" expanded="false">
+    {% for gender in genders %}
+    <option value="{{gender.id}}">{{gender.genderName}}</option>
+    {% endfor %}
+     </select>
+    <br>
+    <label for="selectionSize">Taille(s)</label>
+    <select name="selectionSize[]" id="selectionSize" multiple="true" expanded="false">
+    {% for size in sizes %}
+    <option value="{{size.id}}">{{size.sizeName}}</option>
+    {% endfor %}
+    </select>
+    <br>
+    <label for="selectionType">Type(s) de vêtement</label>
+    <select name="selectionType[]" id="selectionType" multiple="multiple">
+    {% for type in types %}
+    <option value="{{type.id}}">{{type.typeName}}</option>
+    {% endfor %}
+    </select>
+    <br>
+    <label for="selectionSeason">Saison(s)</label>
+    <select name="selectionSeason[]" id="selectionSeason" multiple="multiple">
+    {% for season in seasons %}
+    <option value="{{season.id}}">{{season.seasonName}}</option>
+    {% endfor %}
+    </select>
+    <br>
+    <label for="selectionColor">Couleur(s)</label>
+    <select name="selectionColor[]" id="selectionColor" multiple="multiple">
+    {% for color in colors %}
+    <option value="{{color.id}}">{{color.colorName}}</option>
+    {% endfor %}
+    </select>
+    <br>
+    <label for="selectionBrand">Marque(s)</label>
+    <select name="selectionBrand[]" id="selectionBrand" multiple="multiple">
+    {% for brand in brands %}
+    <option value="{{brand.id}}">{{brand.brandName}}</option>
+    {% endfor %}
+    </select>
+    <br>
+    <label for="selectionWearStatus">Etat usure(s)</label>
+    <select name="selectionWearStatus[]" id="selectionWearStatus" multiple="multiple">
+    {% for wearStatus in wearStatuss %}
+    <option value="{{wearStatus.id}}">{{wearStatus.wearStatusName}}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" value="FILTRER">
+    <br>
+    
+</form>
+    </aside>
+    <br>
+
+    <h1>Liste des articles</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sexe</th>
+                <th>Catégorie</th>
+                <th>Saison</th>
+                <th>Taille</th>
+                <th>Marque</th>
+                <th>Photo 1</th>
+                <th>Valeur (boutons)</th>
+                <th>Valeur (euros)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr>
+                <td>{{ article.articleGender.GenderName }}</td>
+                <td>{{ article.articleType.TypeName }}</td>
+                <td>
+                {% for season in article.articleSeason %}
+                {{ season.SeasonName }}
+                {% endfor %}
+                </td>
+                <td>{{ article.articleSize.SizeName }}</td>
+                <td>{{ article.articleBrand.BrandName }}</td>
+                <td>{{ article.articlePicture1 }}</td>
+                <td>{{ article.articleButtonValue }}</td>
+                <td>{{ article.articleEurosValue }}</td>
+                <td>
+                    <a href="{{ path('article_show', {'id': article.id}) }}">voir la fiche</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucun article trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

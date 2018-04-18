@@ -18,8 +18,8 @@
         {% for fabric in fabrics %}
             <tr>
                 <td>{{ fabric.id }}</td>
-                <td>{{ fabric.fabric_name }}</td>
-                <td>{{ fabric.fabric_code }}</td>
+                <td>{{ fabric.fabricName }}</td>
+                <td>{{ fabric.fabricCode }}</td>
                 <td>
                     <a href="{{ path('fabric_show', {'id': fabric.id}) }}">show</a>
                     <a href="{{ path('fabric_edit', {'id': fabric.id}) }}">edit</a>
