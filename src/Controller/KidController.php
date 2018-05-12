@@ -55,10 +55,6 @@ class KidController extends Controller
                             'class' => 'App\Entity\School',
                             'choice_label' => 'schoolName',
                             'required' => false))
-//voir si possible de rajouter ecole et ville
-//                             'choice_value' => function (MyOptionEntity $entity = null) {
-//     return $entity ? $entity->getId() : '';
-// },
                     ->add('save', SubmitType::class, array('label' => 'Créez son profil'))
                     ->getForm();
                 

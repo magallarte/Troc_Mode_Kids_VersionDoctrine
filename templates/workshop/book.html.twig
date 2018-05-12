@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation Atelier{% endblock %}
+
+{% block body %}
+    <h1>Je réserve un atelier</h1>
+
+    <table class="table">
+        <tbody>
+            {# <tr>
+                <th>Id</th>
+                <td>{{ workshop.id }}</td>
+            </tr> #}
+            <tr>
+                <th>Date / Heure </th>
+                <td>{{ workshop.workshopDate ? workshop.workshopDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Thème</th>
+                <td>{{ workshop.workshopTheme }}</td>
+            </tr>
+            <tr>
+                <th>Coût</th>
+                <td>{{ workshop.workshopFee }}</td>
+            </tr>
+            <tr>
+                <th>Lieu</th>
+                <td>{{ workshop.workshopPlace }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ workshop.workshopPicture }}</td>
+            </tr>
+            <tr>
+                <th>Formateur</th>
+                <td>{{ workshop.workshopTrainer.MemberSurname }}  {{ workshop.workshopTrainer.MemberName }}</td>
+            </tr>
+            {# <tr>
+                <th>Workshop_trainees</th>
+                {% for trainee in workshop.workshopTraineesList %}
+                <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
+                {% endfor %}
+            </tr> #}
+        </tbody>
+    </table>
+
+    <a href="{{ path('workshop_index') }}">Retour à la liste</a>
+    
+    <a href="{{ path('workshop_pay', {'id': workshop.id}) }}">Je paye</a>
+
+{% endblock %}

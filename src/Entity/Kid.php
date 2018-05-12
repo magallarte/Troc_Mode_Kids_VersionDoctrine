@@ -44,7 +44,7 @@ class Kid
     private $kid_school_id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Member", mappedBy="member_kid_list")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Member", mappedBy="member_kid_list", cascade={"persist"})
      * @Assert\NotBlank()
      */
     private $kid_parent_list;

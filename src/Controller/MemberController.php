@@ -8,10 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Member;
+use App\Form\MemberType;
 use App\Entity\Kid;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
+// use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -42,39 +43,42 @@ class MemberController extends Controller
         ));
     }
     /**
-    * @Route("/member/create", name="member_create")
+    * @Route("/member/new", name="member_new")
     */
 
-    public function create(Request $request, SessionInterface $session)
+    public function new(Request $request, SessionInterface $session)
     {
         $member = new Member();
+        // option avec le form builder automatique
+        $form = $this->createForm(MemberType::class, $member);
+        $form->handleRequest($request);
 
-        $form = $this->createFormBuilder($member)
-            ->add('memberName', TextType::class, array('label'  => 'Nom :'))
-            ->add('memberSurname', TextType::class, array('label'  => 'Prénom :'))
-            ->add('memberAddress1', TextType::class, array('label'  => 'Adresse :'))
-            ->add('memberAddress2', TextType::class, array('label'  => 'Adresse (complément) :'))
-            ->add('memberZipCode', TextType::class, array('label'  => 'Code Postal :'))
-            ->add('memberCity', TextType::class, array('label'  => 'Ville :'))
-            ->add('memberTel', TelType::class, array('label'  => 'Téléphone :'))
-            ->add('memberEmail', EmailType::class, array('label'  => 'email :'))
-            ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
-            ->add('memberButtonWallet', HiddenType::class, array('data'  => '0'))
-            // ->add('memberRole', HiddenType::class, array('data'  => 'visiteur'))
-            ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
-            ->add('memberSubscription', ChoiceType::class, array(
-                'label'  => 'Abonnement à la newsletter',
-                'expanded'=> true,
-                'choices' => array(
-                    'Oui' => true,
-                    'Non' => false
-                )))
-            ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
-            ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
-            ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
-            ->getForm();
-        
-            $form->handleRequest($request);
+        // option avec le form à créer soi même
+        // $form = $this->createFormBuilder($member)
+        //     ->add('memberName', TextType::class, array('label'  => 'Nom :'))
+        //     ->add('memberSurname', TextType::class, array('label'  => 'Prénom :'))
+        //     ->add('memberAddress1', TextType::class, array('label'  => 'Adresse :'))
+        //     ->add('memberAddress2', TextType::class, array('label'  => 'Adresse (complément) :'))
+        //     ->add('memberZipCode', TextType::class, array('label'  => 'Code Postal :'))
+        //     ->add('memberCity', TextType::class, array('label'  => 'Ville :'))
+        //     ->add('memberTel', TelType::class, array('label'  => 'Téléphone :'))
+        //     ->add('memberEmail', EmailType::class, array('label'  => 'email :'))
+        //     ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
+        //     ->add('memberButtonWallet', HiddenType::class, array('data'  => '0'))
+        //     // ->add('memberRole', HiddenType::class, array('data'  => 'visiteur'))
+        //     ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
+        //     ->add('memberSubscription', ChoiceType::class, array(
+        //         'label'  => 'Abonnement à la newsletter',
+        //         'expanded'=> true,
+        //         'choices' => array(
+        //             'Oui' => true,
+        //             'Non' => false
+        //         )))
+        //     ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
+        //     ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
+        //     ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
+        //     ->getForm();
+
 
             if ($form->isSubmitted() && $form->isValid())
             {
@@ -93,22 +97,11 @@ class MemberController extends Controller
                     'notice',
                     'Votre profil a bien été crée !'
                 );
-
-                $session->set('id', $member->getId());
-                $session->set('name', $member->getMemberName());
-                $session->set('surname', $member->getMemberSurname());
-                $session->set('submitedKidNb', '1');
-
-                if(($member->getMemberKidCount())>0)
-                {
-                    return $this->redirectToRoute('kid_create');
-                }
-                else {
-                    return $this->render('home.html.twig');
-                }
+                // on démarre une session au nom de la personne qui vient de s'inscrire
+                $session->set('user', $member);
             }
 
-        return $this->render('member/memberCreate.html.twig', array(
+        return $this->render('member/new.html.twig', array(
             'form' => $form->createView()
             ));
     }
@@ -160,10 +153,11 @@ class MemberController extends Controller
                     if ( (in_array($user->getMemberEmail(), $memberEmailList)==true && (in_array('true', $check )==true)))
                     {
                     // on affecte la session
-                    $session->set('id', $member->getId());
-                    $session->set('name', $member->getMemberName());
-                    $session->set('surname', $member->getMemberSurname());
-
+                    $user= $entityManager->getRepository(Member::class)->findOneBy([
+                        'member_email' => $user->getMemberEmail()
+                    ]);
+                    $session->set('user', $user);
+                    
                     $this->addFlash(
                     'notice',
                     'Vous êtes bien connecté !'
@@ -178,7 +172,7 @@ class MemberController extends Controller
                         'notice',
                         'Votre email ou votre mot de passe ne sont pas corrects ! Veuillez recommencer la saisie !'
                         );
-                        return $this->redirectToRoute('member_connect'); 
+                        return $this->redirectToRoute('member_setSession'); 
                         }
                         elseif((in_array($user->getMemberEmail(), $memberEmailList)==false && (in_array('true', $check )==false)))
                         {
@@ -196,13 +190,13 @@ class MemberController extends Controller
             ));
     }
 
-     /**
+    /**
     * @Route("/member/unsetSession", name="member_unsetSession")
     */
 
     public function unsetSession(SessionInterface $session)
     {
-        $session->invalidate();
+        $session->remove('user');
         $this->addFlash(
             'notice',
             'Vous êtes bien déconnecté !'
@@ -218,7 +212,7 @@ class MemberController extends Controller
     public function show(Request $request, SessionInterface $session)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $member = $entityManager->getRepository(Member::class)->find($session->get('id')); 
+        $member = $entityManager->getRepository(Member::class)->find($session->get('user')->getId()); 
 
         return $this->render('member/memberShow.html.twig', array(
             'member' => $member

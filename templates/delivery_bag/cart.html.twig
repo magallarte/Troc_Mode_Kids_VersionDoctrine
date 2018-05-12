@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+
+    <h1>Panier</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sexe</th>
+                <th>Catégorie</th>
+                <th>Saison</th>
+                <th>Taille</th>
+                <th>Marque</th>
+                <th>Photo 1</th>
+                <th>Valeur (boutons)</th>
+                <th>Valeur (euros)</th>
+                <th>Frais (préparation & livraison)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for article in deliveryBag.DeliveryBagArticleList %}
+            <tr>
+                <td>{{ article.articleGender.GenderName }}</td>
+                <td>{{ article.articleType.TypeName }}</td>
+                <td>
+                {% for season in article.articleSeason %}
+                {{ season.SeasonName }}
+                {% endfor %}
+                </td>
+                <td>{{ article.articleSize.SizeName }}</td>
+                <td>{{ article.articleBrand.BrandName }}</td>
+                <td>{{ article.articlePicture1 }}</td>
+                <td>{{ article.articleButtonValue }} B</td>
+                <td>{{ article.articleEurosValue }} €</td>
+                <td>1 €</td>
+                <td>
+                    <a href="{{ path('article_show', {'id': article.id}) }}">voir la fiche</a>
+                    <br>
+                    <a href="{{ path('article_removeFromCart', {'id': article.id}) }}">supprimer du panier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucun article trouvé</td>
+            </tr>
+        {% endfor %}
+            
+        </tbody>
+       
+        <tfoot>
+            <tr>
+                <td colspan="6"> TOTAL ARTICLES</td>
+                <td>{{ totalButtons }} B</td>
+                <td>{{ totalEuros }} €</td>
+                <td>{{ totalServiceFee }} €</td>
+            </tr>
+            <tr>
+                <td colspan="6"> FRAIS DE LIVRAISON</td>
+                <td> 
+                    {# <form > #}
+                    <select id="deliveryChoice" >
+                        <option value=''>Choississez votre livraison</option>
+                        <option value='0'>Retrait en boutique / GRATUIT</option>
+                        <option value='2'>Livraison sur le parking de l'école / 2€</option>
+                        <option value='10'>Livraison par la poste / 10€</option>
+                    </select>
+                    {# </form> #}
+                </td>
+                <td> </td>
+                <td id="deliveryFee">2€</td>
+            </tr>
+            <tr>
+                <td colspan="6">TOTAL ARTICLES + LIVRAISON</td>
+                <td>{{ totalButtons }} B</td>
+                <td>{{ totalEuros }} €</td>
+                <td>{{ totalServiceFee }} €</td>
+            </tr>
+        </tfoot>
+    </table>
+    {% if app.session.get('user') %}
+        <p> Vous avez {{ app.session.get('user').MemberButtonWallet }} boutons dans votre cagnotte</p>
+        <label for="buttonAmount"> Combien souhaitez vous en utiliser ?
+        <input type="money" name="buttonAmount" id="buttonAmount" placeholder="{{ app.session.get('user').MemberButtonWallet }}">
+        </label>
+    {% else %}
+        <a href="/member/setSession">Pour utiliser votre cagnotte en boutons, identidiez vous !</a>
+    {% endif %}
+
+    <a href="/delivery/bag/validateCart">Valider mon panier</a>
+    <br>
+    <a href="/delivery/bag/unsetCart">Vider mon panier</a>
+    <br>
+    <a href="{{ path('article_selection') }}">Revenir à la sélection</a>
+
+    <script>
+
+    jQuery.noConflict(); // Evite les conflits entre plusieurs bibliothèques Javascript utilisant le signe $
+    jQuery( function ( $ ) {
+
+    $(#deliveryChoice).on{
+        change:function(e)
+        {
+            switch($( this ).val())
+            {
+                case "0":
+                    $(#deliveryFee).text('Gratuit');
+                    break;
+                case "2":
+                    $(#deliveryFee).text('2€');
+                    break;
+                case "10":
+                    $(#deliveryFee).text('10€');
+                    break;
+            }
+        e.preventDefault();
+        }
+    }
+}
+    </script>
+{% endblock %}
+
+
+

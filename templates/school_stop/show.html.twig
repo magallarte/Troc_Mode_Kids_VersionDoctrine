@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SchoolStop{% endblock %}
+
+{% block body %}
+    <h1>SchoolStop</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ school_stop.id }}</td>
+            </tr>
+            <tr>
+                <th>SchoolStop_date</th>
+                <td>{{ school_stop.schoolStop_date ? school_stop.schoolStop_date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('school_stop_index') }}">back to list</a>
+
+    <a href="{{ path('school_stop_edit', {'id': school_stop.id}) }}">edit</a>
+
+    {{ include('school_stop/_delete_form.html.twig') }}
+{% endblock %}

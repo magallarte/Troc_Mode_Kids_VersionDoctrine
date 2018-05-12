@@ -58,15 +58,7 @@ class WorkshopController extends Controller
     * @Route("/workshop/create", name="workshop_create")
     */
     public function create(Request $request)
-    {
-           // voir comment faire autrement pour récupérer la liste des noms et prénoms des membre
-   
-    // $role="formateur";
-    // $member= new Member();
-    // $members=$this->getDoctrine()->getRepository(Member::class)->findAll();
-    // $trainers=$this->getDoctrine()->getRepository(Member::class)->findAllSameRole($role);
-        
-                
+    { 
     $workshop = new Workshop();
     $form = $this->createFormBuilder($workshop)
             ->add('workshop_date', DateTimeType::class, array(
@@ -127,6 +119,60 @@ class WorkshopController extends Controller
         return $this->render('workshop/workshopCreate.html.twig', array(
                     'form' => $form->createView(),
                 ));
+    }
+
+    /**
+     * @Route("/workshop/book/{id}", name="workshop_book", methods="GET")
+     */
+    public function book(Workshop $workshop, SessionInterface $session): Response
+    {
+         if(!is_null($session->get('user')))
+            {
+                return $this->render('workshop/book.html.twig', [
+                    'workshop' => $workshop,
+                    'user'=>$session->get('user')
+                    ]);
+            }
+        else
+            {
+            $this->addFlash(
+                    'notice',
+                    'Pour vous inscrire, merci de vous identifier !'
+            );
+            return $this->redirectToRoute('member_setSession');
+            }
+ 
+    }
+
+    /**
+     * @Route("/workshop/pay/{id}", name="workshop_pay", methods="GET")
+     */
+    public function pay(Workshop $workshop, SessionInterface $session): Response
+    {
+         if(!is_null($session->get('user')))
+            {
+            $workshop->addWorkshopTraineesList($session->get('user'));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($workshop);
+            $em->flush();
+
+            $this->addFlash(
+                    'notice',
+                    'Vous avez bien été inscrit à l\'atelier !'
+            );
+
+            return $this->redirectToRoute('home_show');
+
+            }
+        else
+            {
+            $this->addFlash(
+                    'notice',
+                    'Pour réserver, merci de vous identifier !'
+            );
+            return $this->redirectToRoute('member_setSession');
+            }
+
     }
 
     /**

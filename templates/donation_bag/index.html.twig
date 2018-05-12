@@ -1,14 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}DonationBag index{% endblock %}
+{% block title %}Je donne{% endblock %}
 
 {% block body %}
-    <h1>DonationBag index</h1>
+    <h1>Je donne</h1>
 
+    <p>Vous ne savez plus quoi faire des vêtements trop petits de vos enfants ? Vous n'avez pas le temps de faire le tri, de les déposer aux containers, de vous occcuper de les revendre ...<P>
+    <br>
+    <p>Nous vous proposons de récupérer les vêtements que vous ne voulez plus, à un endroit pratique pour vous : le parking de l'école de vos enfants. </p>
+    <p>Du jeudi au vendredi, de 10H à 12H et 14H à 18H, au xxx, rue xxx, à Castelnau le lez.<p>
+    <br>
+
+    <h2>Liste des tournées écoles</h2>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                {# <th>Id</th> #}
                 <th>DonationBag_date</th>
                 <th>actions</th>
             </tr>
@@ -16,7 +23,7 @@
         <tbody>
         {% for donation_bag in donation_bags %}
             <tr>
-                <td>{{ donation_bag.id }}</td>
+                {# <td>{{ donation_bag.id }}</td> #}
                 <td>{{ donation_bag.donationBagDate ? donation_bag.donationBagDate|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('donation_bag_show', {'id': donation_bag.id}) }}">show</a>

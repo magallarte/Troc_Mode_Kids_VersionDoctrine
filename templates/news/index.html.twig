@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}News index{% endblock %}
+
+{% block body %}
+    <h1>News index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>News_title</th>
+                <th>News_source</th>
+                <th>News_url</th>
+                <th>News_picture</th>
+                <th>News_content</th>
+                <th>News_editDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for news in news %}
+            <tr>
+                <td>{{ news.id }}</td>
+                <td>{{ news.news_title }}</td>
+                <td>{{ news.news_source }}</td>
+                <td>{{ news.news_url }}</td>
+                <td>{{ news.news_picture }}</td>
+                <td>{{ news.news_content }}</td>
+                <td>{{ news.news_editDate ? news.news_editDate|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('news_show', {'id': news.id}) }}">show</a>
+                    <a href="{{ path('news_edit', {'id': news.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('news_new') }}">Create new</a>
+{% endblock %}

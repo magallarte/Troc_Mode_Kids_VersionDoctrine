@@ -51,7 +51,7 @@ class Workshop
     private $workshop_trainer;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Member", inversedBy="member_worshopAsTrainee")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Member", inversedBy="member_worshopAsTrainee", cascade={"persist"})
      */
     private $workshop_trainees_list;
 

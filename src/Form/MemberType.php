@@ -7,17 +7,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\PercentType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FabricType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Form\KidType;
 
 class MemberType extends AbstractType
 {
@@ -36,6 +40,12 @@ class MemberType extends AbstractType
             ->add('memberButtonWallet', HiddenType::class, array('data'  => '0'))
             // ->add('memberRole', HiddenType::class, array('data'  => 'visiteur'))
             ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
+            ->add('memberKidList', CollectionType::class, array(
+                    'label'  => 'Enfant :',
+                    'entry_type' => KidType::class,
+                    'allow_add'=> true,
+                    'allow_delete' => true
+            ))
             ->add('memberSubscription', ChoiceType::class, array(
                 'label'  => 'Abonnement à la newsletter',
                 'expanded'=> true,
@@ -45,14 +55,14 @@ class MemberType extends AbstractType
                 )))
             ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
             ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
-            ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
+            // ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Article::class,
+            'data_class' => Member::class,
         ]);
     }
 }

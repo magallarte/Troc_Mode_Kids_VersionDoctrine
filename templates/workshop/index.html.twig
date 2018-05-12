@@ -1,49 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Workshop index{% endblock %}
+{% block title %}Je participe{% endblock %}
 
 {% block body %}
-    <h1>Workshop index</h1>
+    <h1>Je participe</h1>
 
+    <p>Vous êtes couturière débutante et vous avez envie d'aprrendre quelques techniques de couture ?
+    Inscrivez vous à un des ateliers et découvrer comment réparer, transformer ou donner une 2ème vie à vos vêtements !
+    Ou bien créer des accessoires à partir de tissus recyclés !<P>
+    <br>
+    <P>Vous êtes une passionnée de couture et avez envie de partager vos connaissances et vos astuces ?
+    Le local de Troc & Mode est à votre disposition, gratuitement, pour vous accueillir (vous et votre machine !) et coudre avec d'autres passionnées !</p>
+    <p>Du jeudi au vendredi, de 10H à 12H et 14H à 18H, au xxx, rue xxx, à Castelnau le lez.<p>
+    <br>
+    <h2>Liste des ateliers Couture</h2>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Workshop_date</th>
-                <th>Workshop_theme</th>
-                <th>Workshop_fee</th>
-                <th>Workshop_place</th>
-                <th>Workshop_picture</th>
-                <th>Workshop_trainer</th>
-                <th>Workshop_trainees</th>
-                <th>actions</th>
+                {# <th>Id</th> #}
+                <th>Date / Heure</th>
+                <th>Thème</th>
+                <th>Coût</th>
+                <th>Lieu</th>
+                <th>Image</th>
+                <th>Formateur</th>
+                {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+                    <th>Personnes inscrites</th>
+                {% endif %}
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for workshop in workshops %}
             <tr>
-                <td>{{ workshop.id }}</td>
-                <td>{{ workshop.workshopDate ? workshop.workshopDate|date('Y-m-d H:i:s') : '' }}</td>
+                {# <td>{{ workshop.id }}</td> #}
+                <td>{{ workshop.workshopDate ? workshop.workshopDate|date('Y-m-d H:i') : '' }}</td>
                 <td>{{ workshop.workshopTheme }}</td>
                 <td>{{ workshop.workshopFee }}</td>
                 <td>{{ workshop.workshopPlace }}</td>
                 <td>{{ workshop.workshopPicture }}</td>
                 <td>{{ workshop.workshopTrainer.MemberSurname }} {{ workshop.workshopTrainer.MemberName }}</td>
-                {% for trainee in workshop.workshopTraineesList %}
-                <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
-                {% endfor %}
+                {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+                    {% for trainee in workshop.workshopTraineesList %}
+                    <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
+                    {% endfor %}
+                {% endif %}
                 <td>
-                    <a href="{{ path('workshop_show', {'id': workshop.id}) }}">show</a>
-                    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">edit</a>
+                    <a href="{{ path('workshop_book', {'id': workshop.id}) }}">S'inscrire</a>
+                    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+                    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">Modifier la fiche</a>
+                    {% endif %}
+                    
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="7">Aucun atalier trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('workshop_new') }}">Create new</a>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+        <a href="{{ path('workshop_new') }}">Créer un nouvel atelier</a>
+    {% endif %}
+    
 {% endblock %}

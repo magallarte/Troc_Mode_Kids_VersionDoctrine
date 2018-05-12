@@ -9,23 +9,25 @@
         <tbody>
             <tr>
                 <th>Catégorie :</th>
-                <td>{{ article.articleType }}</td>
+                <td>{{ article.articleType.typeName }}</td>
             </tr>
             <tr>
                 <th>Sexe:</th>
-                <td>{{ article.articleGender }}</td>
+                <td>{{ article.articleGender.genderName }}</td>
             </tr>
             <tr>
                 <th>Saison</th>
-                <td>{{ article.articleSeason }}</td>
+                {% for season in article.articleSeason %}
+                <td>{{ season.seasonName }}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <th>Taille</th>
-                <td>{{ article.articleSize }}</td>
+                <td>{{ article.articleSize.sizeName }}</td>
             </tr>
             <tr>
                 <th>Marque</th>
-                <td>{{ article.articleBrand }}</td>
+                <td>{{ article.articleBrand.brandName }}</td>
             </tr>
             <tr>
                 <th>Photo 1</th>
@@ -41,7 +43,13 @@
             </tr>
             <tr>
                 <th>Etat d'usure</th>
-                <td>{{ article.wearStatus }}</td>
+                <td>{{ article.articleWearStatus.wearStatusName }}</td>
+            </tr>
+            <tr>
+                <th>Couleur</th>
+                {% for color in article.articleColor %}
+                <td>{{ color.colorName }}</td>
+                {% endfor %}
             </tr>
             <tr>
                 <th>Valeur (boutons)</th>
@@ -60,7 +68,8 @@
 
     <a href="{{ path('article_index') }}">back to list</a>
 
-    <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>
+    <a href="{{ path('delivery_bag_addToCart', {'id': article.id}) }}">Ajouter à mes trouvailles</a>
+    {# <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a> #}
 
     {{ include('article/_delete_form.html.twig') }}
 {% endblock %}

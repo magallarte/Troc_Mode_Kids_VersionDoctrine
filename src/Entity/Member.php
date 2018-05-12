@@ -6,10 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
  */
+// * @UniqueEntity("member_email")
 class Member
 {
     /**
@@ -58,6 +60,9 @@ class Member
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
+    //unique=true
+     //* @Assert\Email(
+     //*      message="L'email {{ value }}  n'est pas au bon format.")
     private $member_email;
 
     /**
@@ -87,8 +92,7 @@ class Member
     private $member_level;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Kid", inversedBy="kid_parent_list")
-     * Validator
+     * @ORM\ManyToMany(targetEntity="App\Entity\Kid", inversedBy="kid_parent_list", cascade={"persist"})
      */
     private $member_kid_list;
 
@@ -103,7 +107,7 @@ class Member
     private $member_worshopAsTrainer;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Workshop", mappedBy="workshop_trainees_list")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Workshop", mappedBy="workshop_trainees_list", cascade={"persist"})
      */
     private $member_worshopAsTrainee;
 

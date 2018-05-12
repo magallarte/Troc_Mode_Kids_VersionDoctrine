@@ -22,7 +22,7 @@ class HomeController extends Controller
 {
 
     /**
-    * @Route("/home/show", name="home_show")
+    * @Route("/", name="home_show")
     */
     public function show(Request $request,SessionInterface $session)
     {

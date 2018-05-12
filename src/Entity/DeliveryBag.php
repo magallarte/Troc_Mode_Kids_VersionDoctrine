@@ -46,7 +46,7 @@ class DeliveryBag
     private $deliveryBag_processStatus;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="article_deliveyBag")
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="article_deliveryBag")
      */
     private $deliveryBag_article_list;
 
@@ -95,7 +95,6 @@ class DeliveryBag
     public function setDeliveryBagBuyer(?Member $deliveryBag_buyer): self
     {
         $this->deliveryBag_buyer = $deliveryBag_buyer;
-
         return $this;
     }
 
@@ -143,11 +142,21 @@ class DeliveryBag
         return $this->deliveryBag_article_list;
     }
 
+    // public function setDeliveryBagArticleList(Article $deliveryBagArticleList): self
+    // {
+    //     if (!$this->deliveryBag_article_list->contains($deliveryBagArticleList)) {
+    //         $this->deliveryBag_article_list[] = $deliveryBagArticleList;
+    //         $deliveryBagArticleList->setArticleDeliveryBag($this);
+    //     }
+
+    //     return $this;
+    // }
+
     public function addDeliveryBagArticleList(Article $deliveryBagArticleList): self
     {
         if (!$this->deliveryBag_article_list->contains($deliveryBagArticleList)) {
             $this->deliveryBag_article_list[] = $deliveryBagArticleList;
-            $deliveryBagArticleList->setArticleDeliveyBag($this);
+            $deliveryBagArticleList->setArticleDeliveryBag($this);
         }
 
         return $this;
@@ -158,8 +167,8 @@ class DeliveryBag
         if ($this->deliveryBag_article_list->contains($deliveryBagArticleList)) {
             $this->deliveryBag_article_list->removeElement($deliveryBagArticleList);
             // set the owning side to null (unless already changed)
-            if ($deliveryBagArticleList->getArticleDeliveyBag() === $this) {
-                $deliveryBagArticleList->setArticleDeliveyBag(null);
+            if ($deliveryBagArticleList->getArticleDeliveryBag() === $this) {
+                $deliveryBagArticleList->setArticleDeliveryBag(null);
             }
         }
 

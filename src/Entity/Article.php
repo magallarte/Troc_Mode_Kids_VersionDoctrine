@@ -90,14 +90,14 @@ class Article
     private $article_processStatus;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Fabric")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Fabric", cascade={"persist"})
      */
     private $article_fabric;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\DeliveryBag", inversedBy="deliveryBag_article_list")
      */
-    private $article_deliveyBag;
+    private $article_deliveryBag;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\DonationBag", inversedBy="donationBag_article_list")
@@ -110,9 +110,10 @@ class Article
     private $article_season;
 
     /**
-     * @ORM\Column(type="string", length=13, nullable=true)
+     * @ORM\Column(type="string", length=13)
      */
     private $article_code;
+
 
     public function __construct()
     {
@@ -284,12 +285,12 @@ class Article
         return $this;
     }
 
-    public function getArticleProcessStatus(): ?ProcessSatus
+    public function getArticleProcessStatus(): ?ProcessStatus
     {
         return $this->article_processStatus;
     }
 
-    public function setArticleProcessStatus(?ProcessSatus $article_processStatus): self
+    public function setArticleProcessStatus(?ProcessStatus $article_processStatus): self
     {
         $this->article_processStatus = $article_processStatus;
 
@@ -322,14 +323,14 @@ class Article
         return $this;
     }
 
-    public function getArticleDeliveyBag(): ?DeliveryBag
+    public function getArticleDeliveryBag(): ?DeliveryBag
     {
-        return $this->article_deliveyBag;
+        return $this->article_DeliveryBag;
     }
 
-    public function setArticleDeliveyBag(?DeliveryBag $article_deliveyBag): self
+    public function setArticleDeliveryBag(?DeliveryBag $article_DeliveryBag): self
     {
-        $this->article_deliveyBag = $article_deliveyBag;
+        $this->article_DeliveryBag = $article_DeliveryBag;
 
         return $this;
     }
@@ -377,7 +378,7 @@ class Article
         return $this->article_code;
     }
 
-    public function setArticleCode(?string $last_article_code): self
+    public function setArticleCode(?string $last_article_code): ?string
     {
         $numCode = substr( $last_article_code, -4 );
         if( ctype_digit($numCode) ) {
@@ -385,7 +386,7 @@ class Article
             $numCode++;
             $numCode=str_pad($numCode,4,"0",STR_PAD_LEFT);// fonction PHP qui complète pour obtenir 4 caractères
         }
-        
+       
         $genderCode = $this->getArticleGender()->getGenderCode();
         
         $sizeCode = $this->getArticleSize()->getSizeCode();
@@ -401,9 +402,10 @@ class Article
             }
         
         $typeCode = $this->getArticleType()->getTypeCode();
-        
-        $this->id = $genderCode.$sizeCode.$seasonCode.$typeCode.$numCode;
-
-        return $this;
+        var_dump ($genderCode.$sizeCode.$seasonCode.$typeCode.$numCode);
+        $this->article_code = $genderCode.$sizeCode.$seasonCode.$typeCode.$numCode;
+        var_dump($this->article_code);
+        return $this->article_code;
     }
+
 }

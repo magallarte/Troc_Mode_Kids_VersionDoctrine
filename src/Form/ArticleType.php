@@ -27,6 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Form\FabricType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ArticleType extends AbstractType
 {
@@ -64,46 +65,17 @@ class ArticleType extends AbstractType
                     'label'  => 'Etat d\'usure :',
                     'class' => 'App\Entity\WearStatus',
                     'choice_label' => 'WearStatusName'))
-            // ->add('article_fabric', EntityType::class, array(
-            //         'label'  => 'Composition :',
-            //         'class' => 'App\Entity\Fabric',
-            //         'expanded'=> true,
-            //         'multiple'=> true,
-            //         'choice_label' => 'FabricName'))
-            // Option1:
-            ->add('article_fabric', CollectionType::class, array(
-                    'label'  => 'Composition :',
-                    'entry_type' => FabricType::class,
-                    'allow_add'=> true
-            ))
-            //Option2:
-            // ->add('article_fabric%', PercentType::class, array(
-            //         'label'  => 'Marque :',
-            //         'class' => 'App\Entity\Fabric',
-            //         'choice_label' => 'FabricName'))
-            //Option3:
-            // ->add(
-            //         $builder->create('article_fabric', FormType::class, array('by_reference' => true))
-            //         ->add('composition', EntityType::class, array(
-            //             'label'  => 'Composition :',
-            //             'class' => 'App\Entity\Fabric',
-            //             'choice_label' => 'FabricName'))
-            //         ->add('percentage', CollectionType::class, array(
-            //         'entry_type' => PercentType::class,
-            //         'entry_options' => array(
-            //             'attr' => array('class' => 'email-box')))))
-            //Option 4:
-            //  ->add(
-            //         $builder->create('article_fabric', FormType::class, array('by_reference' => true))
-            //         ->add('composition', EntityType::class, array(
-            //             'label'  => 'Composition :',
-            //             'class' => 'App\Entity\Fabric',
-            //             'choice_label' => 'FabricName'))
-            //         ->add('pourcentage', ChoiceType::class, array(
-            //             'label'  => 'Composition en pourcentage :',
-            //             'choices' => array(
-            //                 '5' => '5',
-            //                 '10' => '10'))))
+        // OPTION avec la création du formulaire  FABRIC imbriqué dans celui d ARTICLE
+        //     ->add('article_fabric', CollectionType::class, array(
+        //             'label'  => 'Composition :',
+        //             'entry_type' => FabricType::class,
+        //             'allow_add'=> true
+        //     ))
+            ->add('article_fabric', EntityType::class, array(
+                    'label'  => 'Tissu :',
+                    'class' => 'App\Entity\Fabric',
+                    'multiple'=> 'true',
+                    'choice_label' => 'FabricName'))
             ->add('article_buttonValue', MoneyType::class, array('label'  => 'Valeur "Boutons"  '))
             ->add('article_eurosValue', MoneyType::class, array('label'  => 'Valeur "Euros"  '))
             ->add('article_comments', TextareaType::class, array('label'  => 'Descriptif '))
@@ -111,6 +83,7 @@ class ArticleType extends AbstractType
                     'label'  => 'Etape de traitement :',
                     'class' => 'App\Entity\ProcessStatus',
                     'choice_label' => 'ProcessStatusName'))
+        ->add('article_picture1', FileType::class, array('label' => 'Photo (png)'))
         ;
     }
 
