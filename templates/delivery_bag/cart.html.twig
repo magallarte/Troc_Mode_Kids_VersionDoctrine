@@ -96,7 +96,7 @@
     <br>
     <a class="btn btn-secondary" href="/delivery/bag/unsetCart">Vider mon panier</a>
     <br>
-    <a href="{{ path('article_selection') }}">Revenir à la sélection</a>
+    <a href="{{ path('article_selection') }}">Revenir au catalogue</a>
 </div>
 {% endblock %}
 
@@ -130,7 +130,7 @@
         var totalButtons = 0;
         console.log('caca');
         $("#mytable tr").find(".articleButtons").each(function() {
-            totalButtons += parseFloat($(this).html());
+            totalButtons += parseFloat($(this).val());
             console.log(totalButtons);
         });
         return totalButtons;
@@ -143,7 +143,7 @@
     function getTotalFees() {
         var totalFees = 0;
         $("#mytable tr").find(".articleFee").each(function() {
-            totalFees += parseFloat($(this).html());
+            totalFees += parseFloat($(this).val());
             console.log(totalFees);
         });
         return totalFees;
