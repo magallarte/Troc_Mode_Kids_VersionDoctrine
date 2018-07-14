@@ -1,12 +1,15 @@
 {% extends 'base.html.twig'%}
-{% block title %}Troc&Mode Kids{% endblock %}
+{% block title %}Modifier votre profil{% endblock %}
 
 {% block body %}
-
-<h1>Modifier le profil de {{member.memberSurname}}  {{member.memberName}} </h1>
-
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
-
+    <div class="container">
+        <h1>Modifier le profil de {{member.memberSurname}}  {{member.memberName}} </h1>
+        <form class="form-group" method="post">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </form>
+        <br>
+        {{ include('member/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

@@ -5,13 +5,22 @@
 {% block body %}
     <h1>Je participe</h1>
 
-    <p>Vous êtes couturière débutante et vous avez envie d'aprrendre quelques techniques de couture ?
-    Inscrivez vous à un des ateliers et découvrer comment réparer, transformer ou donner une 2ème vie à vos vêtements !
-    Ou bien créer des accessoires à partir de tissus recyclés !<P>
-    <br>
-    <P>Vous êtes une passionnée de couture et avez envie de partager vos connaissances et vos astuces ?
-    Le local de Troc & Mode est à votre disposition, gratuitement, pour vous accueillir (vous et votre machine !) et coudre avec d'autres passionnées !</p>
-    <p>Du jeudi au vendredi, de 10H à 12H et 14H à 18H, au xxx, rue xxx, à Castelnau le lez.<p>
+    {% if app.session.get('user') %}
+        {% for role in app.session.get('user').MemberRole %}
+            {% if role.id ==  "6" %}
+            <br>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>Vous êtes couturière débutante et vous avez envie d'aprrendre quelques techniques de couture ?
+        Inscrivez vous à un des ateliers et découvrer comment réparer, transformer ou donner une 2ème vie à vos vêtements !
+        Ou bien créer des accessoires à partir de tissus recyclés !<P>
+        <br>
+        <P>Vous êtes une passionnée de couture et avez envie de partager vos connaissances et vos astuces ?
+        Le local de Troc & Mode est à votre disposition, gratuitement, pour vous accueillir (vous et votre machine !) et coudre avec d'autres passionnées !</p>
+        <p>Du jeudi au vendredi, de 10H à 12H et 14H à 18H, au xxx, rue xxx, à Castelnau le lez.<p>
+    {% endif %}
+
     <br>
     <h2>Liste des ateliers Couture</h2>
     <table class="table">

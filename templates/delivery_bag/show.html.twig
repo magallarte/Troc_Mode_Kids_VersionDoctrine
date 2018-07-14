@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}DeliveryBag{% endblock %}
+{% block title %}Sac de livraison{% endblock %}
 
 {% block body %}
-    <h1>DeliveryBag</h1>
+    <h1>Sac de livraison</h1>
 
     <table class="table">
         <tbody>
@@ -12,31 +12,35 @@
                 <td>{{ delivery_bag.id }}</td>
             </tr>
             <tr>
-                <th>DeliveryBag_serviceFee</th>
+                <th>Frais de service</th>
                 <td>{{ delivery_bag.deliveryBagServiceFee }}</td>
             </tr>
             <tr>
-                <th>DeliveryBag_buttonAmount</th>
-                <td>{{ delivery_bag.deliveryBagButtonAmount }}</td>
-            </tr>
-            <tr>
-                <th>DeliveryBag_buyDate</th>
-                <td>{{ delivery_bag.deliveryBagBuyDate ? delivery_bag.deliveryBagBuyDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>DeliveryBag_deliveryFee</th>
+                <th>Frais de livraison</th>
                 <td>{{ delivery_bag.deliveryBagDeliveryFee }}</td>
             </tr>
             <tr>
-                <th>DeliveryBag_deliveryDate</th>
-                <td>{{ delivery_bag.deliveryBagDeliveryDate ? delivery_bag.deliveryBagDeliveryDate|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Montant cagnotte (boutons)</th>
+                <td>{{ delivery_bag.deliveryBagButtonAmount }}</td>
+            </tr>
+            <tr>
+                <th>Date d'achat</th>
+                <td>{{ delivery_bag.deliveryBagBuyDate ? delivery_bag.deliveryBagBuyDate|date('m-d-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date et heure de livraison</th>
+                <td>{{ delivery_bag.deliveryBagDeliveryDate ? delivery_bag.deliveryBagDeliveryDate|date('m-d-Y H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('delivery_bag_index') }}">back to list</a>
+    <a href="{{ path('delivery_bag_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">edit</a>
-
+    <br>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">Modifier</a>
+    <br>
     {{ include('delivery_bag/_delete_form.html.twig') }}
+    {% endif %}
+    
 {% endblock %}

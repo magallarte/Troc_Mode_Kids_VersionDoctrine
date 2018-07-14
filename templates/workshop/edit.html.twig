@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Workshop{% endblock %}
+{% block title %}Modifier un atelier{% endblock %}
 
 {% block body %}
-    <h1>Edit Workshop</h1>
-
-    {{ include('workshop/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('workshop_index') }}">back to list</a>
-
-    {{ include('workshop/_delete_form.html.twig') }}
+    <div class="container">
+        <h1>Modifier un atelier</h1>
+        <form class="form-group" method="post">
+        {{ include('workshop/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        </form>
+        <a href="{{ path('workshop_index') }}">Retour à la liste</a>
+        <br>
+        {{ include('workshop/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

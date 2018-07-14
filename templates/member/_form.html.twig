@@ -9,10 +9,18 @@
   $(document).ready(function() {
     // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
     var $container = $('div#member_memberKidList');
+    //A FINIR
+    // var index = 0;
+    
+    //$container.find('input#member_memberKidCount').keyup(function () {
+    //    index = parseFloat($container.find('input#member_memberKidCount').html());
+    //    console.log(index);
+    //});
 
     // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var index = $container.find(':input').length;
-
+    
+  
     // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
     $('#add_kid').click(function(e) {
       addKid($container);
@@ -75,16 +83,30 @@
 
 
 {{ form_start(form) }}
+  
     {{ form_widget(form) }}
-    {# Le formulaire reste globalement le même,
-   On ne rajoute que le champ tissu et le lien pour en ajouter #}
-<div class="well">
-  {# ... #}
-  
-  {{ form_row(form.memberKidList) }}
-  <a href="#" id="add_kid" class="btn btn-default">Inscrire un enfant</a>
-  
-  {# ... #}
-</div>
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <table>
+      <tr>
+        <td>
+        {{ form_row(form.memberName) }}
+        {{ form_row(form.memberSurname) }}
+        {{ form_row(form.memberAddress1) }}
+        {{ form_row(form.memberAddress2) }}
+        {{ form_row(form.memberZipCode) }}
+        {{ form_row(form.memberCity) }}
+        {{ form_row(form.memberTel) }}
+        {{ form_row(form.memberEmail) }}
+        {{ form_row(form.memberPassword) }}
+        {{ form_row(form.memberKidCount) }}
+        {{ form_row(form.memberSubscription, {label_attr: {class: 'radio-custom'} }) }}
+        {{ form_row(form.memberExpertise) }}
+        {{ form_row(form.memberLevel) }}
+        </td>
+        <td>
+        {{ form_row(form.memberKidList) }}
+        <a href="#" id="add_kid" class="btn btn-secondary">Inscrire un autre enfant</a>
+        </td>
+      </tr>
+  </table>
+    <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
 {{ form_end(form) }}

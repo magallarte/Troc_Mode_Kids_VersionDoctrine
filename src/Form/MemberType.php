@@ -40,12 +40,6 @@ class MemberType extends AbstractType
             ->add('memberButtonWallet', HiddenType::class, array('data'  => '0'))
             // ->add('memberRole', HiddenType::class, array('data'  => 'visiteur'))
             ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
-            ->add('memberKidList', CollectionType::class, array(
-                    'label'  => 'Enfant :',
-                    'entry_type' => KidType::class,
-                    'allow_add'=> true,
-                    'allow_delete' => true
-            ))
             ->add('memberSubscription', ChoiceType::class, array(
                 'label'  => 'Abonnement à la newsletter',
                 'expanded'=> true,
@@ -55,7 +49,12 @@ class MemberType extends AbstractType
                 )))
             ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
             ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
-            // ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
+            ->add('memberKidList', CollectionType::class, array(
+                    'label'  => 'Enfant :',
+                    'entry_type' => KidType::class,
+                    'allow_add'=> true,
+                    'allow_delete' => true
+            ))
         ;
     }
 

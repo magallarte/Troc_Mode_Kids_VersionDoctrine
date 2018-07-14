@@ -72,7 +72,7 @@
           <div class="card h-100">
             <h2 class="card-header">Je trouve<img src="http://127.0.0.1:8000/images/Pictogramme-ACHAT.png"></h2>
             <div class="card-body">
-              <p class="card-text">Grâce à vos points (gagnés en fonction de vos dons)et 1€ par vêtement ou bien, pour quelques €, achetez des vêtements de seconde main, en parfait état ! </p>
+              <p class="card-text">Grâce à vos points (gagnés en fonction de vos dons)et 1€ par vêtement, ou bien pour quelques €, achetez des vêtements de seconde main, en parfait état ! </p>
             </div>
             <div class="card-footer">
               <a href="{{ path('article_selection')}}" class="btn btn-primary">Choisissez ce qu'il vous plait !</a>
@@ -83,7 +83,7 @@
           <div class="card h-100">
             <h2 class="card-header">Je participe<img src="http://127.0.0.1:8000/images/Pictogramme-UPCYCLING.png"></h2>
             <div class="card-body">
-              <p class="card-text">Vous êtes couturière débutante ou professionnelle et vous avez envie de redonner vie à des vêtments abîmés, ou bien de créer à partir de tissues recyclés ?</p>
+              <p class="card-text">Vous êtes couturière débutante ou professionnelle et vous avez envie de redonner vie à des vêtments abîmés, ou bien de créer à partir de tissus recyclés ?</p>
             </div>
             <div class="card-footer">
               <a href="{{ path('workshop_index')}}" class="btn btn-primary">Venez participer !</a>
@@ -124,7 +124,7 @@
           <p>Troc&Mode est une association qui propose ses services de collecte, tri et recyclage, sur Castelnau-le-lez, le Crès et Jacou. Si vous habitez sur une de ces communes ... rejoignez notre association en vous inscrivant sur ce site.</p>
         </div>
         <div class="col-md-4">
-          <a class="btn btn-lg btn btn-primary btn-block" href="#">Rejoignez nous !</a>
+          <a class="btn btn-lg btn btn-primary btn-block" href="{{ path('member_new') }}">Rejoignez nous !</a>
         </div>
       </div>
 

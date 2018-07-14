@@ -26,6 +26,7 @@ class HomeController extends Controller
     */
     public function show(Request $request,SessionInterface $session)
     {
+        // var_dump($session->get('user')->getMemberRole()->getRoleName());
         return $this->render('home.html.twig', array(
             'sessionName' => $session->get('name'),
             'sessionSurname' => $session->get('surname')

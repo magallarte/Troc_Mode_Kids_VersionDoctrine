@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}DonationBag{% endblock %}
+{% block title %} Sac de don{% endblock %}
 
 {% block body %}
-    <h1>DonationBag</h1>
+    <h1>Sac de don</h1>
 
     <table class="table">
         <tbody>
@@ -12,15 +12,19 @@
                 <td>{{ donation_bag.id }}</td>
             </tr>
             <tr>
-                <th>DonationBag_date</th>
-                <td>{{ donation_bag.donationBagDate ? donation_bag.donationBagDate|date('Y-m-d') : '' }}</td>
+                <th>Date</th>
+                <td>{{ donation_bag.donationBagDate ? donation_bag.donationBagDate|date('m-d-Y') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('donation_bag_index') }}">back to list</a>
+    <a href="{{ path('donation_bag_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('donation_bag_edit', {'id': donation_bag.id}) }}">edit</a>
-
+    <br>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    <a href="{{ path('donation_bag_edit', {'id': donation_bag.id}) }}">Modifier</a>
+    <br>
     {{ include('donation_bag/_delete_form.html.twig') }}
+    {% endif %}
+
 {% endblock %}

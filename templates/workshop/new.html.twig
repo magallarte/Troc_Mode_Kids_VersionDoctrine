@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Workshop{% endblock %}
+{% block title %}Créer un atelier{% endblock %}
 
 {% block body %}
-    <h1>Create new Workshop</h1>
-
-    {{ include('workshop/_form.html.twig') }}
-
-    <a href="{{ path('workshop_index') }}">back to list</a>
+    <div class="container">
+        <h1>Créer un atelier</h1>
+        <form class="form-group">
+        {{ include('workshop/_form.html.twig', {'button_label': 'Créer'}) }}
+        </form>
+        <a href="{{ path('workshop_index') }}">Retour à la liste</a>
+    </div>
 {% endblock %}

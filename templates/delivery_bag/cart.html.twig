@@ -3,40 +3,34 @@
 {% block title %}Panier{% endblock %}
 
 {% block body %}
-
+<div class="container">
     <h1>Panier</h1>
 
-    <table class="table">
+    <table class="table" id='myTable'>
         <thead>
             <tr>
                 <th>Sexe</th>
                 <th>Catégorie</th>
-                <th>Saison</th>
                 <th>Taille</th>
-                <th>Marque</th>
-                <th>Photo 1</th>
-                <th>Valeur (boutons)</th>
-                <th>Valeur (euros)</th>
-                <th>Frais (préparation & livraison)</th>
+                <th>Photo</th>
+                <th>Valeur (boutons ou euros)</th>
+                <th>Frais (préparation)</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for article in deliveryBag.DeliveryBagArticleList %}
+        {% for article in deliveryBagList %}
             <tr>
                 <td>{{ article.articleGender.GenderName }}</td>
                 <td>{{ article.articleType.TypeName }}</td>
-                <td>
-                {% for season in article.articleSeason %}
-                {{ season.SeasonName }}
-                {% endfor %}
-                </td>
                 <td>{{ article.articleSize.SizeName }}</td>
-                <td>{{ article.articleBrand.BrandName }}</td>
-                <td>{{ article.articlePicture1 }}</td>
-                <td>{{ article.articleButtonValue }} B</td>
-                <td>{{ article.articleEurosValue }} €</td>
-                <td>1 €</td>
+                <td style="height: 100px;">
+                    <img class="h-100 d-inline-block" src="{{ asset('uploads/pictures/' ~ article.articlePicture1)}}" alt="Photo Recto">
+                </td>
+                <td class='articleButtons' name="articleButtons">{{ article.articleButtonValue }}
+                </td>
+                <td class='articleFee' name="articleFee">1
+                </td>
                 <td>
                     <a href="{{ path('article_show', {'id': article.id}) }}">voir la fiche</a>
                     <br>
@@ -45,7 +39,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">Aucun article trouvé</td>
+                <td colspan="6">Aucun article trouvé</td>
             </tr>
         {% endfor %}
             
@@ -53,75 +47,204 @@
        
         <tfoot>
             <tr>
-                <td colspan="6"> TOTAL ARTICLES</td>
-                <td>{{ totalButtons }} B</td>
-                <td>{{ totalEuros }} €</td>
-                <td>{{ totalServiceFee }} €</td>
+                <td colspan="4"> TOTAL ARTICLES</td>
+                <td id='totalButtons'></td>
+                <td id='totalFees'></td>
             </tr>
             <tr>
-                <td colspan="6"> FRAIS DE LIVRAISON</td>
-                <td> 
-                    {# <form > #}
-                    <select id="deliveryChoice" >
-                        <option value=''>Choississez votre livraison</option>
-                        <option value='0'>Retrait en boutique / GRATUIT</option>
-                        <option value='2'>Livraison sur le parking de l'école / 2€</option>
-                        <option value='10'>Livraison par la poste / 10€</option>
-                    </select>
-                    {# </form> #}
+                <td colspan="2">
+                    {% if app.session.get('user') %}
+                    <p> Vous avez {{ app.session.get('user').MemberButtonWallet }} boutons dans votre cagnotte</p>
+                    {% else %}
+                        <a href="/member/setSession">Pour utiliser votre cagnotte en boutons, identifiez-vous !</a>
+                    {% endif %}
                 </td>
-                <td> </td>
-                <td id="deliveryFee">2€</td>
+                <td colspan="3">
+                    <label for="walletButtons"> Combien souhaitez vous en utiliser ?
+                    <input type="money" name="walletButtons" id="walletButtons" placeholder="0">
+                    </label>
+                </td>
+                <td></td>
             </tr>
             <tr>
-                <td colspan="6">TOTAL ARTICLES + LIVRAISON</td>
-                <td>{{ totalButtons }} B</td>
-                <td>{{ totalEuros }} €</td>
-                <td>{{ totalServiceFee }} €</td>
+                <td colspan="2"> FRAIS DE LIVRAISON</td>
+                <td colspan="2"> 
+                    <select id="deliveryChoice" >
+                        <option value='0'>Choisissez votre livraison</option>
+                        <option value='1'>Retrait en boutique / GRATUIT</option>
+                        <option value='2'>Livraison sur le parking de l'école / 2€</option>
+                        <option value='3'>Livraison par la poste / 10€</option>
+                    </select>
+                    <select id="stopChoice">
+                        {% for stop in schoolStops %}
+                        <option value="{{stop.Id}}">{{stop.schoolStopDate|date("d-m-Y H:i")}} / {{stop.schoolStopSchool.schoolName}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td><p id="deliveryFee"></p></td>
+            </tr>
+            <tr>
+                <td colspan="4">TOTAL ARTICLES + LIVRAISON</td>
+                <td></td>
+                <td><p id="totalCart"></p></td>
             </tr>
         </tfoot>
     </table>
-    {% if app.session.get('user') %}
-        <p> Vous avez {{ app.session.get('user').MemberButtonWallet }} boutons dans votre cagnotte</p>
-        <label for="buttonAmount"> Combien souhaitez vous en utiliser ?
-        <input type="money" name="buttonAmount" id="buttonAmount" placeholder="{{ app.session.get('user').MemberButtonWallet }}">
-        </label>
-    {% else %}
-        <a href="/member/setSession">Pour utiliser votre cagnotte en boutons, identidiez vous !</a>
-    {% endif %}
-
-    <a href="/delivery/bag/validateCart">Valider mon panier</a>
     <br>
-    <a href="/delivery/bag/unsetCart">Vider mon panier</a>
+    <a id="validate" class="btn btn-primary" href="/delivery/bag/validateCart">Payer avec LYF Pay</a>
+    <br>
+    <br>
+    <a class="btn btn-secondary" href="/delivery/bag/unsetCart">Vider mon panier</a>
     <br>
     <a href="{{ path('article_selection') }}">Revenir à la sélection</a>
-
-    <script>
-
-    jQuery.noConflict(); // Evite les conflits entre plusieurs bibliothèques Javascript utilisant le signe $
-    jQuery( function ( $ ) {
-
-    $(#deliveryChoice).on{
-        change:function(e)
-        {
-            switch($( this ).val())
-            {
-                case "0":
-                    $(#deliveryFee).text('Gratuit');
-                    break;
-                case "2":
-                    $(#deliveryFee).text('2€');
-                    break;
-                case "10":
-                    $(#deliveryFee).text('10€');
-                    break;
-            }
-        e.preventDefault();
-        }
-    }
-}
-    </script>
+</div>
 {% endblock %}
 
+{% block javascripts %}
+     {{ parent() }}
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="assets/js/jquery-1.12.4.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="http://127.0.0.1:8000/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <!--<![endif]-->
+
+    <script>
+   
+    var deliveryFeesOptions = {
+        0:"0",
+        1:"0",
+        2:"2",
+        3:"10"
+        }
+    
+    function getWalletButtons() {
+        var walletButtons = 0;
+        walletButtons = $('#walletButtons').val();
+        console.log(walletButtons);
+        return walletButtons;
+        }
+
+    function getTotalButtons() {
+        var totalButtons = 0;
+        console.log('caca');
+        $("#mytable tr").find(".articleButtons").each(function() {
+            totalButtons += parseFloat($(this).html());
+            console.log(totalButtons);
+        });
+        return totalButtons;
+        }
+    function updateCartButtons() {
+        $("#totalButtons").html( getTotalButtons() );
+        console.log(getTotalButtons());
+        }
+
+    function getTotalFees() {
+        var totalFees = 0;
+        $("#mytable tr").find(".articleFee").each(function() {
+            totalFees += parseFloat($(this).html());
+            console.log(totalFees);
+        });
+        return totalFees;
+        }
+
+    function updateCartFees() {
+        $("#totalFees").html( getTotalFees() );
+        console.log(getTotalFees());
+        }
+
+    function updateDeliveryFees(){
+        $('#deliveryFee').val(deliveryFeesOptions[$('#deliveryChoice').val()]);
+        $('#deliveryFee').html(deliveryFeesOptions[$('#deliveryChoice').val()]);
+    }
+
+    function getDeliveryFees(){
+        var deliveryFees = 0;
+        deliveryFees = parseFloat($('#deliveryFee').val());
+        console.log(deliveryFees);
+        return deliveryFees;
+    }
+
+    function getTotalCart() {
+        var totalCart = 0;
+        totalCart = (getTotalButtons() - getWalletButtons()) + getTotalFees() + getDeliveryFees();
+        return totalCart;
+        }
+    function updateTotalCart() {
+        $("#totalCart").html( getTotalCart() );
+        }
+
+    function showSchoolStopslist(){
+        $('#stopChoice').show();
+    }
+    function hideSchoolStopsList(){
+        $('#stopChoice').hide();
+    }
+   
+    $(document).ready(function () {
+        hideSchoolStopsList();
+        updateCartButtons();
+        updateCartFees();
+        updateTotalCart();
+        $("#walletButtons").keyup(function () {
+            getWalletButtons();
+            updateTotalCart();
+        });
+        $('#deliveryChoice').change(function () {
+            updateDeliveryFees();
+            updateTotalCart();
+            if($('#deliveryChoice').val() == '2')
+            {
+                showSchoolStopslist();
+            }
+            else
+            {
+                hideSchoolStopsList();
+            }
+            
+        });
+    });
+
+    {# function validateCart(){
+        $('#validate').submit(function( event ) {
+            alert( "Handler for .submit() called." );
+            event.preventDefault();
+
+            if($('#deliveryChoice').val() == '1'){
+                var deliverySchoolStop = null;
+                var deliveryType ="boutique"
+            }
+
+            if($('#deliveryChoice').val() == '2'){
+                var deliverySchoolStop = $('#stopChoice').val();
+                var deliveryType ="école"
+            }
+
+            if($('#deliveryChoice').val() == '3'){
+                var deliverySchoolStop = null;
+                var deliveryType ="envoi"
+            }
+
+            $.post(
+                {# '{{path('delivery_bag_validateCart')}}', // Le fichier cible côté serveur.
+                'http://127.0.0.1:8000/delivery/bag/validateCar',
+                {
+                    serviceFee : $("#totalFees").val(),
+                    walletAmount : $("#walletButton").val(),
+                    schoolStopId : $('#stopChoice').val(),
+                    deliveryType : deliveryType
+                },
+                success, // Nous renseignons uniquement le nom de la fonction de retour.
+                'text' // Format des données reçues.
+            );
+
+            function success(response){
+                // Du code pour gérer le retour de l'appel AJAX.
+            }
+        }); 
+    }#}
+    </script>
+{% endblock %}
 
 

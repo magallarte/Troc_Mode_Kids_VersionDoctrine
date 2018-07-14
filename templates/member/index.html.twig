@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des membres{% endblock %}
+
+{% block body %}
+    <h1>Liste des membres</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                {# <th>Adresse (1)</th>
+                <th>Adresse (2)</th>
+                <th>Code Postal</th>
+                <th>Ville</th> #}
+                <th>Tel</th>
+                <th>Email</th>
+                <th>Souscription Newsletter</th>
+                <th>Niveau en couture</th>
+                <th>Montant Cagnotte</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for member in members %}
+            <tr>
+                <td>{{ member.memberName }}</td>
+                <td>{{ member.memberSurname }}</td>
+                {# <td>{{member.memberAddress1}}</td>
+                <td>{{member.memberAddress2}}</td>
+                <td>{{member.memberZipCode}}</td>
+                <td>{{member.memberCity}}</td> #}
+                <td>{{member.memberTel}}</td>
+                <td>{{member.memberEmail}}</td>
+                <td>{{member.memberSubscription}}</td>
+                <td>{{member.memberLevel}}</td>
+                <td>{{member.memberButtonWallet}}</td>
+                <td>
+                    <a href="{{ path('member_show', {'id': member.Id}) }}">voir la fiche - </a>
+                    {# <a href="{{ path('member_edit', {'id': member.id}) }}"> éditer la fiche</a> #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">Aucun membre trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('member_new') }}">Créer un nouveau membre</a>
+    <a href="{{ path('member_admin') }}">Retour au menu Admin</a>
+{% endblock %}

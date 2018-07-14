@@ -12,35 +12,39 @@
                 <td>{{ news.id }}</td>
             </tr>
             <tr>
-                <th>News_title</th>
+                <th>Titre</th>
                 <td>{{ news.news_title }}</td>
             </tr>
             <tr>
-                <th>News_source</th>
+                <th>Source</th>
                 <td>{{ news.news_source }}</td>
             </tr>
             <tr>
-                <th>News_url</th>
+                <th>Lien</th>
                 <td>{{ news.news_url }}</td>
             </tr>
             <tr>
-                <th>News_picture</th>
+                <th>Image</th>
                 <td>{{ news.news_picture }}</td>
             </tr>
             <tr>
-                <th>News_content</th>
+                <th>Contenu</th>
                 <td>{{ news.news_content }}</td>
             </tr>
             <tr>
-                <th>News_editDate</th>
-                <td>{{ news.news_editDate ? news.news_editDate|date('Y-m-d') : '' }}</td>
+                <th>Date de parution</th>
+                <td>{{ news.news_editDate ? news.news_editDate|date('m-d-Y') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('news_index') }}">back to list</a>
+    <a href="{{ path('news_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('news_edit', {'id': news.id}) }}">edit</a>
+    <br>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    <a href="{{ path('news_edit', {'id': news.id}) }}">Modifier</a>
+    <br>
+   {{ include('news/_delete_form.html.twig') }}
+    {% endif %}
 
-    {{ include('news/_delete_form.html.twig') }}
 {% endblock %}

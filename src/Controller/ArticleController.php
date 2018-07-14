@@ -22,6 +22,8 @@ use App\Repository\WearStatusRepository;
 use App\Entity\ProcessStatus;
 use App\Repository\ProcessStatusRepository;
 use App\Entity\DeliveryBag;
+use App\Entity\Kid;
+use App\Entity\Member;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +48,7 @@ class ArticleController extends Controller
     /**
      * @Route("/article/selection", name="article_selection", methods="GET|POST")
      */
-    public function selection(Request $request): Response
+    public function selection(Request $request, SessionInterface $session): Response
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -57,8 +59,31 @@ class ArticleController extends Controller
         $colors= $em->getRepository(Color::class)->findAll();
         $brands= $em->getRepository(Brand::class)->findAll();
         $wearStatuss= $em->getRepository(WearStatus::class)->findAll();
-        // $articles= $em->getRepository(Article::class)->findAll();
         $articles= $em->getRepository(Article::class)->findArticlesToSellStatus();
+
+        if($session->get('user'))
+        {
+            $user = $session->get('user');
+        }
+
+        if ( (!empty($request->get('preselectionKid'))))
+        {
+            $em = $this->getDoctrine()->getManager();
+            $kid=$em->getRepository(Kid::class)->find($request->get('preselectionKid'));
+            $articles= $em->getRepository(Article::class)->findByKid($kid);
+            return $this->render('article/selection.html.twig', [
+            'genders' => $genders,
+            'sizes' => $sizes,
+            'types' => $types,
+            'seasons' => $seasons,
+            'colors' => $colors,
+            'brands' => $brands,
+            'wearStatuss' => $wearStatuss,
+            'articles' => $articles,
+            // temp car form connexion ne marche pas
+            'user'=>$user,
+            ]);
+        }
 
         if ( (!empty($request->get('selectionGender'))) || (!empty($request->get('selectionSize'))) || (!empty($request->get('selectionType'))) || (!empty($request->get('selectionSeason'))) || (!empty($request->get('selectionColor'))) || (!empty($request->get('selectionBrand'))) || (!empty($request->get('selectionWearStatus')) ))
         {
@@ -66,7 +91,6 @@ class ArticleController extends Controller
             if(!empty($request->get('selectionGender')))
             {
                 foreach ($request->get('selectionGender') as $key => $gender) {
-                    $selection['Gender'][]=$gender;
                     $selection['Gender'][]=$gender;
                 }
             }
@@ -166,6 +190,8 @@ class ArticleController extends Controller
             'brands' => $brands,
             'wearStatuss' => $wearStatuss,
             'articles' => $articles,
+            // temp car form connexion ne marche pas
+            'user'=>$user,
             ]);
             
         }
@@ -178,7 +204,9 @@ class ArticleController extends Controller
             'colors' => $colors,
             'brands' => $brands,
             'wearStatuss' => $wearStatuss,
-            'articles' => $articles
+            'articles' => $articles,
+            // temp car form connexion ne marche pas
+            'user'=>$user,
         ]);
     }
     /**
@@ -186,14 +214,14 @@ class ArticleController extends Controller
      */
     public function new(Request $request): Response
     {
+
         $details = new Article();
         $form = $this->createForm(ArticleType::class, $details);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $details = $form->getData();
-            
+            $details = $form->getData();         
             $article = new Article();
             $article->setArticleGender($details->getArticleGender());
             $article->setArticleType($details->getArticleType());
@@ -217,12 +245,12 @@ class ArticleController extends Controller
             $article->setArticleComments($details->getArticleComments());
             $article->setArticleProcessStatus($details->getArticleProcessStatus());
 
-// On récupère le code du dernier article pour créer le code de l'article en cours de création
+            // Look for the last created article with same gender, size and type to determine the code
+            // of the new article in creation
             $em = $this->getDoctrine()->getManager();
             $criteria=array(
                 'article_gender'=> $details->getArticleGender(),
                 'article_size'=> $details->getArticleSize(),
-                // 'article_season'=> $article->getArticleSeason(),
                 'article_type'=> $details->getArticleType(),
             );
             $orderBy = array('id'=>'DESC');
@@ -237,6 +265,35 @@ class ArticleController extends Controller
                 $lastArticleCode = $lastArticle->getArticleCode();
             }
             $article->setArticleCode($lastArticleCode);
+
+            // we upload the picture file and name it with the new article code
+            // Picture 1
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file1 */
+            $file1 = $details->getArticlePicture1();
+            $fileName1 = $article->setArticleCode($lastArticleCode).'(1).'.$file1->guessExtension();
+
+            // moves the file to the directory where images are stored
+            $file1->move(
+                $this->getParameter('pictures_directory'),
+                $fileName1
+            );
+            // updates the 'ArticlePicture1' property to store the PDF file name
+            // instead of its contents
+            $article->setArticlePicture1($fileName1);
+
+            // Picture 2
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file2 */
+            $file2 = $details->getArticlePicture2();
+            $fileName2 = $article->setArticleCode($lastArticleCode).'(2).'.$file2->guessExtension();
+
+            // moves the file to the directory where images are stored
+            $file2->move(
+                $this->getParameter('pictures_directory'),
+                $fileName2
+            );
+            // updates the 'ArticlePicture2' property to store the PDF file name
+            // instead of its contents
+            $article->setArticlePicture2($fileName2);
 
             $em->persist($article);
             $em->flush();
@@ -254,10 +311,10 @@ class ArticleController extends Controller
             'form' => $form->createView(),
         ]);
     }
-
     
+    //VOIR SI UTILE DE METTRE requirements={"id"="\d+"}
     /**
-     * @Route("/article/{id}", name="article_show", methods="GET", requirements={"id"="\d+"})
+     * @Route("/article/{id}", name="article_show", methods="GET")
      */
     public function show(Article $article): Response
     {
@@ -265,13 +322,13 @@ class ArticleController extends Controller
     }
 
     /**
-     * @Route("/article/{id}/edit", name="article_edit", methods="GET|POST", requirements={"id"="\d+"})
+     * @Route("/article/{id}/edit", name="article_edit", methods="GET|POST")
      */
     public function edit(Request $request, Article $article): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -283,7 +340,7 @@ class ArticleController extends Controller
             'form' => $form->createView(),
         ]);
     }
-
+    
     /**
      * @Route("/article/{id}", name="article_delete", methods="DELETE", requirements={"id"="\d+"})
      */

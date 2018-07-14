@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SchoolStop{% endblock %}
+{% block title %}Tournée{% endblock %}
 
 {% block body %}
-    <h1>SchoolStop</h1>
+    <h1>Tournée</h1>
 
     <table class="table">
         <tbody>
@@ -12,15 +12,22 @@
                 <td>{{ school_stop.id }}</td>
             </tr>
             <tr>
-                <th>SchoolStop_date</th>
-                <td>{{ school_stop.schoolStop_date ? school_stop.schoolStop_date|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date/Heure</th>
+                <td>{{ school_stop.schoolStop_date ? school_stop.schoolStop_date|date('m-d-Y H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Ecole</th>
+                <td>{{ school_stop.schoolStopSchool.schoolName}}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('school_stop_index') }}">back to list</a>
-
-    <a href="{{ path('school_stop_edit', {'id': school_stop.id}) }}">edit</a>
-
+    <a href="{{ path('school_stop_index') }}">Retour à la liste</a>
+    <br>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    <a href="{{ path('school_stop_edit', {'id': school_stop.id}) }}">modifier</a>
+    <br>
     {{ include('school_stop/_delete_form.html.twig') }}
+    {% endif %}
+   
 {% endblock %}

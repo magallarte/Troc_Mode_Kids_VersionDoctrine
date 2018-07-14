@@ -2,8 +2,8 @@
 {% block title %}Troc&Mode Kids{% endblock %}
 
 {% block body %}
-
-<h1>Créez votre profil</h1>
+<div class="container">
+    <h1>Créez votre profil</h1>
 
 {# <form action="/member/create" method="post">
 
@@ -57,9 +57,10 @@
 {% endfor %}
     
 </form> #}
-
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
-
+        <form class="form-group" method="post">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </form>
+    </div>
 {% endblock %}

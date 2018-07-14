@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Member;
 use App\Form\MemberType;
+use App\Repository\MemberRepository;
 use App\Entity\Kid;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -30,17 +31,38 @@ class MemberController extends Controller
 {
 
     /**
+     * @Route("/member", name="member_index", methods="GET")
+     */
+    public function index(MemberRepository $memberRepository): Response
+    {
+        return $this->render('member/index.html.twig', ['members' => $memberRepository->findAll()]);
+        
+    }
+
+    /**
     * @Route("/member/admin", name="member_admin")
     */
 
     public function admin(Request $request, SessionInterface $session)
     {
-    $entityManager = $this->getDoctrine()->getManager();
-    $members = $entityManager->getRepository(Member::class)->findAll();
-
-    return $this->render('member/memberAdmin.html.twig', array(
+        if($session->get('user') && $session->get('user')->getMemberRole() == '6')
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+            $members = $entityManager->getRepository(Member::class)->findAll();
+            return $this->render('member/memberAdmin.html.twig', array(
             'members' => $members,
         ));
+        }
+        else
+        {
+            $this->addFlash(
+                    'notice',
+                    'Vous n\'êtes pas autorisé à consulter cette page !'
+                );
+            return $this->redirectToRoute('home_show');
+        }
+
+    
     }
     /**
     * @Route("/member/new", name="member_new")
@@ -52,33 +74,6 @@ class MemberController extends Controller
         // option avec le form builder automatique
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
-
-        // option avec le form à créer soi même
-        // $form = $this->createFormBuilder($member)
-        //     ->add('memberName', TextType::class, array('label'  => 'Nom :'))
-        //     ->add('memberSurname', TextType::class, array('label'  => 'Prénom :'))
-        //     ->add('memberAddress1', TextType::class, array('label'  => 'Adresse :'))
-        //     ->add('memberAddress2', TextType::class, array('label'  => 'Adresse (complément) :'))
-        //     ->add('memberZipCode', TextType::class, array('label'  => 'Code Postal :'))
-        //     ->add('memberCity', TextType::class, array('label'  => 'Ville :'))
-        //     ->add('memberTel', TelType::class, array('label'  => 'Téléphone :'))
-        //     ->add('memberEmail', EmailType::class, array('label'  => 'email :'))
-        //     ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
-        //     ->add('memberButtonWallet', HiddenType::class, array('data'  => '0'))
-        //     // ->add('memberRole', HiddenType::class, array('data'  => 'visiteur'))
-        //     ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
-        //     ->add('memberSubscription', ChoiceType::class, array(
-        //         'label'  => 'Abonnement à la newsletter',
-        //         'expanded'=> true,
-        //         'choices' => array(
-        //             'Oui' => true,
-        //             'Non' => false
-        //         )))
-        //     ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
-        //     ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
-        //     ->add('save', SubmitType::class, array('label' => 'Créez votre profil'))
-        //     ->getForm();
-
 
             if ($form->isSubmitted() && $form->isValid())
             {
@@ -99,6 +94,7 @@ class MemberController extends Controller
                 );
                 // on démarre une session au nom de la personne qui vient de s'inscrire
                 $session->set('user', $member);
+                return $this->redirectToRoute('home_show');
             }
 
         return $this->render('member/new.html.twig', array(
@@ -113,6 +109,7 @@ class MemberController extends Controller
     {
         $user = new Member();
 
+        // On crée un formulaire d'identification avec email et password.
         $form = $this->createFormBuilder($user)
             ->add('memberEmail', EmailType::class, array('label'  => 'Email :'))
             ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
@@ -120,13 +117,12 @@ class MemberController extends Controller
             ->getForm();
         
             $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid())
+        // On vérifie si le formulaire est bien soumis et on traite les données.
+        if ($form->isSubmitted() && $form->isValid())
             {
                 $user = $form->getData();
-
+                
                 // On récupère les données de tous les membres de la base de données.
-                // voir si possible de faire autrment qu'avec un findAll
                 $entityManager = $this->getDoctrine()->getManager();
                 $members = $entityManager->getRepository(Member::class)->findAll();
 
@@ -143,16 +139,19 @@ class MemberController extends Controller
                 {
                     $memberEmailList[]=$member->getMemberEmail();
                 }
-                
+                var_dump($user->getMemberPassword());
                 //On vérifie que le mot de passe crypté existe bien dans la liste de tous les mots de passe
-                    foreach ($memberPasswordList as $memberPassword)
-                    {
-                        $check[]=password_verify($user->getMemberPassword(),$memberPassword);
-                    }
+                foreach ($memberPasswordList as $memberPassword)
+                {
+                    $check[]=password_verify($user->getMemberPassword(),$memberPassword);
+                    var_dump($memberPassword);
+                }
+                var_dump($check);
                     //On vérifie que l'email existe bien dans la liste de tous les mots de passe et que le test du mot de passe est ok
                     if ( (in_array($user->getMemberEmail(), $memberEmailList)==true && (in_array('true', $check )==true)))
                     {
-                    // on affecte la session
+                    var_dump('second step');
+                    // On affecte la session
                     $user= $entityManager->getRepository(Member::class)->findOneBy([
                         'member_email' => $user->getMemberEmail()
                     ]);
@@ -164,7 +163,7 @@ class MemberController extends Controller
                     );
                     return $this->render('home.html.twig');
                     }
-                    else // sinon on demande de recommencer la saisie ou de se créer un profil
+                    else // Sinon on demande de recommencer la saisie ou de se créer un profil
                     {
                         if((in_array($user->getMemberEmail(), $memberEmailList)==false || (in_array('true', $check )==false)))
                         {
@@ -180,7 +179,7 @@ class MemberController extends Controller
                         'notice',
                         'Vos identifiants n\'ont pas été crées! Veuillez vous créer un profil !'
                         );
-                        return $this->redirectToRoute('member_create'); 
+                        return $this->redirectToRoute('member_new'); 
                         }
                     }
             }
@@ -197,6 +196,7 @@ class MemberController extends Controller
     public function unsetSession(SessionInterface $session)
     {
         $session->remove('user');
+        $session->remove('cart');
         $this->addFlash(
             'notice',
             'Vous êtes bien déconnecté !'
@@ -205,93 +205,63 @@ class MemberController extends Controller
     }
 
 
-    /**
-    * @Route("/member/show", name="member_show")
-    */
+/**
+* @Route("/member/{id}", name="member_show", methods="GET")
+*/
 
-    public function show(Request $request, SessionInterface $session)
+public function show(Member $member, SessionInterface $session):Response
+{
+    if($session->get('user') && ($session->get('user')->getMemberRole() == '6' || $session->get('user')->getId() == $member->getId()))
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $member = $entityManager->getRepository(Member::class)->find($session->get('user')->getId()); 
-
         return $this->render('member/memberShow.html.twig', array(
             'member' => $member
-        ));
-    }
-
-/**
- *@Route("/member/update" , name="member_update")
- */
-public function update(Request $request, SessionInterface $session)
-{
-    $entityManager = $this->getDoctrine()->getManager();
-    if($session)
-    {
-        $member = $entityManager->getRepository(Member::class)->find($session->get('id'));
+    ));
     }
     else {
-        $member = $entityManager->getRepository(Member::class)->find($request->get('memberId'));
+        $this->addFlash(
+                    'notice',
+                    'Vous n\'êtes pas autorisé à consulter cette page !'
+                );
+        return $this->redirectToRoute('home_show');
     }
     
-    // $id=$request->get('memberId');
-    // $member = $entityManager->getRepository(Member::class)->find($id);
+}
 
-    if (!$member) {
-        throw $this->createNotFoundException(
-            'Le membre '.$member->getId(). 'n\'existe pas !'
-        );
-    }
-
-    $form = $this->createFormBuilder($member)
-            ->add('memberName', TextType::class, array('label'  => 'Nom :'))
-            ->add('memberSurname', TextType::class, array('label'  => 'Prénom :'))
-            ->add('memberAddress1', TextType::class, array('label'  => 'Adresse :'))
-            ->add('memberAddress2', TextType::class, array('label'  => 'Adresse (complément) :'))
-            ->add('memberZipCode', TextType::class, array('label'  => 'Code Postal :'))
-            ->add('memberCity', TextType::class, array('label'  => 'Ville :'))
-            ->add('memberTel', TelType::class, array('label'  => 'Téléphone :'))
-            ->add('memberEmail', EmailType::class, array('label'  => 'email :'))
-            ->add('memberPassword', PasswordType::class, array('label'  => 'Mot de passe :'))
-            ->add('memberRole', EntityType::class, array('data'  => 'membre'))
-            ->add('memberRole', EntityType::class, array(
-                            'label'  => 'Role :',
-                            'class' => 'App\Entity\Role',
-                            'choice_label' => 'RoleName'))
-            ->add('memberKidCount',IntegerType::class, array('label'  => 'Nombre d\'enfants :'))
-            ->add('memberSubscription', RadioType::class, array('label'  => 'Abonnement à la newsletter'))
-            ->add('memberExpertise', TextType::class, array('label'  => 'Compétence que vous pouvez mettre à disposition:'))
-            ->add('memberLevel', RangeType::class, array('label'  => 'Niveau en couture:'))
-            ->add('save', SubmitType::class, array('label' => 'Modifiez votre profil'))
-            ->getForm();
+/**
+ * @Route("/member/{id}/edit", name="member_edit", methods="GET|POST")
+ */
+public function edit(Request $request, Member $member, SessionInterface $session): Response
+{
+    if($session->get('user') && ($session->get('user')->getMemberRole() == '6' || $session->get('user')->getId() == $member->getId()))
+    {
+        $form = $this->createForm(MemberType::class, $member);
+        $form->handleRequest($request);
         
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
-            if ($form->isSubmitted() && $form->isValid())
-            {
-                // $form->getData() holds the submitted values
-                // but, the original `$member` variable has also been updated
-                $member = $form->getData();
-
-                // ... perform some action, such as saving the member to the database
-                // for example, if Member is a Doctrine entity, save it!
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($member);
-                $entityManager->flush();
-
-                $this->addFlash(
+            $this->addFlash(
                     'notice',
                     'Votre profil a bien été modifié !'
                 );
 
-                return $this->render('home.html.twig');
-            }
+            return $this->redirectToRoute('member_edit', ['id' => $member->getId()]);
+        }
 
-        return $this->render('member/memberUpdate.html.twig', array(
+        return $this->render('member/edit.html.twig', [
+            'member' => $member,
             'form' => $form->createView(),
-            'member'=> $member
-        ));
-
+        ]);
     }
+    else
+    {
+        $this->addFlash(
+                    'notice',
+                    'Vous n\'êtes pas autorisé à consulter cette page !'
+                );
+        return $this->redirectToRoute('home_show');
+    }
+}
 
 /**
  *@Route("/member/delete/{id}" , name="member_delete")

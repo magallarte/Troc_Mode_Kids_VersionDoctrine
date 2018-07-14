@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Nouvelle Livraison {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Créer une livraison</h1>
+        <form class="form-group" method="post">
+        {{ include('delivery/_form.html.twig', {'button_label': 'Créer'}) }}
+        </form>
+        <a href="{{ path('delivery_index') }}">Retour à la liste</a>
+    </div>
+{% endblock %}

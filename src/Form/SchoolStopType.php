@@ -14,6 +14,10 @@ class SchoolStopType extends AbstractType
         $builder
             ->add('schoolStop_date')
             ->add('schoolStop_school')
+            // ->add('interest', CheckboxType::class, array(
+            //     'label'  => 'Cà m\'intéresse',
+            //     'mapped' => false
+            //     ))
         ;
     }
 

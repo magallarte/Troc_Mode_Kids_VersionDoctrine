@@ -1,43 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}DeliveryBag index{% endblock %}
+{% block title %}Liste des sacs de livraison{% endblock %}
 
 {% block body %}
-    <h1>DeliveryBag index</h1>
+    <h1>Liste des sacs de livraison</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>DeliveryBag_serviceFee</th>
-                <th>DeliveryBag_buttonAmount</th>
-                <th>DeliveryBag_buyDate</th>
-                <th>DeliveryBag_deliveryFee</th>
-                <th>DeliveryBag_deliveryDate</th>
-                <th>actions</th>
+                <th>Numéro</th>
+                <th>Date de livraison</th>
+                <th>Ecole</th>
+                <th>Ville</th>
+                <th>Acheteur</th>
+                <th>Date d'achat</th>
+                <th>Préparation</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for delivery_bag in delivery_bags %}
             <tr>
                 <td>{{ delivery_bag.id }}</td>
-                <td>{{ delivery_bag.deliveryBagServiceFee }}</td>
-                <td>{{ delivery_bag.deliveryBagButtonAmount }}</td>
-                <td>{{ delivery_bag.deliveryBagBuyDate ? delivery_bag.deliveryBagBuyDate|date('Y-m-d') : '' }}</td>
-                <td>{{ delivery_bag.deliveryBagDeliveryFee }}</td>
-                <td>{{ delivery_bag.deliveryBagDeliveryDate ? delivery_bag.deliveryBagDeliveryDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ delivery_bag.deliveryBagDeliveryDate ? delivery_bag.deliveryBagDeliveryDate|date('d-m-Y H:i:s') : '' }}</td>
+                <td>{{ delivery_bag.deliveryBag_delivery.school.schoolName }}</td>
+                <td>{{ delivery_bag.deliveryBag_delivery.school.schoolCity }}</td>
+                <td>{{ delivery_bag.deliveryBag_buyer.memberName }}  {{delivery_bag.deliveryBag_buyer.memberSurname }}</td>
+                <td>{{ delivery_bag.deliveryBagBuyDate ? delivery_bag.deliveryBagBuyDate|date('d-m-Y') : '' }}</td>
+                <td>{{ delivery_bag.deliveryBag_processStatus.processStatusName }}</td>
                 <td>
-                    <a href="{{ path('delivery_bag_show', {'id': delivery_bag.id}) }}">show</a>
-                    <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">edit</a>
+                    <a href="{{ path('delivery_bag_show', {'id': delivery_bag.id}) }}">voir - </a>
+                    <a href="{{ path('delivery_bag_edit', {'id': delivery_bag.id}) }}">modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="8">pas de sac de livraison trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('delivery_bag_new') }}">Create new</a>
+    <a href="{{ path('delivery_bag_new') }}">Créer un nouveau sac de livraison</a>
 {% endblock %}

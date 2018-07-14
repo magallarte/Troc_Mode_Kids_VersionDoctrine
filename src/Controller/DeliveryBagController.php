@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use App\Entity\DeliveryBag;
 use App\Form\DeliveryBagType;
 use App\Repository\DeliveryBagRepository;
@@ -20,6 +21,7 @@ use App\Repository\ColorRepository;
 use App\Entity\Brand;
 use App\Repository\BrandRepository;
 use App\Entity\WearStatus;
+use App\Entity\SchoolStop;
 use App\Repository\WearStatusRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,24 +113,30 @@ class DeliveryBagController extends Controller
      */
     public function showCart(SessionInterface $session): Response
     {
-        $totalEuros= 0;
-        foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $article) {
-            $totalEuros=$totalEuros+$article->getArticleEurosValue();
-        }
-        $totalButtons= 0;
-        foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $article) {
-            $totalButtons=$totalButtons+$article->getArticleButtonValue();
-        }
-        $totalServiceFee= 0;
-        foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $article) {
-            $totalServiceFee=$totalServiceFee+1;
-        }
+        
+        if($session->get('user'))
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+            $member = $entityManager->getRepository(Member::class)->find($session->get('user')->getId());
+            $schoolStops=$entityManager->getRepository(SchoolStop::class)->findAll();
+
+        $articlesList=$session->get('cart')->getDeliveryBagArticleList();
+        
         return $this->render('delivery_bag/Cart.html.twig', [
-            'deliveryBag' => $session->get('cart'),
-            'totalEuros' => $totalEuros,
-            'totalButtons' => $totalButtons,
-            'totalServiceFee' => $totalServiceFee
+            'deliveryBagList' => $articlesList,
+            'member' => $member,
+            'schoolStops' => $schoolStops,
             ]);
+        }
+        else
+        {
+            $this->addFlash(
+                        'notice',
+                        'Identifiez vous pour accéder à votre panier'
+                );
+            return $this->redirectToRoute('member_setSession');
+        }
+        
     }
 
     /**
@@ -136,34 +144,43 @@ class DeliveryBagController extends Controller
      */
     public function addToCart(Request $request, Article $article, SessionInterface $session)
     {
-            $em = $this->getDoctrine()->getManager();
-            $article_selectedStatus= $em->getRepository(ProcessStatus::class)->find(8);
+            if ($article->getArticleProcessStatus()->getId()!='8')
+            {
+                $em = $this->getDoctrine()->getManager();
+                $article_selectedStatus= $em->getRepository(ProcessStatus::class)->find(8);//8 = "sélectionné"
 
-            $article->setArticleProcessStatus($article_selectedStatus);
-            $em->persist($article);
-            $em->flush();
+                $article->setArticleProcessStatus($article_selectedStatus);
+                $em->persist($article);
+                $em->flush();
+
+                $session =new Session();
+                $session->start();
+                if(!is_null($session->get('cart')))
+                {
+                    $cart = $session->get('cart');
+                }
+                else
+                {
+                    $cart=new DeliveryBag();
+                }
             
-            $session =new Session();
-            $session->start();
-            if(!is_null($session->get('cart')))
-            {
-                $cart = $session->get('cart');
+                $id=$article->getId();
+                $article=$em->getRepository(Article::class)->find($id);
+                $cart->addDeliveryBagArticleList($article);
+                $session->set('cart', $cart);
+                
+                $this->addFlash(
+                            'notice',
+                            'L\'article a bien été ajouté au panier !'
+                    );
             }
-            else
-            {
-                $cart=new DeliveryBag();
+            else {
+                $this->addFlash(
+                            'notice',
+                            'L\'article est déjà dans votre panier !'
+                    );
             }
-           
-            $id=$article->getId();
-            $article=$em->getRepository(Article::class)->find($id);
-            $cart->addDeliveryBagArticleList($article);
-            $session->set('cart', $cart);
             
-            $this->addFlash(
-                        'notice',
-                        'L\'article a bien été ajouté au panier !'
-                );
-        // }
         return $this->redirectToRoute('delivery_bag_showCart');
     }
 
@@ -173,7 +190,7 @@ class DeliveryBagController extends Controller
     public function removeFromCart(Request $request, Article $article, SessionInterface $session)
     {
             $em = $this->getDoctrine()->getManager();
-            $article_toSellStatus= $em->getRepository(ProcessStatus::class)->find(4);
+            $article_toSellStatus= $em->getRepository(ProcessStatus::class)->find(4);//4 = "à vendre"
 
             $article->setArticleProcessStatus($article_toSellStatus);
             $em->persist($article);
@@ -196,31 +213,114 @@ class DeliveryBagController extends Controller
                         'notice',
                         'L\'article a bien été retiré du panier !'
                 );
-        // }
-        return $this->redirectToRoute('article_selection');
+
+        return $this->redirectToRoute('delivery_bag_showCart');
     }
 
     /**
-    * @Route("/delivery/bag/unsetCart", name="member_unsetCart")
+    * @Route("/delivery/bag/unsetCart", name="delivery_bag_unsetCart")
     */
     // Ne fonctionne pas !!!! checker erreur INDEX
     public function unsetCart(SessionInterface $session)
     {
         $em = $this->getDoctrine()->getManager();
-        $article_toSellStatus= $em->getRepository(ProcessStatus::class)->find(4);
+        $article_toSellStatus= $em->getRepository(ProcessStatus::class)->find(4);//4 = "à vendre"
 
-        foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $sessionArticle)
-        {
-            $sessionArticle->setArticleProcessStatus($article_toSellStatus);
-            $em->persist($sessionArticle);
-            $em->flush();
+        if (!empty($session->get('cart'))) {
+            foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $sessionArticle)
+            {
+                $sessionArticle->setArticleProcessStatus($article_toSellStatus);
+                $em->persist($sessionArticle);
+                $em->flush();
+            }
+            $session->remove('cart');
+
+            $this->addFlash(
+                'notice',
+                'Votre panier a été vidé !'
+            );
         }
-        $session->remove('cart');
 
-        $this->addFlash(
-            'notice',
-            'Votre panier a été vidé !'
-        );
-        return $this->render('home.html.twig');
+        return $this->redirectToRoute('delivery_bag_showCart');
+    }
+
+    /**
+    * @Route("/delivery/bag/validateCart", name="delivery_bag_validateCart", methods="GET|POST")
+    */
+    public function validateCart(Request $request, SessionInterface $session)
+    {
+
+            $session->get('cart');
+            $cart=new DeliveryBag();
+            $em = $this->getDoctrine()->getManager();
+
+            $article_PayedStatus= $em->getRepository(ProcessStatus::class)->find(6);//4 = "payé"
+
+            foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $sessionArticle)
+            {
+                $cart->addDeliveryBagArticleList($sessionArticle);
+                $sessionArticle->setArticleProcessStatus($article_PayedStatus);
+                $em->persist($sessionArticle);
+                $em->flush();
+            }
+
+            if ($request->post('serviceFee') || $request->post('deliveryType') || $request->post('schoolStopId')|| $request->post('walletAmount'))
+            {
+                $serviceFee= $request->post('serviceFee');
+                $cart->setDeliveryBagServiceFee($deliveryBag_serviceFee);
+
+
+                $schoolStop = $request->post('schoolStopId');
+                if($schoolStopId !== null)
+                {
+                    $delivery = new Delivery();
+                    $schoolStop = $em->getRepository(ProcessStatus::class)->find($schoolStopId);
+                    $delivery->setDeliverySchoolStop($schoolStop);
+                    $delivery->setDeliveryDate($schoolStop->getSchoolStopDate());
+                    $deliveryType= $request->post('deliveryType');
+                    $delivery->setDeliveryType($deliveryType);
+                    $em->persist($delivery);
+                    $em->flush();
+
+                }
+                else
+                {
+                    $delivery = new Delivery();
+                    $delivery->setDeliverySchoolStop(null);
+                    $delivery->setDeliveryDate(null);
+                    $deliveryType= $request->post('deliveryType');
+                    $delivery->setDeliveryType($deliveryType);
+                    $em->persist($delivery);
+                    $em->flush();
+                }
+                $cart->setDeliveryBagDelivery($delivery);
+
+                $walletAmount = $request->post('$walletAmount');
+                $cart->setDeliveryBagButtonAmount($walletAmount);
+
+                return new Response ('success');
+            }
+            
+            $buyer=$session->get('user');
+            $cart->setDeliveryBagBuyer($buyer);
+            $buyer->setMemberButtonWallet($buyer->getMemberButtonWallet()- $walletAmount);
+            $em->persist($buyer);
+            $em->flush();
+
+            $date = date('m/d/Y h:i:s a', time());
+            $cart->setDeliveryBagBuyDate($date);
+
+            $PayedStatus= $em->getRepository(ProcessStatus::class)->find(6);//6 = "payé"
+            $cart->setDeliveryBagProcessStatus($PayedStatus);
+
+            $em->persist($cart);
+            $em->flush();
+            
+            $this->addFlash(
+                        'notice',
+                        'Votre commande a bien été validée ! Vous allez recevoir un email concernant votre livraison.'
+                );
+
+        return $this->redirectToRoute('delivery_bag_show', ['id' => $deliveryBag->getId()]);
     }
 }

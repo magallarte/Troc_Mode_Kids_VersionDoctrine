@@ -28,6 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Form\FabricType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\OptionResolver\OptionResolver;
 
 class ArticleType extends AbstractType
 {
@@ -83,7 +84,8 @@ class ArticleType extends AbstractType
                     'label'  => 'Etape de traitement :',
                     'class' => 'App\Entity\ProcessStatus',
                     'choice_label' => 'ProcessStatusName'))
-        ->add('article_picture1', FileType::class, array('label' => 'Photo (png)'))
+            ->add('article_picture1', FileType::class, array('label' => 'Photo Recto(png)','data_class' => null))
+            ->add('article_picture2', FileType::class, array('label' => 'Photo Verso (png)','data_class' => null))
         ;
     }
 

@@ -18,33 +18,29 @@ class SchoolRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, School::class);
     }
+    /**
+     * @return School[] Returns an array of School objects
+     */
 
-//    /**
-//     * @return School[] Returns an array of School objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function findByCity($city)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('s.school_city = :val')
+            ->setParameter('val', $city)
             ->orderBy('s.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?School
+    
+    public function findOneByDirectorName($director_name): ?School
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('s.school_director_name = :val')
+            ->setParameter('val', $director_name)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

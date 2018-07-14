@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -28,10 +29,11 @@ class Article
      */
     private $article_picture2;
 
+    // Picture 3 not used yet
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $article_picture3;
+    // private $article_picture3;
 
     /**
      * @ORM\Column(type="float")
@@ -127,41 +129,42 @@ class Article
         return $this->id;
     }
 
-    public function getArticlePicture1(): ?string
+    public function getArticlePicture1()
     {
         return $this->article_picture1;
     }
 
-    public function setArticlePicture1(?string $article_picture1): self
+    public function setArticlePicture1( $article_picture1)  
     {
-        $this->article_picture2 = $article_picture1;
+        $this->article_picture1 = $article_picture1;
 
         return $this;
     }
 
-    public function getArticlePicture2(): ?string
+    public function getArticlePicture2()
     {
         return $this->article_picture2;
     }
 
-    public function setArticlePicture2(?string $article_picture2): self
+    public function setArticlePicture2($article_picture2)
     {
         $this->article_picture2 = $article_picture2;
 
         return $this;
     }
 
-    public function getArticlePicture3(): ?string
-    {
-        return $this->article_picture3;
-    }
+    // Picture 3 not used yet
+    // public function getArticlePicture3()
+    // {
+    //     return $this->article_picture3;
+    // }
 
-    public function setArticlePicture3(?string $article_picture3): self
-    {
-        $this->article_picture3 = $article_picture3;
+    // public function setArticlePicture3($article_picture3)
+    // {
+    //     $this->article_picture3 = $article_picture3;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getArticleButtonValue(): ?float
     {
@@ -380,17 +383,22 @@ class Article
 
     public function setArticleCode(?string $last_article_code): ?string
     {
+        // We get a NUM code from the 4 last characters of the last similar article
         $numCode = substr( $last_article_code, -4 );
+
+        // We increment this NUM code  
         if( ctype_digit($numCode) ) {
             $numCode = (int)$numCode;
             $numCode++;
-            $numCode=str_pad($numCode,4,"0",STR_PAD_LEFT);// fonction PHP qui complète pour obtenir 4 caractères
+            $numCode=str_pad($numCode,4,"0",STR_PAD_LEFT);
         }
-       
+       // We create a GENDER code
         $genderCode = $this->getArticleGender()->getGenderCode();
         
+        // We create a SIZE code
         $sizeCode = $this->getArticleSize()->getSizeCode();
-        
+
+        // We create a SEASON code ( with 1 or 2 optionnal characters)
         $seasonCode='';
             foreach($this->getArticleSeason() as $articleSeason)
             {
@@ -400,11 +408,12 @@ class Article
             {
                 $seasonCode= ( str_pad($seasonCode ,2, "0", STR_PAD_LEFT) );
             }
-        
+        // We create a TYPE code
         $typeCode = $this->getArticleType()->getTypeCode();
-        var_dump ($genderCode.$sizeCode.$seasonCode.$typeCode.$numCode);
+
+        // We concatenate the differents codes
         $this->article_code = $genderCode.$sizeCode.$seasonCode.$typeCode.$numCode;
-        var_dump($this->article_code);
+        
         return $this->article_code;
     }
 

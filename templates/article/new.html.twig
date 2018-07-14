@@ -3,9 +3,12 @@
 {% block title %}Création Article{% endblock %}
 
 {% block body %}
-    <h1>Créer un nouveau article</h1>
-
-    {{ include('article/_form.html.twig') }}
-
-    <a href="{{ path('article_index') }}">Retour à la liste</a>
+    <div class="container">
+        <h1>Créer un nouveau article</h1>
+        <form class="form-group" method="post">
+        {{ include('article/_form.html.twig', {'button_label': 'Créer'}) }}
+        </form>
+        <a href="{{ path('article_index') }}">Retour à la liste</a>
+    </div>
 {% endblock %}
+

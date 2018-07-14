@@ -12,41 +12,46 @@
                 <td>{{ workshop.id }}</td>
             </tr>
             <tr>
-                <th>Workshop_date</th>
+                <th>Date</th>
                 <td>{{ workshop.workshopDate ? workshop.workshopDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Workshop_theme</th>
+                <th>Thème</th>
                 <td>{{ workshop.workshopTheme }}</td>
             </tr>
             <tr>
-                <th>Workshop_fee</th>
+                <th>Prix</th>
                 <td>{{ workshop.workshopFee }}</td>
             </tr>
             <tr>
-                <th>Workshop_place</th>
+                <th>Lieu</th>
                 <td>{{ workshop.workshopPlace }}</td>
             </tr>
             <tr>
-                <th>Workshop_picture</th>
+                <th>Photo</th>
                 <td>{{ workshop.workshopPicture }}</td>
             </tr>
             <tr>
-                <th>Workshop_trainer</th>
+                <th>Formateur</th>
                 <td>{{ workshop.workshopTrainer.MemberSurname }}  {{ workshop.workshopTrainer.MemberName }}</td>
             </tr>
-            <tr>
-                <th>Workshop_trainees</th>
+            {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+                <tr>
+                <th>Participants</th>
                 {% for trainee in workshop.workshopTraineesList %}
                 <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
                 {% endfor %}
-            </tr>
+                </tr>
+            {% endif %}
+            
         </tbody>
     </table>
-
-    <a href="{{ path('workshop_index') }}">back to list</a>
-    
-    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">edit</a>
-
+    <br>
+    <a href="{{ path('workshop_index') }}">Retour à la liste</a>
+    <br>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">modifier</a>
+    <br>
     {{ include('workshop/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

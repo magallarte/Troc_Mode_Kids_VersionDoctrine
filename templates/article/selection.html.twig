@@ -2,123 +2,132 @@
 
 {% block title %}Je trouve{% endblock %}
 
-{% block javascripts %}
-<script type="text/javascipt">
-    $(document).ready(function(e){
-        $('.chzn-select').chosen();
-});
-</script>
-{% endblock %}
-
 {% block body %}
 
-<h1>Je trouve</h1>
-<p>Grâce à vos points (gagnés en fonction de vos dons) et 1€ par vêtement ou bien, pour quelques €, achetez des vêtements de seconde main, en parfait état ! </p>
+<div class="container">
+    <h1>Je trouve</h1>
+    <p>Grâce à vos points sur votre cagnotte et 1€ par vêtement, ou bien pour quelques €, achetez des vêtements de seconde main, en parfait état ! </p>
 
-    <aside>
-    <h2>Filtres</h2>
-    <form action="/article/selection" method="post">
-
-    {# A FINIR
-    Voir comment transformer les selects en dropdown choix multiple #}
-    <label for="selectionGender">Sexe(s)</label>
-    <select multiple class="chzn-select" name="selectionGender[]" id="selectionGender">
-        {% for gender in genders %}
-        <option value="{{gender.id}}">{{gender.genderName}}</option>
-        {% endfor %}
-    </select>
- 
-    <br>
-    <label for="selectionSize">Taille(s)</label>
-    <select name="selectionSize[]" id="selectionSize" multiple="true" expanded="false">
-        {% for size in sizes %}
-        <option value="{{size.id}}">{{size.sizeName}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label for="selectionType">Type(s) de vêtement</label>
-    <select name="selectionType[]" id="selectionType" multiple="multiple">
-        {% for type in types %}
-        <option value="{{type.id}}">{{type.typeName}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label for="selectionSeason">Saison(s)</label>
-    <select name="selectionSeason[]" id="selectionSeason" multiple="multiple">
-        {% for season in seasons %}
-        <option value="{{season.id}}">{{season.seasonName}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label for="selectionColor">Couleur(s)</label>
-    <select name="selectionColor[]" id="selectionColor" multiple="multiple">
-        {% for color in colors %}
-        <option value="{{color.id}}">{{color.colorName}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label for="selectionBrand">Marque(s)</label>
-    <select name="selectionBrand[]" id="selectionBrand" multiple="multiple">
-        {% for brand in brands %}
-        <option value="{{brand.id}}">{{brand.brandName}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label for="selectionWearStatus">Etat usure(s)</label>
-    <select name="selectionWearStatus[]" id="selectionWearStatus" multiple="multiple">
-        {% for wearStatus in wearStatuss %}
-        <option value="{{wearStatus.id}}">{{wearStatus.wearStatusName}}</option>
-        {% endfor %}
-    </select>
-    <input type="submit" value="FILTRER">
-    <br>
-    
-</form>
-    </aside>
-    <br>
-
-    <h1>Liste des articles</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Sexe</th>
-                <th>Catégorie</th>
-                <th>Saison</th>
-                <th>Taille</th>
-                <th>Marque</th>
-                <th>Photo 1</th>
-                <th>Valeur (boutons)</th>
-                <th>Valeur (euros)</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.articleGender.GenderName }}</td>
-                <td>{{ article.articleType.TypeName }}</td>
-                <td>
-                {% for season in article.articleSeason %}
-                {{ season.SeasonName }}
-                {% endfor %}
-                </td>
-                <td>{{ article.articleSize.SizeName }}</td>
-                <td>{{ article.articleBrand.BrandName }}</td>
-                <td>{{ article.articlePicture1 }}</td>
-                <td>{{ article.articleButtonValue }}</td>
-                <td>{{ article.articleEurosValue }}</td>
-                <td>{{ article.articleProcessStatus.id }}</td>
-                <td>
-                    <a href="{{ path('article_show', {'id': article.id}) }}">Voir la fiche</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">Aucun article trouvé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="row">
+            <div class="col-md-3">
+                {# temp car form connexion ne marche pas #}
+                {% if user %}
+                {# {% if app.session.get('user') %} #}
+                    <h2>Préselection</h2>
+                    <form action="/article/selection" method="post" class="form-group">
+                    <select name="preselectionKid" id="preselectionKid" class="form-control dropdown">
+                        {# temp car form connexion ne marche pas #}
+                        {% for kid in user.memberKidList %}
+                        {# {% for kid in app.session.get('user').memberKidList %} #}
+                            {% if kid.kidAge > 12 %}
+                            {% set age=(kid.kidAge/12) %}
+                            <option value="{{kid.id}}">Sélection pour {{kid.kidSurname}} - {{age|round}} ans - Taille {{kid.kidSizeCode}}</option>
+                            {% else %} #}
+                            <option value="{{kid.id}}">Sélection pour {{kid.kidSurname}} - {{kid.kidAge}} mois - Taille {{kid.kidSizeCode}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input type="submit" value="VOIR">
+                    <br>
+                    </form>
+                {% endif %}
+                <h2>Filtres</h2>
+                <form action="/article/selection" method="post" class="form-group">
+                    {# A FINIR
+                    Voir comment transformer les selects en dropdown choix multiple #}
+                    <label for="selectionGender">Sexe(s)</label>
+                    <select name="selectionGender[]" id="selectionGender" class="form-control mdb-select">
+                        {% for gender in genders %}
+                        <option value="{{gender.id}}">{{gender.genderName}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="selectionSize">Taille(s)</label>
+                    <select name="selectionSize[]" id="selectionSize" multiple="true" expanded="false" class="form-control mdb-select">
+                        {% for size in sizes %}
+                        <option value="{{size.id}}">{{size.sizeName}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="selectionType">Type(s) de vêtement</label>
+                    <select name="selectionType[]" id="selectionType" multiple="multiple" class="form-control mdb-select">
+                        {% for type in types %}
+                        <option value="{{type.id}}">{{type.typeName}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="selectionSeason">Saison(s)</label>
+                    <select name="selectionSeason[]" id="selectionSeason" multiple="multiple" class="form-control mdb-select">
+                        {% for season in seasons %}
+                        <option value="{{season.id}}">{{season.seasonName}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="selectionColor">Couleur(s)</label>
+                    <select name="selectionColor[]" id="selectionColor" multiple="multiple" class="form-control mdb-select">
+                        {% for color in colors %}
+                        <option value="{{color.id}}">{{color.colorName}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="selectionBrand">Marque(s)</label>
+                    <select name="selectionBrand[]" id="selectionBrand" multiple="multiple" class="form-control mdb-select">
+                        {% for brand in brands %}
+                        <option value="{{brand.id}}">{{brand.brandName}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="selectionWearStatus">Etat usure(s)</label>
+                    <select name="selectionWearStatus[]" id="selectionWearStatus" multiple="multiple" class="form-control mdb-select">
+                        {% for wearStatus in wearStatuss %}
+                        <option value="{{wearStatus.id}}">{{wearStatus.wearStatusName}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="FILTRER">
+                    <br>
+                </form>
+                <a href="{{path('article_selection')}}">Revoir tout le catalogue </a>
+            </div>
+            <br> 
+            <div class="col-md-9">
+                <h1>Liste des articles</h1>
+                    <div class="row">
+                        {% for article in articles %}
+                        <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+                            <div class="card h-100">
+                                <a href="#"><img class="card-img-top" src="{{ asset('uploads/pictures/' ~ article.articlePicture1)}}" alt=""></a>
+                                <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ path('article_show', {'id': article.id}) }}">{{ article.articleType.TypeName }} - {{ article.articleGender.GenderName }} - {{ article.articleSize.SizeName }}</a>
+                                </h5>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>Aucun article trouvé</p>
+                        {% endfor %}
+                    </div>
+            </div>
+        </div>
+</div>
 {% endblock %}
+
+{% block javascripts %}
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="assets/js/jquery-1.12.4.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="http://127.0.0.1:8000/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <!--<![endif]-->
+
+    <script>
+        $(document).ready(function() {
+            $('.mdb-select').material_select();
+         });
+    
+    </script>
+{% endblock %}
+
+    {# <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> #}

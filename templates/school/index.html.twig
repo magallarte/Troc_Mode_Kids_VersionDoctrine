@@ -1,24 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}School index{% endblock %}
+{% block title %}Liste des écoles{% endblock %}
 
 {% block body %}
-    <h1>School index</h1>
+    <h1>Liste des écoles</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>School_name</th>
-                <th>School_address1</th>
-                <th>School_address2</th>
-                <th>School_zip_code</th>
-                <th>School_city</th>
-                <th>School_director_gender</th>
-                <th>School_director_name</th>
-                <th>School_director_tel</th>
-                <th>School_director_email</th>
-                <th>actions</th>
+                <th>Nom</th>
+                <th>Adresse (1)</th>
+                <th>Adresse (2)</th>
+                <th>Code Postal</th>
+                <th>Ville</th>
+                <th>Mr / Mme</th>
+                <th>Directeur / Directrice</th>
+                <th>Tel</th>
+                <th>Email</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -35,13 +35,13 @@
                 <td>{{ school.schoolDirectorTel }}</td>
                 <td>{{ school.schoolDirectorEmail }}</td>
                 <td>
-                    <a href="{{ path('school_show', {'id': school.id}) }}">show</a>
-                    <a href="{{ path('school_edit', {'id': school.id}) }}">edit</a>
+                    <a href="{{ path('school_show', {'id': school.id}) }}">voir la fiche - </a>
+                    <a href="{{ path('school_edit', {'id': school.id}) }}">éditer la fiche </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="11">no records found</td>
+                <td colspan="11">Aucune école trouvée</td>
             </tr>
         {% endfor %}
         </tbody>

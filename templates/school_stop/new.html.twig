@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New SchoolStop{% endblock %}
+{% block title %}Créer une tournée{% endblock %}
 
 {% block body %}
-    <h1>Create new SchoolStop</h1>
-
-    {{ include('school_stop/_form.html.twig') }}
-
-    <a href="{{ path('school_stop_index') }}">back to list</a>
+    <div class="container">
+        <h1>Créer une tournée</h1>
+        <form class="form-group" method="post">
+        {{ include('school_stop/_form.html.twig', {'button_label': 'Créer'}) }}
+        </form>
+        <a href="{{ path('school_stop_index') }}">Retour à la liste</a>
+        <br>
+        {{ include('school_stop/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

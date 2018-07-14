@@ -49,6 +49,12 @@ class Kid
      */
     private $kid_parent_list;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Gender")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $kid_gender;
+
     public function __construct()
     {
         $this->kid_parent_list = new ArrayCollection();
@@ -138,6 +144,39 @@ class Kid
         }
 
         return $this;
+    }
+
+    public function getKidGender(): ?Gender
+    {
+        return $this->kid_gender;
+    }
+
+    public function setKidGender(?Gender $kid_gender): self
+    {
+        $this->kid_gender = $kid_gender;
+
+        return $this;
+    }
+
+    public function getKidAge()
+    {
+        $dateInterval = $this->kid_birthday->diff(new \DateTime());
+        $age=(($dateInterval->y)*12)+ ($dateInterval->m);
+ 
+        return $age;
+    }
+
+        public function getKidSizeCode()
+    {
+        if ($this->getKidAge()<12)
+        {
+            $sizeCode=(str_pad($this->getKidAge(),2,"0",STR_PAD_LEFT)).'M';
+        }
+        if ($this->getKidAge()>12)
+        {
+            $sizeCode=(str_pad(floor($this->getKidAge()/12),2,"0",STR_PAD_LEFT)).'A';
+        }
+        return $sizeCode;
     }
 
 }

@@ -9,13 +9,13 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>News_title</th>
-                <th>News_source</th>
-                <th>News_url</th>
-                <th>News_picture</th>
-                <th>News_content</th>
-                <th>News_editDate</th>
-                <th>actions</th>
+                <th>Titre</th>
+                <th>Source</th>
+                <th>Lien</th>
+                <th>Image</th>
+                <th>Contenu</th>
+                <th>Date</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,17 +29,17 @@
                 <td>{{ news.news_content }}</td>
                 <td>{{ news.news_editDate ? news.news_editDate|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('news_show', {'id': news.id}) }}">show</a>
-                    <a href="{{ path('news_edit', {'id': news.id}) }}">edit</a>
+                    <a href="{{ path('news_show', {'id': news.id}) }}">voir</a>
+                    <a href="{{ path('news_edit', {'id': news.id}) }}">modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">Aucune news trouvée</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('news_new') }}">Create new</a>
+    <a href="{{ path('news_new') }}">Créer une nouvelle news</a>
 {% endblock %}

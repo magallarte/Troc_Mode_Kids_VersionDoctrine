@@ -12,47 +12,51 @@
                 <td>{{ school.id }}</td>
             </tr>
             <tr>
-                <th>School_name</th>
+                <th>Nom de l'école</th>
                 <td>{{ school.schoolName }}</td>
             </tr>
             <tr>
-                <th>School_address1</th>
+                <th>Adresse </th>
                 <td>{{ school.schoolAddress1 }}</td>
             </tr>
             <tr>
-                <th>School_address2</th>
+                <th>Adresse (complément)</th>
                 <td>{{ school.schoolAddress2 }}</td>
             </tr>
             <tr>
-                <th>School_zip_code</th>
+                <th>Code Postal</th>
                 <td>{{ school.schoolZipCode }}</td>
             </tr>
             <tr>
-                <th>School_city</th>
+                <th>Ville</th>
                 <td>{{ school.schoolCity }}</td>
             </tr>
             <tr>
-                <th>School_director_gender</th>
+                <th>Directeur/Directrice</th>
                 <td>{{ school.schoolDirectorGender }}</td>
             </tr>
             <tr>
-                <th>School_director_name</th>
+                <th>Nom du directeur/directrice</th>
                 <td>{{ school.schoolDirectorName }}</td>
             </tr>
             <tr>
-                <th>School_director_tel</th>
+                <th>Tel</th>
                 <td>{{ school.schoolDirectorTel }}</td>
             </tr>
             <tr>
-                <th>School_director_email</th>
+                <th>Email</th>
                 <td>{{ school.schoolDirectorEmail }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('school_index') }}">back to list</a>
+    <a href="{{ path('school_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('school_edit', {'id': school.id}) }}">edit</a>
-
+    <br>
+    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    <a href="{{ path('school_edit', {'id': school.id}) }}">Modifier</a>
+    <br>
     {{ include('school/_delete_form.html.twig') }}
+    {% endif %}
+
 {% endblock %}

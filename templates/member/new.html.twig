@@ -3,9 +3,13 @@
 {% block title %}Inscription Membre{% endblock %}
 
 {% block body %}
-    <h1>Créer votre profil ! </h1>
-
-    {{ include('member/_form.html.twig') }}
-
-    <a href="{{ path('member_show') }}">Voir votre profil</a>
+    <div class="container">
+        <h1>Créer votre profil ! </h1>
+        <form class="form-group" method="post">
+        {{ include('member/_form.html.twig', {'button_label': 'Créer'}) }}
+        </form>
+        <a href="{{ path('home_show') }}">Retour à l'accueil</a>
+        <br>
+        {# {{ include('member/_delete_form.html.twig') }} #}
+    </div>
 {% endblock %}

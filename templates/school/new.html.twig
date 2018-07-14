@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New School{% endblock %}
+{% block title %}Création d'une nouvelle Ecole {% endblock %}
 
 {% block body %}
-    <h1>Create new School</h1>
-
-    {{ include('school/_form.html.twig') }}
-
-    <a href="{{ path('school_index') }}">back to list</a>
+    <div class="container">
+        <h1>Créer une nouvelle école</h1>
+        <form class="form-group" method="post">
+        {{ include('school/_form.html.twig', {'button_label': 'Créer'}) }}
+        </form>
+        <a href="{{ path('school_index') }}">Retour à la liste</a>
+        <br>
+        {{ include('school/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

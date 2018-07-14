@@ -1,24 +1,90 @@
 {% extends 'base.html.twig'%}
 
 {% block body %}
+<div class="container">
+    <h1>Votre profil</h1>
 
-<h1>Votre profil</h1>
+<div class="row">
+<table class="table">
+    <tbody>
+        <th>
+            <td>{{member.memberSurname}} {{member.memberName}}</td>
+        </th>
+        <tr>
+            <td>{{member.memberAddress1}}<br>{{member.memberAddress2}}</td>
+        </tr>
+        <tr>
+            <td>{{member.memberZipCode}} {{member.memberCity}}</td>
+        </tr>
+        <tr>
+            <td>Tel : {{member.memberTel}}</td>
+        </tr>
+        <tr>
+            <td>Email : {{member.memberEmail}}</td>
+        </tr>
+        <tr>
+            <td>
+            <lable>Abonnement à la newsletter :</label>
+            <select type="checkbox">{{member.memberSubscription}}</select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <lable>Niveau de couture :</label>
+            <select type="range">{{member.memberLevel}}</select>
+            </td>
+        </tr>
+        <tr>
+            <td>Cagnotte : {{member.memberButtonWallet}}</td>
+        </tr>
+    </tbody>
+</table>
 
-<p>{{member.memberName}}</p>
-<p>{{member.memberSurname}}</p>
-<p>{{member.memberAddress1}}</p>
-<p>{{member.memberAddress2}}</p>
-<p>{{member.memberZipCode}} {{member.memberCity}} </p>
-<p>Tel : {{member.memberTel}}</p>
-<p>Email : {{member.memberEmail}}</p>
-<p>Abonnement à la newsletter :{{member.memberSubscription}}</p>
-<p>Niveau de couture :</p>
-<p type="range">{{member.memberLevel}}</p>
-<p>Cagnotte : {{member.memberButtonWallet}}</p>
+{% if member.memberKidList %}
+    {% for kid in member.memberKidList %}
+        <table>
+            <tbody>
+                <th>
+                    <td>{{kid.kidSurname}} {{kid.kidName}}</td>
+                </th>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{{kid.kidGender.GenderName}}</td>
+                </tr>
+                <tr>
+                    <td>{{kid.kidBirthday | date ('d-m-Y')}}</td>
+                </tr>
+                <tr>
+                    <td>Ecole : {{kid.kidSchoolId.SchoolName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+{% endif %}
+</div>
 
-<a href="/member/unsetSession">Me déconnecter</a>
-<a href="/member/update">Modifier mon profil</a>
-<a href="/donationBag/show">Voir mes derniers dons</a>
-<a href="/deliveryBag/show">Voir mes dernières trouvailles</a>
+        {# <form class="form-group" method="post">
+        {{ include('member/_form.html.twig') }}
+        </form>
+        <a href="{{ path('home_index') }}">Retour à l'accueil</a>
+        <br>
+        {{ include('member/_delete_form.html.twig') }} #}
 
+        <div class="row">
+        <a href="/member/unsetSession">Me déconnecter - </a>
+        <a href="/member/update">Modifier mon profil - </a>
+        <a href="/donationBag/show">Voir mes derniers dons - </a>
+        <a href="/deliveryBag/show">Voir mes dernières trouvailles</a>
+        </div>
+
+        <br>
+        {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+        <a href="{{ path('member_edit', {'id': member.id}) }}">Modifier</a>
+        <br>
+        {{ include('member/_delete_form.html.twig') }}
+        {% endif %}
+
+    </div>
 {% endblock %}

@@ -26,6 +26,11 @@ class Delivery
      */
     private $delivery_schoolStop;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $delivery_date;
+
     public function getId()
     {
         return $this->id;
@@ -51,6 +56,18 @@ class Delivery
     public function setDeliverySchoolStop(?SchoolStop $delivery_schoolStop): self
     {
         $this->delivery_schoolStop = $delivery_schoolStop;
+
+        return $this;
+    }
+
+    public function getDeliveryDate(): ?\DateTimeInterface
+    {
+        return $this->delivery_date;
+    }
+
+    public function setDeliveryDate(?\DateTimeInterface $delivery_date): self
+    {
+        $this->delivery_date = $delivery_date;
 
         return $this;
     }

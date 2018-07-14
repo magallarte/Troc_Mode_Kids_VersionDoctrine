@@ -27,6 +27,10 @@ class KidType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('kidGender', EntityType::class, array(
+                'label'  => 'Sexe',
+                'class' => 'App\Entity\Gender',
+                'choice_label' => 'GenderName'))
             ->add('kidName', TextType::class, array('label'  => 'Nom :'))
             ->add('kidSurname', TextType::class, array('label'  => 'Prénom :'))
             ->add('kidParentList', EntityType::class, array(
@@ -34,7 +38,11 @@ class KidType extends AbstractType
                     'class' => 'App\Entity\Member',
                     'choice_label' => function ($parent){
                         return $parent->getMemberName().' '.$parent->getMemberSurname();
-                    }))
+                    },
+                    'empty_data' => null,
+                    'placeholder' => 'Sélectionner une personne',
+                    'required'      => false
+                    ))
             ->add('kidBirthday', BirthdayType::class, array(
                 'label'  => 'Date de naissance :',
                 'widget' => 'choice',
@@ -54,6 +62,7 @@ class KidType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Kid::class,
+            "allow_extra_fields" => true,
         ]);
     }
 }

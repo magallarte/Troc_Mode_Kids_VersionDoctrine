@@ -35,13 +35,13 @@
                 <td>{{ article.articleButtonValue }}</td>
                 <td>{{ article.articleEurosValue }}</td>
                 <td>
-                    <a href="{{ path('article_show', {'id': article.id}) }}">voir le fiche</a>
-                    <a href="{{ path('article_edit', {'id': article.id}) }}">éditer la fiche</a>
+                    <a href="{{ path('article_show', {'id': article.id}) }}">voir - </a>
+                    <a href="{{ path('article_edit', {'id': article.id}) }}"> modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">Aucun article trouvé</td>
+                <td colspan="9">Aucun article trouvé</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Delivery{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Modifier une livraison</h1>
+        <form class="form-group" method="post">
+        {{ include('delivery/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        </form>
+        <a href="{{ path('delivery_index') }}">Retour à la liste</a>
+        <br>
+        {{ include('delivery/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

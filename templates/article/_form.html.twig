@@ -78,13 +78,10 @@
     {{ form_widget(form) }}
     {# Le formulaire reste globalement le même,
    On ne rajoute que le champ tissu et le lien pour en ajouter #}
-<div class="well">
-  {# ... #}
-  
-  {{ form_row(form.article_fabric) }}
-  <a href="#" id="add_fabric" class="btn btn-default">Ajouter un tissu</a>
-  
-  {# ... #}
-</div>
-    <button class="btn">{{ button_label|default('Save') }}</button>
+  <div>  
+    {{ form_row(form.article_fabric) }}
+    <a href="#" id="add_fabric" class="btn btn-secondary">Ajouter un tissu</a> 
+  </div>
+  <br>
+  <button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
 {{ form_end(form) }}

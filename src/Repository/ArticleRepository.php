@@ -19,22 +19,34 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-//    /**
-//     * @return Article[] Returns an array of Article objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+
+    public function findByKid($kid)
     {
+        $kidGender = $kid->getKidGender()->getId();
+        $kidSizeCode=$kid->getKidSizeCode();
+
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+            ->leftJoin('a.article_gender', 'g')
+            ->addselect('g')
+            ->leftJoin('a.article_size', 's')
+            ->addselect('s')
+            ->andWhere('a.article_gender= :kidgender')
+            ->setParameter('kidgender', $kidGender)
+            ->orWhere('a.article_gender= :mixedgender')
+            ->setParameter('mixedgender', 3)
+            ->andWhere('s.size_code= :kidsize')
+            ->setParameter('kidsize', $kidSizeCode)
+            ->andwhere('a.article_processStatus = :status')
+            ->setParameter('status', '4' )
             ->orderBy('a.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Article
@@ -73,25 +85,11 @@ class ArticleRepository extends ServiceEntityRepository
     public function findArticlesByMultipleSelection($selection): array
     {
         $qb = $this->createQueryBuilder('a')
-            // ->innerJoin('a.article_season', 's', 'WITH', 's.id = :season')
-            // ->addselect('s')
-            // ->setParameters( array ($selection['Season']))
-            // ->innerJoin('a.article_color', 'c', 'WITH', 'c.id = :color')
-            // ->addselect('c')
-            // ->setParameters( array ($selection['Color']));
             ->leftJoin('a.article_season', 's')
             ->addselect('s')
             ->leftJoin('a.article_color', 'c')
             ->addselect('c');
             
-            // foreach ($selection as $field => $selectionvalue)
-            // {
-            //     foreach ($selectionvalue as $key => $subselectionvalue)
-            //     {
-            //         $qb->andWhere(sprintf('a.article%s = :%s', '_'.strtolower($field), $field))
-            //         ->setParameter($field, $subselectionvalue);
-            //     }
-            // }
             $markers = array();
             $binds = array();
             foreach( $selection['Gender'] as $key=>$value) {
@@ -142,35 +140,29 @@ class ArticleRepository extends ServiceEntityRepository
             }
             $qb->andWhere($qb->expr()->in('a.article_wearStatus',$markers));
 
+            $markers = array();
+            $markers[] = new \Doctrine\ORM\Query\Expr\Literal(':processStatus');
+            $binds['processStatus']= '4';
+            $qb->andWhere($qb->expr()->in('a.article_processStatus',$markers));
 
-            
             $qb = $qb->orderBy('a.article_code', 'ASC')
-            ->setParameters($binds);
-
-            $qb->andwhere('a.article_processStatus = :status')
-            ->setParameter('status', '4' )
-            ->getQuery();
+            ->setParameters($binds)
+            ->getQuery(); 
             
         return $qb->execute(); 
-        // return $qb->getResult();
     }
-
+    
     /**
      * @return Article[] Returns an array of Article objects
      */
     public function findArticlesToSellStatus(): array
     {
         $qb = $this->createQueryBuilder('a')
-            ->leftJoin('a.article_season', 's')
-            ->addselect('s')
-            ->leftJoin('a.article_color', 'c')
-            ->addselect('c')
             ->andwhere('a.article_processStatus = :status')
             ->setParameter('status', '4' )
             ->orderBy('a.article_code', 'ASC')
             ->getQuery();
             
         return $qb->execute(); 
-        // return $qb->getResult();
     }
 }
