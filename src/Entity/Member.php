@@ -66,7 +66,7 @@ class Member
     private $member_email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=64)
      * @Assert\NotBlank()
      */
     private $member_password;

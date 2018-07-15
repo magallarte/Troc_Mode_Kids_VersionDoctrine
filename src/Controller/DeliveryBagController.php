@@ -7,6 +7,7 @@ use App\Entity\DeliveryBag;
 use App\Form\DeliveryBagType;
 use App\Repository\DeliveryBagRepository;
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use App\Entity\ProcessStatus;
 use App\Entity\Gender;
 use App\Repository\GenderRepository;
@@ -23,6 +24,7 @@ use App\Repository\BrandRepository;
 use App\Entity\WearStatus;
 use App\Entity\SchoolStop;
 use App\Repository\WearStatusRepository;
+use App\Repository\App\Repository\ProcessStatusRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -255,14 +257,59 @@ class DeliveryBagController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $article_PayedStatus= $em->getRepository(ProcessStatus::class)->find(6);//4 = "payé"
-
+            $sessionArticlelist=[];
             foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $sessionArticle)
             {
-                $cart->addDeliveryBagArticleList($sessionArticle);
-                $sessionArticle->setArticleProcessStatus($article_PayedStatus);
-                $em->persist($sessionArticle);
-                $em->flush();
+                $sessionArticlelist[]=$sessionArticle;
             }
+
+            $batchSize = 20;
+            $i = 0;
+            $q = $em->createQuery('select a from App\Entity\Article a left join App\Entity\ProcessStatus p where p.id = 8');
+            // $q = $em->createQueryBuilder('a')
+            //     ->leftjoin('a.processStatus', 'p')
+            //     ->addselect('p')
+            //     ->andwhere('p.id = :status')
+            //     ->setParameter('status', '8' )
+            //     ->getQuery()
+            //     ->getResult();
+            $iterableResult = $q->iterate();
+            foreach ($iterableResult as $row) {
+                $article = $row[0];
+                $article->setArticleProcessStatus($article_PayedStatus);
+                if (($i % $batchSize) === 0) {
+                    $em->flush(); // Executes all updates.
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                ++$i;
+            }
+            $em->flush();
+
+            // for ($i = 0; $i <= count($sessionArticle); ++$i) {
+
+            //     $sessionArticlelist[$i]->setArticleProcessStatus($article_PayedStatus);
+
+            //     $em->persist($sessionArticle);
+
+            //     if (($i % $batchSize) === 0) {
+            //         $em->flush();
+            //         $em->clear(); // Detaches all objects from Doctrine!
+            //     }
+            // }
+
+            // $em->flush(); // Persist objects that did not make up an entire batch
+            // $em->clear();
+
+            // foreach ($session->get('cart')->getDeliveryBagArticleList() as $key => $sessionArticle)
+            // {
+            //     $cart->addDeliveryBagArticleList($sessionArticle);
+            //     $sessionArticle->setArticleProcessStatus($article_PayedStatus);
+            //     var_dump($sessionArticle->getId());
+            //     $em->persist($sessionArticle);
+            //     $em->flush();
+            //     $em->clear();
+            // }
+
 
             if ($request->post('serviceFee') || $request->post('deliveryType') || $request->post('schoolStopId')|| $request->post('walletAmount'))
             {

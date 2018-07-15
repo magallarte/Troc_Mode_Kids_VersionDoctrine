@@ -81,7 +81,8 @@ class MemberController extends Controller
                 $member = $form->getData();
 
                 // on crypte le mot de passe
-                $member->setMemberPassWord(password_hash($member->getMemberPassWord(), PASSWORD_BCRYPT));
+                //$member->setMemberPassWord(password_hash($member->getMemberPassWord(), PASSWORD_BCRYPT));
+                $member->setMemberPassWord($member->getMemberPassWord());
 
                 // on sauve les données dans la base de données
                 $entityManager = $this->getDoctrine()->getManager();
