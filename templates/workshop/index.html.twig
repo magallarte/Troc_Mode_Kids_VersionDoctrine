@@ -3,8 +3,9 @@
 {% block title %}Je participe{% endblock %}
 
 {% block body %}
+<div class="container">
     <h1>Je participe</h1>
-
+    <br>
     {% if app.session.get('user') %}
         {% for role in app.session.get('user').MemberRole %}
             {% if role.id ==  "6" %}
@@ -12,13 +13,20 @@
             {% endif %}
         {% endfor %}
     {% else %}
+    <div class="row">
+        <div class="col-lg-6 mb-6">
+            <img src={{ asset('images/Sewing.jpeg')}} height="400px"/>
+        </div>
+        <div class="col-lg-6 mb-6">
         <p>Vous êtes couturière débutante et vous avez envie d'aprrendre quelques techniques de couture ?
         Inscrivez vous à un des ateliers et découvrer comment réparer, transformer ou donner une 2ème vie à vos vêtements !
         Ou bien créer des accessoires à partir de tissus recyclés !<P>
-        <br>
+        {# <br> #}
         <P>Vous êtes une passionnée de couture et avez envie de partager vos connaissances et vos astuces ?
         Le local de Troc & Mode est à votre disposition, gratuitement, pour vous accueillir (vous et votre machine !) et coudre avec d'autres passionnées !</p>
         <p>Du jeudi au vendredi, de 10H à 12H et 14H à 18H, au xxx, rue xxx, à Castelnau le lez.<p>
+        </div>
+    </div>
     {% endif %}
 
     <br>
@@ -29,7 +37,7 @@
                 {# <th>Id</th> #}
                 <th>Date / Heure</th>
                 <th>Thème</th>
-                <th>Coût</th>
+                <th>Prix</th>
                 <th>Lieu</th>
                 <th>Image</th>
                 <th>Formateur</th>
@@ -47,7 +55,10 @@
                 <td>{{ workshop.workshopTheme }}</td>
                 <td>{{ workshop.workshopFee }}</td>
                 <td>{{ workshop.workshopPlace }}</td>
-                <td>{{ workshop.workshopPicture }}</td>
+                <td><img src={{ asset('images/' ~ workshop.workshopPicture)}} height="50px"/></td>
+                 {# <img class="d-block w-100 img-fluid" src="{{ asset('uploads/pictures/' ~ article.articlePicture1)}}" alt="First slide"> #}
+                        </div>
+                {# <td>{{ workshop.workshopPicture }}</td> #}
                 <td>{{ workshop.workshopTrainer.MemberSurname }} {{ workshop.workshopTrainer.MemberName }}</td>
                 {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
                     {% for trainee in workshop.workshopTraineesList %}
@@ -73,5 +84,5 @@
     {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
         <a href="{{ path('workshop_new') }}">Créer un nouvel atelier</a>
     {% endif %}
-    
+</div> 
 {% endblock %}

@@ -150,6 +150,38 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery(); 
             
         return $qb->execute(); 
+
+        // $sql = 'SELECT DISTINCT article.id FROM article
+        // LEFT JOIN article_season ON article_season.article_id = article.id
+        // LEFT JOIN season ON season.id = article_season.season_id
+        // LEFT JOIN article_color ON article_color.article_id = article.id
+        // LEFT JOIN color ON color.id = article_color.color_id
+        // LEFT JOIN brand ON brand.id = article.article_brand_id
+        // LEFT JOIN gender ON gender.id = article.article_gender_id
+        // LEFT JOIN size ON size.id = article.article_size_id
+        // LEFT JOIN type ON type.id = article.article_type_id
+        // LEFT JOIN wear_status ON wear_status.id = article.article_wear_status_id
+        // LEFT JOIN process_status ON process_status.id = article.article_process_status_id
+        // ';
+        
+        // $selectionOptions = array('selectionGender', 'selectionSize', 'selectionType', 'selectionColor', 'selectionSeason', 'selectionBrand', 'selectionWearStatus', 'selectionProcessStatus');
+        
+        // $markers = array();
+        // $binds = array();
+        
+        // foreach ($selectionOptions as  $selectionOption) {
+        //     if (!empty($_POST[$selectionOption])) {
+        //         $markers[] = '  '. $selectionOption. ' = :'.$selectionOption;
+        //         $binds[$selectionOption] = $_POST[$selectionOption];
+        //     }
+        // }
+        
+        // if (!empty($criteres)) {
+        //     $sql .= ' WHERE '.implode(' AND ', $criteres);
+        // }
+        
+        // $query = $bdd->prepare($sql);
+        // $res = $query->execute($valeurs);
     }
     
     /**
@@ -160,6 +192,20 @@ class ArticleRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('a')
             ->andwhere('a.article_processStatus = :status')
             ->setParameter('status', '4' )
+            ->orderBy('a.article_code', 'ASC')
+            ->getQuery();
+            
+        return $qb->execute(); 
+    }
+
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findArticlesSelectedStatus(): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->andwhere('a.article_processStatus = :status')
+            ->setParameter('status', '8' )
             ->orderBy('a.article_code', 'ASC')
             ->getQuery();
             

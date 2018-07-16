@@ -76,13 +76,13 @@
                                     <a class="dropdown-item" href="{{ path('news_index') }}">News</a>
                                     {# A FAIRE #}
                                     {# <a class="dropdown-item" href="{{ path('member_contact') }}">Contact</a> #}
-                                    {% if app.session.get('user') %}
+                                    {# {% if app.session.get('user') %}
                                         {% for role in app.session.get('user').MemberRole %}
-                                            {% if role.id ==  "6" %}
+                                            {% if role.id ==  "6" %} #}
                                             <a class="dropdown-item" href="{{ path('member_admin') }}">Admin</a>
-                                            {% endif %}
+                                            {# {% endif %}
                                         {% endfor %}
-                                    {% endif %}
+                                    {% endif %} #}
                                 </div>
                             </li>
                         </ul>

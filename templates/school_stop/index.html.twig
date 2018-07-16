@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container">
     <h1>Je donne</h1>
-
+    <br>
     {% if app.session.get('user') %}
         {% for role in app.session.get('user').MemberRole %}
             {% if role.id ==  "6" %}
@@ -13,13 +13,20 @@
             {% endif %}
         {% endfor %}
     {% else %}
-        <p>Vous ne savez plus quoi faire des vêtements trop petits de vos enfants ? Vous n'avez pas le temps de faire le tri, de les déposer aux containers, de vous occcuper de les revendre ...<P>
-        <br>
-        <p>Nous vous proposons de les récupérer, à un endroit pratique pour vous : le parking de l'école de vos enfants. </p>
-        <p>Des tournées sont régulièrment organisées sur les parkings des écoles de Castelnau le lez, Jacou et Le Crès.<p>
-        <br>
+     <div class="row">
+        <div class="col-lg-6 mb-6">
+            <img src={{ asset('images/Gaspillage_vestimentaire.png')}} height="300px"/>
+        </div>
+        <div class="col-lg-6 mb-6">
+            <p>Vous ne savez plus quoi faire des vêtements trop petits de vos enfants ? Vous n'avez pas le temps de faire le tri, de les déposer aux containers, de vous occcuper de les revendre ...<P>
+            {# <br> #}
+            <p>Nous vous proposons de les récupérer, à un endroit pratique pour vous : le parking de l'école de vos enfants. </p>
+            <p>Des tournées sont régulièrment organisées sur les parkings des écoles de Castelnau le lez, Jacou et Le Crès.<p>
+            <br>
+        </div>
+    </div>
     {% endif %}
-    
+    <br>
     <h2>Liste des tournées écoles</h2>
 
     <table class="table">

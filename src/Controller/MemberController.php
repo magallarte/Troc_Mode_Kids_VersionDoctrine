@@ -81,8 +81,8 @@ class MemberController extends Controller
                 $member = $form->getData();
 
                 // on crypte le mot de passe
-                //$member->setMemberPassWord(password_hash($member->getMemberPassWord(), PASSWORD_BCRYPT));
-                $member->setMemberPassWord($member->getMemberPassWord());
+                $member->setMemberPassWord(password_hash($member->getMemberPassWord(), PASSWORD_BCRYPT));
+                // $member->setMemberPassWord($member->getMemberPassWord());
 
                 // on sauve les données dans la base de données
                 $entityManager = $this->getDoctrine()->getManager();
@@ -140,18 +140,25 @@ class MemberController extends Controller
                 {
                     $memberEmailList[]=$member->getMemberEmail();
                 }
-                var_dump($user->getMemberPassword());
+                
                 //On vérifie que le mot de passe crypté existe bien dans la liste de tous les mots de passe
                 foreach ($memberPasswordList as $memberPassword)
                 {
+                    // OPTION 1 : PASSWORD VERIFY NE MARCHE PAS
                     $check[]=password_verify($user->getMemberPassword(),$memberPassword);
-                    var_dump($memberPassword);
+
+                     // OPTION 2 : VERIF MANUELLE FONCTIONNE
+                    if($user->getMemberPassword() == $memberPassword)
+                    {
+                        $check[]=True;
+                    }
+                    else {
+                        $check[]=False;
+                    }
                 }
-                var_dump($check);
                     //On vérifie que l'email existe bien dans la liste de tous les mots de passe et que le test du mot de passe est ok
                     if ( (in_array($user->getMemberEmail(), $memberEmailList)==true && (in_array('true', $check )==true)))
                     {
-                    var_dump('second step');
                     // On affecte la session
                     $user= $entityManager->getRepository(Member::class)->findOneBy([
                         'member_email' => $user->getMemberEmail()

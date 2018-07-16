@@ -112,63 +112,68 @@
 
     <script>
    
-    var deliveryFeesOptions = {
+    var deliveryFeeOptions = {
         0:"0",
         1:"0",
         2:"2",
         3:"10"
         }
     
+     var totalCart = 0;
+
     function getWalletButtons() {
         var walletButtons = 0;
         walletButtons = $('#walletButtons').val();
-        console.log(walletButtons);
+        console.log('wallet'+walletButtons);
         return walletButtons;
         }
 
     function getTotalButtons() {
         var totalButtons = 0;
-        console.log('caca');
-        $("#mytable tr").find(".articleButtons").each(function() {
-            totalButtons += parseFloat($(this).val());
-            console.log(totalButtons);
+        $(".articleButtons").each(function() {
+            totalButtons += parseFloat($(this).html());
         });
         return totalButtons;
         }
     function updateCartButtons() {
         $("#totalButtons").html( getTotalButtons() );
-        console.log(getTotalButtons());
         }
 
     function getTotalFees() {
         var totalFees = 0;
-        $("#mytable tr").find(".articleFee").each(function() {
-            totalFees += parseFloat($(this).val());
-            console.log(totalFees);
+        $(".articleFee").each(function() {
+            totalFees += parseFloat($(this).html());
         });
         return totalFees;
         }
 
     function updateCartFees() {
         $("#totalFees").html( getTotalFees() );
-        console.log(getTotalFees());
+        console.log('totalFee'+getTotalFees());
         }
 
-    function updateDeliveryFees(){
-        $('#deliveryFee').val(deliveryFeesOptions[$('#deliveryChoice').val()]);
-        $('#deliveryFee').html(deliveryFeesOptions[$('#deliveryChoice').val()]);
+    function updateDeliveryFee(){
+        $('#deliveryFee').val(deliveryFeeOptions[$('#deliveryChoice').val()]);
+        $('#deliveryFee').html(deliveryFeeOptions[$('#deliveryChoice').val()]);
     }
 
-    function getDeliveryFees(){
-        var deliveryFees = 0;
-        deliveryFees = parseFloat($('#deliveryFee').val());
-        console.log(deliveryFees);
-        return deliveryFees;
+    function getDeliveryFee(){
+        var deliveryFee = parseFloat($('#deliveryFee').html());
+        if(deliveryFee == NaN)
+        {
+            deliveryFee=0;
+        }
+
+        console.log('deliveryFee'+deliveryFee);
+        return deliveryFee;
     }
 
     function getTotalCart() {
-        var totalCart = 0;
-        totalCart = (getTotalButtons() - getWalletButtons()) + getTotalFees() + getDeliveryFees();
+        console.log('B'+getTotalButtons());
+        console.log('W'+getWalletButtons());
+        console.log('TF'+getTotalFees());
+        console.log('DF'+getDeliveryFee());
+        totalCart = (getTotalButtons() - getWalletButtons()) + getTotalFees() + getDeliveryFee();
         return totalCart;
         }
     function updateTotalCart() {
@@ -186,27 +191,28 @@
         hideSchoolStopsList();
         updateCartButtons();
         updateCartFees();
+        updateDeliveryFee();
         updateTotalCart();
         $("#walletButtons").keyup(function () {
             getWalletButtons();
             updateTotalCart();
         });
         $('#deliveryChoice').change(function () {
-            updateDeliveryFees();
+            updateDeliveryFee();
             updateTotalCart();
             if($('#deliveryChoice').val() == '2')
-            {
-                showSchoolStopslist();
+           {
+               showSchoolStopslist();
             }
-            else
+           else
             {
-                hideSchoolStopsList();
-            }
+               hideSchoolStopsList();
+           }
             
         });
     });
 
-    {# function validateCart(){
+    function validateCart(){
         $('#validate').submit(function( event ) {
             alert( "Handler for .submit() called." );
             event.preventDefault();
@@ -216,12 +222,12 @@
                 var deliveryType ="boutique"
             }
 
-            if($('#deliveryChoice').val() == '2'){
+            else if($('#deliveryChoice').val() == '2'){
                 var deliverySchoolStop = $('#stopChoice').val();
                 var deliveryType ="école"
             }
 
-            if($('#deliveryChoice').val() == '3'){
+            else if($('#deliveryChoice').val() == '3'){
                 var deliverySchoolStop = null;
                 var deliveryType ="envoi"
             }
@@ -241,9 +247,10 @@
 
             function success(response){
                 // Du code pour gérer le retour de l'appel AJAX.
+                alert( "ca marche." );
             }
         }); 
-    }#}
+    }
     </script>
 {% endblock %}
 
