@@ -65,7 +65,7 @@ class ArticleController extends Controller
         {
             $user = $session->get('user');
         }
-
+        
         if ( (!empty($request->get('preselectionKid'))))
         {
             $em = $this->getDoctrine()->getManager();
@@ -80,100 +80,77 @@ class ArticleController extends Controller
             'brands' => $brands,
             'wearStatuss' => $wearStatuss,
             'articles' => $articles,
-            // temp car form connexion ne marche pas
-            'user'=>$user,
             ]);
         }
 
         if ( (!empty($request->get('selectionGender'))) || (!empty($request->get('selectionSize'))) || (!empty($request->get('selectionType'))) || (!empty($request->get('selectionSeason'))) || (!empty($request->get('selectionColor'))) || (!empty($request->get('selectionBrand'))) || (!empty($request->get('selectionWearStatus')) ))
         {
 
-            if(!empty($request->get('selectionGender')))
-            {
+            if(!empty($request->get('selectionGender'))){
                 foreach ($request->get('selectionGender') as $key => $gender) {
                     $selection['Gender'][]=$gender;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($genders as $key => $gender) {
                     $selection['Gender'][]=$gender->getId();
                 }
             }
             
-            if(!empty($request->get('selectionSize')))
-            {
+            if(!empty($request->get('selectionSize'))){
                 foreach ($request->get('selectionSize') as $key => $size) {
                     $selection['Size'][]=$size;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($sizes as $key => $size) {
                     $selection['Size'][]=$size->getId();
                 }
             }
             
-            if(!empty($request->get('selectionType')))
-            {
+            if(!empty($request->get('selectionType'))){
                 foreach ($request->get('selectionType') as $key => $type) {
                     $selection['Type'][]=$type;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($types as $key => $type) {
                     $selection['Type'][]=$type->getId();
                 }
             }
             
-            if(!empty($request->get('selectionSeason')))
-            {
+            if(!empty($request->get('selectionSeason'))){
                 foreach ($request->get('selectionSeason') as $key => $season) {
                     $selection['Season'][]=$season;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($seasons as $key => $season) {
                     $selection['Season'][]=$season->getId();
                 }
             }
 
-            if(!empty($request->get('selectionColor')))
-            {
+            if(!empty($request->get('selectionColor'))){
                 foreach ($request->get('selectionColor') as $key => $color) {
                     $selection['Color'][]=$color;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($colors as $key => $color) {
                     $selection['Color'][]=$color->getId();
                 }
             }
             
-            if(!empty($request->get('selectionBrand')))
-            {
+            if(!empty($request->get('selectionBrand'))){
                 foreach ($request->get('selectionBrand') as $key => $brand) {
                     $selection['Brand'][]=$brand;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($brands as $key => $brand) {
                     $selection['Brand'][]=$brand->getId();
                 }
             }
             
-            if(!empty($request->get('selectionWearStatus')))
-            {
+            if(!empty($request->get('selectionWearStatus'))){
                 foreach ($request->get('selectionWearStatus') as $key => $wearStatus) {
                     $selection['WearStatus'][]=$wearStatus;
                 }
-            }
-            else
-            {
+            }else{
                 foreach ($wearStatuss as $key => $wearStatus) {
                     $selection['WearStatus'][]=$wearStatus->getId();
                 }
@@ -190,8 +167,6 @@ class ArticleController extends Controller
             'brands' => $brands,
             'wearStatuss' => $wearStatuss,
             'articles' => $articles,
-            // temp car form connexion ne marche pas
-            'user'=>$user,
             ]);
             
         }
@@ -205,8 +180,6 @@ class ArticleController extends Controller
             'brands' => $brands,
             'wearStatuss' => $wearStatuss,
             'articles' => $articles,
-            // temp car form connexion ne marche pas
-            'user'=>$user,
         ]);
     }
     /**

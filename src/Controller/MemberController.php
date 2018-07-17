@@ -45,22 +45,23 @@ class MemberController extends Controller
 
     public function admin(Request $request, SessionInterface $session)
     {
-        if($session->get('user') && $session->get('user')->getMemberRole() == '6')
-        {
+        // var_dump($session->get('user'));
+        // if($session->get('user') && $session->get('user')->getMemberRole() == '6')
+        // {
             $entityManager = $this->getDoctrine()->getManager();
             $members = $entityManager->getRepository(Member::class)->findAll();
             return $this->render('member/memberAdmin.html.twig', array(
             'members' => $members,
         ));
-        }
-        else
-        {
-            $this->addFlash(
-                    'notice',
-                    'Vous n\'êtes pas autorisé à consulter cette page !'
-                );
-            return $this->redirectToRoute('home_show');
-        }
+        // }
+        // else
+        // {
+        //     $this->addFlash(
+        //             'notice',
+        //             'Vous n\'êtes pas autorisé à consulter cette page !'
+        //         );
+        //     return $this->redirectToRoute('home_show');
+        // }
 
     
     }
@@ -144,20 +145,10 @@ class MemberController extends Controller
                 //On vérifie que le mot de passe crypté existe bien dans la liste de tous les mots de passe
                 foreach ($memberPasswordList as $memberPassword)
                 {
-                    // OPTION 1 : PASSWORD VERIFY NE MARCHE PAS
                     $check[]=password_verify($user->getMemberPassword(),$memberPassword);
-
-                     // OPTION 2 : VERIF MANUELLE FONCTIONNE
-                    if($user->getMemberPassword() == $memberPassword)
-                    {
-                        $check[]=True;
-                    }
-                    else {
-                        $check[]=False;
-                    }
                 }
                     //On vérifie que l'email existe bien dans la liste de tous les mots de passe et que le test du mot de passe est ok
-                    if ( (in_array($user->getMemberEmail(), $memberEmailList)==true && (in_array('true', $check )==true)))
+                    if ( (in_array($user->getMemberEmail(), $memberEmailList)==true && (in_array(true, $check )==true)))
                     {
                     // On affecte la session
                     $user= $entityManager->getRepository(Member::class)->findOneBy([
@@ -173,7 +164,7 @@ class MemberController extends Controller
                     }
                     else // Sinon on demande de recommencer la saisie ou de se créer un profil
                     {
-                        if((in_array($user->getMemberEmail(), $memberEmailList)==false || (in_array('true', $check )==false)))
+                        if((in_array($user->getMemberEmail(), $memberEmailList)==false || (in_array(true, $check )==false)))
                         {
                         $this->addFlash(
                         'notice',
@@ -181,7 +172,7 @@ class MemberController extends Controller
                         );
                         return $this->redirectToRoute('member_setSession'); 
                         }
-                        elseif((in_array($user->getMemberEmail(), $memberEmailList)==false && (in_array('true', $check )==false)))
+                        elseif((in_array($user->getMemberEmail(), $memberEmailList)==false && (in_array(true, $check )==false)))
                         {
                         $this->addFlash(
                         'notice',
@@ -205,6 +196,7 @@ class MemberController extends Controller
     {
         $session->remove('user');
         $session->remove('cart');
+        // RAJOUTER UNE FONCTION POUR REPASSER LES ARTICLES SELECTIONNES A VENDRE
         $this->addFlash(
             'notice',
             'Vous êtes bien déconnecté !'

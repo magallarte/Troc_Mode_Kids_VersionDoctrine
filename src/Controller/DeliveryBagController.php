@@ -121,14 +121,26 @@ class DeliveryBagController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $member = $entityManager->getRepository(Member::class)->find($session->get('user')->getId());
             $schoolStops=$entityManager->getRepository(SchoolStop::class)->findAll();
-
-        $articlesList=$session->get('cart')->getDeliveryBagArticleList();
+            // PREVOIR DE FILTRER LES SCHOOL STOPDS PAR RAPPORT A LA DATE DU JOUR
         
-        return $this->render('delivery_bag/Cart.html.twig', [
-            'deliveryBagList' => $articlesList,
-            'member' => $member,
-            'schoolStops' => $schoolStops,
-            ]);
+            if($session->get('cart'))
+            {
+                $articlesList=$session->get('cart')->getDeliveryBagArticleList();
+            
+            return $this->render('delivery_bag/Cart.html.twig', [
+                'deliveryBagList' => $articlesList,
+                'member' => $member,
+                'schoolStops' => $schoolStops,
+                ]);
+            }
+            else 
+            {
+                $this->addFlash(
+                        'notice',
+                        'Votre panier est vide pour le moment !'
+                );
+            return $this->redirectToRoute('article_selection');
+            }
         }
         else
         {
@@ -146,6 +158,16 @@ class DeliveryBagController extends Controller
      */
     public function addToCart(Request $request, Article $article, SessionInterface $session)
     {
+                // $session =new Session();
+                // $session->start();
+                if(!is_null($session->get('cart')))
+                {
+                    $cart = $session->get('cart');
+                }
+                else
+                {
+                    $cart=new DeliveryBag();
+                }
             if ($article->getArticleProcessStatus()->getId()!='8')
             {
                 $em = $this->getDoctrine()->getManager();
@@ -155,23 +177,13 @@ class DeliveryBagController extends Controller
                 $em->persist($article);
                 $em->flush();
 
-                $session =new Session();
-                $session->start();
-                if(!is_null($session->get('cart')))
-                {
-                    $cart = $session->get('cart');
-                }
-                else
-                {
-                    $cart=new DeliveryBag();
-                }
             
                 $id=$article->getId();
                 $article=$em->getRepository(Article::class)->find($id);
                 $cart->addDeliveryBagArticleList($article);
                 $session->set('cart', $cart);
                 
-                $this->addFlash(
+                $this->addFlash(    
                             'notice',
                             'L\'article a bien été ajouté au panier !'
                     );
@@ -182,8 +194,18 @@ class DeliveryBagController extends Controller
                             'L\'article est déjà dans votre panier !'
                     );
             }
+        
+            $articlesList=$cart->getDeliveryBagArticleList();
+            $entityManager = $this->getDoctrine()->getManager();
+            $member = $entityManager->getRepository(Member::class)->find($session->get('user')->getId());
+            $schoolStops=$entityManager->getRepository(SchoolStop::class)->findAll();
             
-        return $this->redirectToRoute('delivery_bag_showCart');
+        // return $this->redirectToRoute('delivery_bag_showCart');
+        return $this->render('delivery_bag/Cart.html.twig', [
+                'deliveryBagList' => $articlesList,
+                'member' => $member,
+                'schoolStops' => $schoolStops,
+                ]);
     }
 
     /**

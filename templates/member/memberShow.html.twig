@@ -5,64 +5,76 @@
     <h1>Votre profil</h1>
 
 <div class="row">
-<table class="table">
-    <tbody>
-        <th>
-            <td>{{member.memberSurname}} {{member.memberName}}</td>
-        </th>
-        <tr>
-            <td>{{member.memberAddress1}}<br>{{member.memberAddress2}}</td>
-        </tr>
-        <tr>
-            <td>{{member.memberZipCode}} {{member.memberCity}}</td>
-        </tr>
-        <tr>
-            <td>Tel : {{member.memberTel}}</td>
-        </tr>
-        <tr>
-            <td>Email : {{member.memberEmail}}</td>
-        </tr>
-        <tr>
-            <td>
-            <lable>Abonnement à la newsletter :</label>
-            <select type="checkbox">{{member.memberSubscription}}</select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-            <lable>Niveau de couture :</label>
-            <select type="range">{{member.memberLevel}}</select>
-            </td>
-        </tr>
-        <tr>
-            <td>Cagnotte : {{member.memberButtonWallet}}</td>
-        </tr>
-    </tbody>
-</table>
-
-{% if member.memberKidList %}
-    {% for kid in member.memberKidList %}
-        <table>
-            <tbody>
-                <th>
-                    <td>{{kid.kidSurname}} {{kid.kidName}}</td>
+    <div class = "col-lg-6 mb-6">
+        <table class="table">
+            <thead>
+                <th> Vous
                 </th>
+            </thead>
+            <tbody>
                 <tr>
-                    <td></td>
+                    <td>{{member.memberSurname}} {{member.memberName}}</td>
                 </tr>
                 <tr>
-                    <td>{{kid.kidGender.GenderName}}</td>
+                    <td>{{member.memberAddress1}}<br>{{member.memberAddress2}}</td>
                 </tr>
                 <tr>
-                    <td>{{kid.kidBirthday | date ('d-m-Y')}}</td>
+                    <td>{{member.memberZipCode}} {{member.memberCity}}</td>
                 </tr>
                 <tr>
-                    <td>Ecole : {{kid.kidSchoolId.SchoolName}}</td>
+                    <td>Tel : {{member.memberTel}}</td>
+                </tr>
+                <tr>
+                    <td>Email : {{member.memberEmail}}</td>
+                </tr>
+                <tr>
+                    <td> Abonnement à la newsletter :
+                    {% if member.memberSubscription == true %}
+                        <p>oui</p>
+                    {% else %}
+                        <p>non</p>
+                    {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td> Niveau de couture :{{member.memberLevel}}/100
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cagnotte : {{member.memberButtonWallet}}</td>
                 </tr>
             </tbody>
         </table>
-    {% endfor %}
-{% endif %}
+    </div>
+    <div class = "col-lg-6 mb-6">
+        {% if member.memberKidList %}
+            <table>
+                <tbody>
+                    <thead>
+                        <th> Votre(vos) enfant(s)</th>
+                    </thead>
+                {% for kid in member.memberKidList %}
+                    <tr>
+                        <td>{{kid.kidSurname}} {{kid.kidName}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>{{kid.kidGender.GenderName}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{kid.kidBirthday | date ('d-m-Y')}}</td>
+                    </tr>
+                    <tr>
+                        <td>Ecole : {{kid.kidSchoolId.SchoolName}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
 </div>
 
         {# <form class="form-group" method="post">
@@ -72,13 +84,17 @@
         <br>
         {{ include('member/_delete_form.html.twig') }} #}
 
-        <div class="row">
-        <a href="/member/unsetSession">Me déconnecter - </a>
-        <a href="/member/update">Modifier mon profil - </a>
-        <a href="/donationBag/show">Voir mes derniers dons - </a>
-        <a href="/deliveryBag/show">Voir mes dernières trouvailles</a>
-        </div>
-
+<div class="row" style="text-align:justify">
+    
+        <a class="btn btn-secondary" href="/member/unsetSession">Me déconnecter</a>
+        <p>             </p>
+        <a class="btn btn-secondary" href="{{ path('member_edit', {'id': member.id})}}">Modifier mon profil</a>
+        <p>   </p>
+        <a class="btn btn-secondary" href="/donationBag/show">Voir mes derniers dons</a>
+        <p>   </p>
+        <a class="btn btn-secondary" href="/deliveryBag/show">Voir mes dernières trouvailles</a>
+    
+</div>
         <br>
         {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
         <a href="{{ path('member_edit', {'id': member.id}) }}">Modifier</a>

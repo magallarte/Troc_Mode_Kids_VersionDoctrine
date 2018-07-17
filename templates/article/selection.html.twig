@@ -10,15 +10,11 @@
 
         <div class="row">
             <div class="col-md-3">
-                {# temp car form connexion ne marche pas #}
-                {% if user %}
-                {# {% if app.session.get('user') %} #}
+                {% if app.session.get('user') %}
                     <h2>Préselection</h2>
                     <form action="/article/selection" method="post" class="form-group">
                     <select name="preselectionKid" id="preselectionKid" class="form-control dropdown">
-                        {# temp car form connexion ne marche pas #}
-                        {% for kid in user.memberKidList %}
-                        {# {% for kid in app.session.get('user').memberKidList %} #}
+                        {% for kid in app.session.get('user').memberKidList %}
                             {% if kid.kidAge > 12 %}
                             {% set age=(kid.kidAge/12) %}
                             <option value="{{kid.id}}">Sélection pour {{kid.kidSurname}} - {{age|round}} ans - Taille {{kid.kidSizeCode}}</option>
@@ -121,7 +117,7 @@
     <!--[if gte IE 9]><!-->
     <script type="text/javascript" src="http://127.0.0.1:8000/vendor/jquery/jquery-3.3.1.min.js"></script>
     <!--<![endif]-->
-
+{# NE FONCTIONNE PAS #}
     <script>
         $(document).ready(function() {
             $('.mdb-select').material_select();

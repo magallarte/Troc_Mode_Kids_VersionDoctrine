@@ -164,24 +164,44 @@ class ArticleRepository extends ServiceEntityRepository
         // LEFT JOIN process_status ON process_status.id = article.article_process_status_id
         // ';
         
-        // $selectionOptions = array('selectionGender', 'selectionSize', 'selectionType', 'selectionColor', 'selectionSeason', 'selectionBrand', 'selectionWearStatus', 'selectionProcessStatus');
+        // $selectionOptions = array('gender', 'size', 'type', 'color', 'season', 'brand', 'wear_status', 'process_status');
         
         // $markers = array();
         // $binds = array();
         
         // foreach ($selectionOptions as  $selectionOption) {
-        //     if (!empty($_POST[$selectionOption])) {
-        //         $markers[] = '  '. $selectionOption. ' = :'.$selectionOption;
-        //         $binds[$selectionOption] = $_POST[$selectionOption];
-        //     }
+        //      if (!empty($selection[ucfirst($selectionOption)])) {
+        //          foreach( $selection[ucfirst($selectionOption)] as $key=>$value) {
+        //              $markers[] = 'article_'. $selectionOption.'_id = ?';
+        //              $binds[] = $value; 
+        //          }
+        //      }
         // }
         
-        // if (!empty($criteres)) {
-        //     $sql .= ' WHERE '.implode(' AND ', $criteres);
+        // if (!empty($markers)) {
+        //     $sql .= ' WHERE '.implode(' AND ', $markers);
+        // }
+
+        // if (!empty($binds)) {
+        //     $binds .= implode(' && ', $binds);
         // }
         
         // $query = $bdd->prepare($sql);
-        // $res = $query->execute($valeurs);
+        // $res = $query->execute($binds);
+    }
+
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findArticlesByProcessStatus($processStatusId): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->andwhere('a.article_processStatus = :status')
+            ->setParameter('status', $processStatusId )
+            ->orderBy('a.article_code', 'ASC')
+            ->getQuery();
+            
+        return $qb->execute(); 
     }
     
     /**
