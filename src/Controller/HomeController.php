@@ -26,10 +26,14 @@ class HomeController extends Controller
     */
     public function show(Request $request,SessionInterface $session)
     {
-        // var_dump($session->get('user')->getMemberRole()->getRoleName());
-        return $this->render('home.html.twig', array(
-            'sessionName' => $session->get('name'),
-            'sessionSurname' => $session->get('surname')
-        ));
+        return $this->render('home.html.twig');
+    }
+
+    /**
+    * @Route("/concept", name="home_concept")
+    */
+    public function concept(Request $request,SessionInterface $session)
+    {
+        return $this->render('concept.html.twig');
     }
 }

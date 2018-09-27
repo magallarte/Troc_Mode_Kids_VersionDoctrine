@@ -96,11 +96,15 @@
     
 </div>
         <br>
-        {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-        <a href="{{ path('member_edit', {'id': member.id}) }}">Modifier</a>
-        <br>
-        {{ include('member/_delete_form.html.twig') }}
-        {% endif %}
+        {% if app.session.get('user') %}
+            {% for role in app.session.get('user').MemberRole %}
+                {% if role.id ==  "6" %}
+                <a href="{{ path('member_edit', {'id': member.id}) }}">Modifier</a>
+                <br>
+                {{ include('member/_delete_form.html.twig') }}
+                {% endif %}
+            {% endfor %}
+        {% endif %} 
 
     </div>
 {% endblock %}

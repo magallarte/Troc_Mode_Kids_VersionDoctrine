@@ -24,10 +24,14 @@
 
     <a href="{{ path('school_stop_index') }}">Retour à la liste</a>
     <br>
-    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-    <a href="{{ path('school_stop_edit', {'id': school_stop.id}) }}">modifier</a>
-    <br>
-    {{ include('school_stop/_delete_form.html.twig') }}
+    {% if app.session.get('user') %}
+        {% for role in app.session.get('user').MemberRole %}
+            {% if role.id ==  "6" %}
+            <a href="{{ path('school_stop_edit', {'id': school_stop.id}) }}">modifier</a>
+            <br>
+            {{ include('school_stop/_delete_form.html.twig') }}
+            {% endif %}
+        {% endfor %}
     {% endif %}
    
 {% endblock %}

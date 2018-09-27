@@ -82,7 +82,7 @@
                     </tbody>
                 </table>
                 <div>
-                    <a href="{{ path('delivery_bag_addToCart', {'id': article.id}) }}">Ajouter à mes trouvailles</a>
+                    <a href="{{ path('delivery_bag_addToCart', {'id': article.id}) }}" class="btn btn-primary">Ajouter au panier</a>
                 </div>
             </div>
       </div>
@@ -92,14 +92,18 @@
     </div>
     <!-- /.container -->
 
-    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-        <div display="inline-block">
+    {% if app.session.get('user') %}
+        {% for role in app.session.get('user').MemberRole %}
+            {% if role.id ==  "6" %}
+                 <div display="inline-block">
             <a href="{{ path('article_index') }}">Liste de tous les articles</a>
             <p> - </p>
             <a href="{{ path('article_edit', {'id': article.id}) }}">Modifier</a>
             <p> - </p>
             <a href="{{ path('article_delete', {'id': article.id}) }}">Supprimer</a>
         </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
 {% endblock %}

@@ -3,11 +3,17 @@
 
 {% block body %}
     <div class="container">
-        <h1>Me connecter</h1>
-        <form class="form-group" method="post">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </form>
+        <div>
+            <h1>Me connecter</h1>
+            <form class="form-group" method="post">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </form>
+        </div>
+        <div>
+        <a href="{{ path('member_new')}}" class="btn btn-secondary">Pas encore inscrit ?</a>
+        </div>
+        <br>
     </div>
 {% endblock %}

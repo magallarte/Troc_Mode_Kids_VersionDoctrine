@@ -44,8 +44,11 @@
         </tbody>
     </table>
 
+    <a class="btn btn-primary" href="{{ path('workshop_pay', {'id': workshop.id}) }}">Je paye</a>
+    <br>
     <a href="{{ path('workshop_index') }}">Retour à la liste</a>
+    <br>
     
-    <a href="{{ path('workshop_pay', {'id': workshop.id}) }}">Je paye</a>
+    
 
 {% endblock %}

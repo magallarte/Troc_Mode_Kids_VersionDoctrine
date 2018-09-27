@@ -41,9 +41,13 @@
                 <th>Lieu</th>
                 <th>Image</th>
                 <th>Formateur</th>
-                {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-                    <th>Personnes inscrites</th>
-                {% endif %}
+                    {% if app.session.get('user') %}
+                        {% for role in app.session.get('user').MemberRole %}
+                            {% if role.id ==  "6" %}
+                            <th>Personnes inscrites</th>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 <th>Actions</th>
             </tr>
         </thead>
@@ -60,29 +64,41 @@
                         </div>
                 {# <td>{{ workshop.workshopPicture }}</td> #}
                 <td>{{ workshop.workshopTrainer.MemberSurname }} {{ workshop.workshopTrainer.MemberName }}</td>
-                {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-                    {% for trainee in workshop.workshopTraineesList %}
-                    <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
+                {% if app.session.get('user') %}
+                    {% for role in app.session.get('user').MemberRole %}
+                        {% if role.id ==  "6" %}
+                            {% for trainee in workshop.workshopTraineesList %}
+                            <td>{{trainee.MemberSurname}} {{trainee.MemberName}}</td>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
                 <td>
                     <a href="{{ path('workshop_book', {'id': workshop.id}) }}">S'inscrire</a>
-                    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-                    <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">Modifier la fiche</a>
-                    {% endif %}
-                    
+                {% if app.session.get('user') %}
+                    {% for role in app.session.get('user').MemberRole %}
+                        {% if role.id ==  "6" %}
+                            <a href="{{ path('workshop_edit', {'id': workshop.id}) }}">Modifier la fiche</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">Aucun atalier trouvé</td>
+                <td colspan="7">Aucun atelier trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-        <a href="{{ path('workshop_new') }}">Créer un nouvel atelier</a>
+    {% if app.session.get('user') %}
+        {% for role in app.session.get('user').MemberRole %}
+            {% if role.id ==  "6" %}
+                <a href="{{ path('workshop_new') }}">Créer un nouvel atelier</a>
+            {% endif %}
+        {% endfor %}
     {% endif %}
+    
 </div> 
 {% endblock %}

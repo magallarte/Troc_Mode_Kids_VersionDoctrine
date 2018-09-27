@@ -1,0 +1,48 @@
+{% extends 'base.html.twig'%}
+{% block title %}Troc&Mode Kids{% endblock %}
+
+{% block body %}
+
+<!-- Page Content -->
+    <div class="container">
+
+      <h1 class="my-4">Donnez utile - Achetez raisonné - Devenez upcycler !</h1>
+
+      <!-- Section Arguments-->
+        <div class="col-lg-12">
+          <h3><strong>Pourquoi donner et acheter ses vêtements via TROC&Mode Kids ?</strong></h3>
+            <ul class="list-likes">
+                <p>C'est facile, on s'occupe de TOUT  ! (Collecte,Tri,Vente,Recyclage).</p>
+                <p>C'est simple, on récupère TOUS les vêtements enfant! (toutes les marques, toutes les tailles, tous les états).</p>
+                <p>Cest'utile, cela permet :
+                  <div>
+                    <ul class="list-check">
+                    <li>d'éviter le gaspillage vestimentaire et de faire un geste pour la planète !</li>
+                    <li>de faire profiter à beaucoup de parents d'un grand choix de vêtements pour leur(s) enfant(s).</li>
+                    <li>de mettre en valeur le savoir faire des couturières.</li>
+                    <li>de soutenir une activité qui crée du lien entre toutes les générations !</li>
+                    <li>de créer des emplois locaux.</li>
+                    </ul>
+                  </div>
+                </p>
+            </ul>
+        </div>
+      <!-- /.row -->
+
+      <hr>
+
+      <!-- Section Rejoignez nous ! -->
+      <div class="row mb-4">
+        <div class="col-md-8">
+          <p>Troc&Mode est une association qui propose ses services de collecte, tri et recyclage, sur Castelnau-le-lez, le Crès et Jacou. Si vous habitez sur une de ces communes ... rejoignez notre association en vous inscrivant sur ce site.</p>
+        </div>
+        <div class="col-md-4">
+          <a class="btn btn-lg btn btn-primary btn-block" href="{{ path('member_new') }}">Rejoignez nous !</a>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.container -->
+
+
+{% endblock %}

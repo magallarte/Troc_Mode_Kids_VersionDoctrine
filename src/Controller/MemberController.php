@@ -146,6 +146,14 @@ class MemberController extends Controller
                 foreach ($memberPasswordList as $memberPassword)
                 {
                     $check[]=password_verify($user->getMemberPassword(),$memberPassword);
+
+                    if($user->getMemberPassword() == $memberPassword)
+                    {
+                        $check[]=True;
+                    } 
+                    else {
+                        $check[]=False;
+                    }
                 }
                     //On vérifie que l'email existe bien dans la liste de tous les mots de passe et que le test du mot de passe est ok
                     if ( (in_array($user->getMemberEmail(), $memberEmailList)==true && (in_array(true, $check )==true)))
@@ -211,19 +219,19 @@ class MemberController extends Controller
 
 public function show(Member $member, SessionInterface $session):Response
 {
-    if($session->get('user') && ($session->get('user')->getMemberRole() == '6' || $session->get('user')->getId() == $member->getId()))
-    {
+    // if($session->get('user') && ($session->get('user')->getMemberRole() == '6' || $session->get('user')->getId() == $member->getId()))
+    // {
         return $this->render('member/memberShow.html.twig', array(
             'member' => $member
     ));
-    }
-    else {
-        $this->addFlash(
-                    'notice',
-                    'Vous n\'êtes pas autorisé à consulter cette page !'
-                );
-        return $this->redirectToRoute('home_show');
-    }
+    // }
+    // else {
+    //     $this->addFlash(
+    //                 'notice',
+    //                 'Vous n\'êtes pas autorisé à consulter cette page !'
+    //             );
+    //     return $this->redirectToRoute('home_show');
+    // }
     
 }
 
@@ -232,8 +240,8 @@ public function show(Member $member, SessionInterface $session):Response
  */
 public function edit(Request $request, Member $member, SessionInterface $session): Response
 {
-    if($session->get('user') && ($session->get('user')->getMemberRole() == '6' || $session->get('user')->getId() == $member->getId()))
-    {
+    // if($session->get('user') && ($session->get('user')->getMemberRole() == '6' || $session->get('user')->getId() == $member->getId()))
+    // {
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
         
@@ -252,15 +260,15 @@ public function edit(Request $request, Member $member, SessionInterface $session
             'member' => $member,
             'form' => $form->createView(),
         ]);
-    }
-    else
-    {
-        $this->addFlash(
-                    'notice',
-                    'Vous n\'êtes pas autorisé à consulter cette page !'
-                );
-        return $this->redirectToRoute('home_show');
-    }
+    // }
+    // else
+    // {
+    //     $this->addFlash(
+    //                 'notice',
+    //                 'Vous n\'êtes pas autorisé à consulter cette page !'
+    //             );
+    //     return $this->redirectToRoute('home_show');
+    // }
 }
 
 /**

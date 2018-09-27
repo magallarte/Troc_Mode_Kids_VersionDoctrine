@@ -41,10 +41,14 @@
     <a href="{{ path('news_index') }}">Retour à la liste</a>
 
     <br>
-    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-    <a href="{{ path('news_edit', {'id': news.id}) }}">Modifier</a>
-    <br>
-   {{ include('news/_delete_form.html.twig') }}
-    {% endif %}
+    {% if app.session.get('user') %}
+        {% for role in app.session.get('user').MemberRole %}
+            {% if role.id ==  "6" %}
+            <a href="{{ path('news_edit', {'id': news.id}) }}">Modifier</a>
+            <br>
+            {{ include('news/_delete_form.html.twig') }}
+            {% endif %}
+        {% endfor %}
+    {% endif %} 
 
 {% endblock %}

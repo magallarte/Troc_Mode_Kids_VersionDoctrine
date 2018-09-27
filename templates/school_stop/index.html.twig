@@ -36,9 +36,13 @@
                 <th>Date</th>
                 <th>Ecole</th>
                 <th>Ville</th>
-                {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
-                    <th>Actions</th>
-                {% endif %}
+                    {% if app.session.get('user') %}
+                        {% for role in app.session.get('user').MemberRole %}
+                            {% if role.id ==  "6" %}
+                            <th>Actions</th>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %} 
             </tr>
         </thead>
         <tbody>
@@ -48,12 +52,17 @@
                 <td>{{ school_stop.schoolStopDate ? school_stop.schoolStopDate|date('Y-m-d H:i') : '' }}</td>
                 <td>{{ school_stop.schoolStopSchool.SchoolName}}</td>
                 <td>{{ school_stop.schoolStopSchool.SchoolCity}}</td>
-                    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+                    {% if app.session.get('user') %}
+                        {% for role in app.session.get('user').MemberRole %}
+                            {% if role.id ==  "6" %}
                             <td>
                                 <a href="{{ path('school_stop_show', {'id': school_stop.id}) }}">show</a>
                                 <a href="{{ path('school_stop_edit', {'id': school_stop.id}) }}">edit</a>
                             </td>
-                    {% endif %}
+                            {{ include('member/_delete_form.html.twig') }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %} 
             </tr>
         {% else %}
             <tr>
@@ -76,9 +85,14 @@
         <br>
     {% endif %}
 
-    {% if app.session.get('user') and app.session.get('user').MemberRole is same as(6) %}
+    {% if app.session.get('user') %}
+        {% for role in app.session.get('user').MemberRole %}
+            {% if role.id ==  "6" %}
             <a href="{{ path('school_stop_new') }}">Créer une tournée</a>
-    {% endif %}
+            {{ include('member/_delete_form.html.twig') }}
+            {% endif %}
+        {% endfor %}
+    {% endif %} 
     
 </div>
 {% endblock %}
